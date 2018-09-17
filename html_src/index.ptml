@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<!--include head.txt -->
+        <title>
+            Semester Scheduler
+        </title>
+    </head>
+
+    <body>
+        <div class="wrapper">
+<!--include navbar.txt -->
+            <div id="content">
+
+                <h1 class="home">
+                    Semester Scheduler
+                </h1>
+        
+                    <figure>
+                        <img src="" width="28%">
+                        <figcaption>
+                        </figcaption>
+                    </figure>
+
+                    <p>
+                    This is going to be scheduling classes in classrooms!
+                    </p>
+            </div>
+        </div>
+
+    </body>
+</html>
