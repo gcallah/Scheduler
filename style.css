@@ -298,6 +298,7 @@ i, span {
 
 /******** Side Bar Style *********/
 .wrapper {
+    display: flex;
     align-items: stretch;
 }
 
