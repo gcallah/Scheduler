@@ -5,6 +5,7 @@ export QUIZ_DIR = templates
 PTML_DIR = html_src
 UDIR = utils
 INCS = $(TEMPLATE_DIR)/head.txt 
+SCHED_DIR = Scheduler
 
 HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/html_src\///')
 
@@ -29,11 +30,12 @@ container:
 db:
 	python3 manage.py makemigrations
 	python3 manage.py migrate
-	git add $(EMUDIR)/migrations/*.py
-	-git commit $(EMUDIR)/migrations/*.py
+	git add $(SCHED_DIR)/migrations/*.py
+	-git commit $(SCHED_DIR)/migrations/*.py
 	git push origin master
 
 prod: $(SRCS) $(OBJ)
 	./all_tests.sh
 	git push origin master
-	ssh gcallah@ssh.pythonanywhere.com 'cd /home/gcallah/Emu86; /home/gcallah/Emu86/myutils/prod.sh'
+# what to do here?
+#	ssh gcallah@ssh.pythonanywhere.com 'cd /home/gcallah/Emu86; /home/gcallah/Emu86/myutils/prod.sh'
