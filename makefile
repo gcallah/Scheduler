@@ -5,7 +5,7 @@ export QUIZ_DIR = templates
 PTML_DIR = html_src
 UDIR = utils
 INCS = $(TEMPLATE_DIR)/head.txt 
-SCHED_DIR = Scheduler
+SCHED_DIR = scheduler
 
 HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/html_src\///')
 
@@ -27,7 +27,7 @@ website: $(INCS) $(HTML_FILES)
 container:
 	docker build -t scheduler docker
 
-db:
+db: $(SCHED_DIR)/models.py
 	python3 manage.py makemigrations
 	python3 manage.py migrate
 	git add $(SCHED_DIR)/migrations/*.py
