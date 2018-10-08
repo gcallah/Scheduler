@@ -1,0 +1,262 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    color: #ddd;
+    background:#444;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+a:link {
+    color: #acf;
+}
+
+a:visited {
+    color: #cbf;
+}
+
+table, th, td {
+    margin: .4em 2.5em .4em 2.5em;
+    font-size: 1em;
+    border-collapse: collapse;
+    border: 1px solid black;
+    }
+
+th, td {
+        padding: 1em;
+}
+
+th {
+    background: #525;
+}
+
+th.table-head {
+    background: #fcc;
+}
+
+td {
+    background: #659;
+}
+
+p {
+    margin: .4em 1.5em .4em 1.5em;
+    font-size: 1.4em;
+    padding: 0;
+    line-height: 140%;
+}
+
+hr {
+    margin: 2em 20em 2em 20em;
+}
+
+blockquote {
+    margin: 0.4em 6em .4em 6em;
+    font-size: 1.1em;
+}
+
+ol, ul, dl, li {
+    margin: 1em 1.5em .4em 1.5em;
+    font-size: 1.4em;
+}
+
+ul.centered {
+    text-align: center;
+    list-style-position: inside;
+    font-size: 1em;
+}
+
+ol.nested, ul.nested, dl.nested {
+    font-size: 1em;
+}
+
+dt {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: .4em 3em .4em 1em;
+}
+
+#header {
+    width: auto;
+    height: 3em;
+    padding: .5em 2em;
+    line-height: 1em;
+    background-color: #cbe;
+    color: #933;
+   
+}
+
+#header a:link, #header a:visited {
+    color: #748;
+}
+
+#header a:focus , #header a:hover {
+    text-decoration: underline;
+}
+
+h1,h2,h3,h4,h5 {
+    font-weight: bold;
+}
+
+h1 {
+    margin: 0em 0em 1em 0em;
+    padding-bottom: .5em;
+    padding-top: .5em;
+    text-align: center;
+    font-size: 2.5em;
+    color: #933;
+    background-color: #cbe;
+}
+
+h1#course-title {
+    margin: 0em 0em 0em 0em;
+}
+
+h1.chap-title {
+    margin: 0em 0em 0em 0em;
+}
+
+h2 {
+    font-size: 1.9em;
+    margin: 1.2em 1em .6em 4em;
+    color: #c69;
+}
+
+h2.subhead {
+    font-weight:
+    normal;
+}
+
+h3 {
+    font-size: 1.6em;
+    margin: .8em 1.2em .8em 2em;
+    color: #ebd;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 1.5em;
+    margin: .8em 1.6em .6em 1.6em;
+    color: #339;
+    font-weight: bold;
+}
+
+summary.sum1 {
+    font-size: 1.7em;
+    color: #903;
+    margin: 1em 1.2em 1em 1.2em;
+}
+
+summary.sum2 {
+    font-size: 1.6em;
+    color: #ebd;
+    font-weight: bold;
+    margin: .8em 1.2em .8em 2em;
+}
+
+summary.sum3 {
+    font-size: 1.5em;
+    color: #339;
+    margin: .6em 1.2em .6em 2.8em;
+}
+
+summary.sum4 {
+    font-size: 1.4em;
+    color: #903;
+    margin: .4em 1.2em .4em 2.8em;
+}
+
+summary.menu_sum {
+    font-size: 1.4em;
+    color: #639;
+    margin: .5em 0em .5em 0em;
+}
+
+p.copyright {
+    text-align: center;
+    margin: 2em 1em 1em 1em;
+    font-size: 1.1em;
+    color: #ebd;
+}
+
+p.author {
+    text-align: center;
+    margin: 1em 1em 1em 1em;
+    font-size: 1.5em;
+    color: #e9c;
+}
+
+p.leadquote {
+    font-style: italic;
+    text-align: center;
+    margin: 1em 1em 1em 2em;
+    font-size: 1.4em;
+    color: #9cd;
+}
+
+p.def {
+    margin: .8em 1.5em .3em 4em;
+    font-size: 1.3em;
+    color: #cac;
+}
+
+.lead_illus {
+    text-align: center;
+}
+
+#logo {
+    float: left;
+}
+
+#user-tools {
+    float: right;
+    padding: 0;
+    margin: 0 0 0 1em;
+    font-weight: 300;
+    font-size: 1.0em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    text-align: right;
+}
+
+input[type=submit] {
+    padding: .7em 1.2em; 
+    background:#cbe;
+    color: #933;
+    font-weight: bold;
+    border:0 none;
+    -webkit-border-radius: .5em;
+    border-radius: .5em; 
+    margin: .4em 2.5em .4em 3.5em;
+}
+
+figure {
+    text-align: center;
+}
+
+figure.lead-figure {
+    margin: 0em 1em 1em 1em;
+}
+
+figcaption {
+    color: #ced;
+    font-style: italic;
+    text-align: center;
+    margin: .8em 1em .6em 1em;
+}
+
+span.frac {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+span.frac > sup, span.frac > sub {
+  display: block;
+  font: inherit;
+  padding: 0 0.3em;
+}
+
+span.frac > sup {border-bottom: 0.08em solid;}
+span.frac > span {display: none;}
+
+.over { text-decoration: overline; }
