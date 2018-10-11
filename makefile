@@ -27,6 +27,11 @@ website: $(INCS) $(HTML_FILES)
 container:
 	docker build -t scheduler docker
 
+
+dblocal: $(SCHED_DIR)/models.py
+	python3 manage.py makemigrations
+	python3 manage.py migrate
+
 db: $(SCHED_DIR)/models.py
 	python3 manage.py makemigrations
 	python3 manage.py migrate
