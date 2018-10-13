@@ -5,7 +5,7 @@ export QUIZ_DIR = templates
 PTML_DIR = html_src
 UDIR = utils
 INCS = $(TEMPLATE_DIR)/head.txt 
-SCHED_DIR = scheduler
+SCHED_DIR = scheduler/scheduler
 
 HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/html_src\///')
 
@@ -15,7 +15,7 @@ HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's
 	$(UDIR)/html_include.awk <$< >$@
 	git add $@
 
-local: $(HTML_FILES)
+local: $(HTML_FILES) 
 
 # build the static website describing the project:
 website: $(INCS) $(HTML_FILES) 
@@ -28,11 +28,11 @@ container:
 	docker build -t scheduler docker
 
 
-dblocal: $(SCHED_DIR)/models.py
+dblocal:
 	python3 manage.py makemigrations
 	python3 manage.py migrate
 
-db: $(SCHED_DIR)/models.py
+db:
 	python3 manage.py makemigrations
 	python3 manage.py migrate
 	git add $(SCHED_DIR)/migrations/*.py

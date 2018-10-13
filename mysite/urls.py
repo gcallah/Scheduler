@@ -17,8 +17,11 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
+from scheduler import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('', include('scheduler.urls')),
+    url('requirements/$', views.requirements),
+    url('index/$', views.index)
 ]

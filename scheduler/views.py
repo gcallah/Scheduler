@@ -12,4 +12,7 @@ def about(request):
 def feedback(request):
     return render(request, 'feedback.html', {'header': site_hdr})
 
+def requirements(request):
+	return render(request, 'requirements.html', {'header': site_hdr})
+
 
