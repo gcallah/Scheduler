@@ -15,4 +15,7 @@ def feedback(request):
 def requirements(request):
 	return render(request, 'requirements.html', {'header': site_hdr})
 
+def schedule(request):
+	return render(request, 'schedule.html', {'header': site_hdr})
+
 

@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url('', include('scheduler.urls')),
     url('requirements/$', views.requirements),
-    url('index/$', views.index)
+    url('index/$', views.index),
+    url('schedule/$', views.schedule)
 ]
