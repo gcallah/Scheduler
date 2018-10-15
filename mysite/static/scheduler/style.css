@@ -3,8 +3,15 @@ body {
     padding: 0;
     font-size: 100%;
     color: #ddd;
-    background:#444;
+    background: #444;
     font-family: Arial, Helvetica, sans-serif
+}
+
+.button {
+    font-size: 1.2em;
+    border-radius: 12px;
+    border: 2px solid #4CAF50;
+    background-color: #9bf;
 }
 
 a:link {
@@ -27,7 +34,7 @@ th, td {
 }
 
 th {
-    background: #525;
+    background: #444;
 }
 
 th.table-head {
@@ -35,7 +42,7 @@ th.table-head {
 }
 
 td {
-    background: #659;
+    background: #444;
 }
 
 p {
@@ -45,18 +52,29 @@ p {
     line-height: 140%;
 }
 
+p.submit {
+    text-align: center
+}
+
 hr {
     margin: 2em 20em 2em 20em;
 }
 
 blockquote {
-    margin: 0.4em 6em .4em 6em;
-    font-size: 1.1em;
+    margin: .4em 6em .4em 6em;
+    font-size: 1.3em;
 }
 
 ol, ul, dl, li {
     margin: 1em 1.5em .4em 1.5em;
     font-size: 1.4em;
+}
+
+ul.mod_list, ol.mod_list {
+    color: #bcf;
+    text-align: center;
+    list-style-position: inside;
+    font-size: 1.2em;
 }
 
 ul.centered {
@@ -75,18 +93,27 @@ dt {
     margin: .4em 3em .4em 1em;
 }
 
+code {
+    font-size: 1.2em;
+    font-family: monospace;
+    background: inherit;
+    color: #fad;
+}
+
 #header {
     width: auto;
     height: 3em;
-    padding: .5em 2em;
-    line-height: 1em;
+    padding-bottom: 2em;
+    padding-top: .2em;
+    line-height: 2em;
     background-color: #cbe;
-    color: #933;
-   
+    color: #633;
+    text-align: center;
+
 }
 
 #header a:link, #header a:visited {
-    color: #748;
+    color: #622;
 }
 
 #header a:focus , #header a:hover {
@@ -94,21 +121,24 @@ dt {
 }
 
 h1,h2,h3,h4,h5 {
-    font-weight: bold;
+    font-weight: 400;
 }
 
-h1 {
-    margin: 0em 0em 1em 0em;
-    padding-bottom: .5em;
-    padding-top: .5em;
+h1 { 
+    display: inline;
+    margin: 0em 0em .6em 0em;
+    padding-bottom: 2em;
+    padding-top: 1em;
+    padding-left: 1em;
+    font-size: 2em;
     text-align: center;
-    font-size: 2.5em;
-    color: #933;
-    background-color: #cbe;
 }
 
-h1#course-title {
+h1.brand {
     margin: 0em 0em 0em 0em;
+    color: #622;
+    font-size: 2.2em;
+    text-align: center;
 }
 
 h1.chap-title {
@@ -116,58 +146,60 @@ h1.chap-title {
 }
 
 h2 {
-    font-size: 1.9em;
-    margin: 1.2em 1em .6em 4em;
-    color: #c69;
+    font-size: 1.8em;
+    margin: 1.2em 1em .6em 1em;
+    color: #e24;
 }
 
 h2.subhead {
-    font-weight:
-    normal;
+    font-weight: normal;
 }
 
 h3 {
     font-size: 1.6em;
-    margin: .8em 1.2em .8em 2em;
-    color: #ebd;
-    font-weight: bold;
+    margin: 1em 1.4em .6em 1.4em;
+    color: #ecb;
 }
 
 h4 {
     font-size: 1.5em;
     margin: .8em 1.6em .6em 1.6em;
-    color: #339;
-    font-weight: bold;
+    color: #aaf;
+}
+
+code {
+    font-family: monospace;
+    background: inherit;
+    color: #fad;
 }
 
 summary.sum1 {
     font-size: 1.7em;
-    color: #903;
-    margin: 1em 1.2em 1em 1.2em;
+    color: #f9b;
+    margin: .8em 2em .8em 2em;
 }
 
 summary.sum2 {
-    font-size: 1.6em;
-    color: #ebd;
-    font-weight: bold;
-    margin: .8em 1.2em .8em 2em;
+    font-size: 1.5em;
+    color: #9cf;
+    margin: .6em 3em .6em 3em;
 }
 
 summary.sum3 {
-    font-size: 1.5em;
-    color: #339;
-    margin: .6em 1.2em .6em 2.8em;
+    font-size: 1.3em;
+    color: #88e;
+    margin: .4em 1.2em .4em 4em;
 }
 
 summary.sum4 {
-    font-size: 1.4em;
-    color: #903;
-    margin: .4em 1.2em .4em 2.8em;
+    font-size: 1.2em;
+    color: #dac;
+    margin: .4em 1.2em .4em 4em;
 }
 
 summary.menu_sum {
     font-size: 1.4em;
-    color: #639;
+    color: #ebd;
     margin: .5em 0em .5em 0em;
 }
 
@@ -190,7 +222,7 @@ p.leadquote {
     text-align: center;
     margin: 1em 1em 1em 2em;
     font-size: 1.4em;
-    color: #9cd;
+    color: #9de;
 }
 
 p.def {
@@ -204,29 +236,18 @@ p.def {
 }
 
 #logo {
-    float: left;
+    float:left;
 }
 
 #user-tools {
     float: right;
     padding: 0;
-    margin: 0 0 0 1em;
+    margin: 0 4em 0 1em;
     font-weight: 300;
-    font-size: 1.0em;
+    font-size: 1em;
     letter-spacing: .1em;
-    text-transform: uppercase;
     text-align: right;
-}
-
-input[type=submit] {
-    padding: .7em 1.2em; 
-    background:#cbe;
-    color: #933;
-    font-weight: bold;
-    border:0 none;
-    -webkit-border-radius: .5em;
-    border-radius: .5em; 
-    margin: .4em 2.5em .4em 3.5em;
+    color: #622;
 }
 
 figure {
@@ -241,7 +262,7 @@ figcaption {
     color: #ced;
     font-style: italic;
     text-align: center;
-    margin: .8em 1em .6em 1em;
+    margin: .6em 1em .4em 1em;
 }
 
 span.frac {
@@ -259,4 +280,11 @@ span.frac > sup, span.frac > sub {
 span.frac > sup {border-bottom: 0.08em solid;}
 span.frac > span {display: none;}
 
+
+span.hilight {
+    color: #fc2;
+}
+
 .over { text-decoration: overline; }
+
+.errors { color: red; }
