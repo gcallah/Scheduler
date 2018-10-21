@@ -21,5 +21,5 @@ def requirements(request):
 
 def schedule(request):
     form_class = ScheduleForm
-    return render(request, 'feedback.html', {'form': form_class,})
+    return render(request, 'schedule.html', {'form': form_class,})
 
