@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from scheduler.forms import FeedbackForm
+from scheduler.forms import ScheduleForm
+
 
 site_hdr = "Course Scheduler"
 
@@ -10,12 +13,13 @@ def about(request):
     return render(request, 'about.html', {'header': site_hdr})
 
 def feedback(request):
-    return render(request, 'feedback.html', {'header': site_hdr})
+    form_class = FeedbackForm
+    return render(request, 'feedback.html', {'form': form_class,})
 
 def requirements(request):
-	return render(request, 'requirements.html', {'header': site_hdr})
+    return render(request, 'requirements.html', {'header': site_hdr})
 
 def schedule(request):
-	return render(request, 'schedule.html', {'header': site_hdr})
-
+    form_class = ScheduleForm
+    return render(request, 'feedback.html', {'form': form_class,})
 

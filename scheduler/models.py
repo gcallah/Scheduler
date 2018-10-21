@@ -32,3 +32,4 @@ class ProfessorAvailability(models.Model):
 	start_time = models.TimeField()
 	end_time = models.TimeField()
 	day_of_week = models.CharField(max_length=128)
+

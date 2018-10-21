@@ -5,11 +5,10 @@
     <p>
         Feedback for NYU DevOps Scheduler.
     </p>
-
-    <p>
-        What do you think?
-    </p>
-
-
+    <form role="form" action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
 
 {% endblock content %}
