@@ -1,0 +1,11 @@
+First Name:
+{{ First_name }}
+
+Last Name:
+{{ Last_name }}
+
+Email:
+{{ contact_email }}
+
+Comments:
+{{ comments|safe|striptags }}
