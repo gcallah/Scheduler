@@ -14,15 +14,14 @@ def get_time_choices():
     return choices_list
 
 class FeedbackForm(forms.Form):
-    First_Name = forms.CharField(required=True)
-    Last_Name = forms.CharField(required=True)
-    contact_email = forms.EmailField(required=True)
-    Comments = forms.CharField(required=True, widget=forms.Textarea)
+    fname = forms.CharField(label='First Name', required=True)
+    lname = forms.CharField(label='Last Name', required=True)
+    email_address = forms.EmailField(label='Email Address', required=True)
+    comments = forms.CharField(label='Comments', required=True, widget=forms.Textarea)
 
 class ScheduleForm(forms.Form):
-    First_Name = forms.CharField(required=True)
-    Last_Name = forms.CharField(required=True)
-    email_address = forms.EmailField(required=True)
+    fname = forms.CharField(label='First Name', required=True)
+    lname = forms.CharField(label='Last Name', required=True)
+    email_address = forms.EmailField(label='Email Address', required=True)    
     Course_being_taught = forms.CharField(required=True)
-    Time_slot = forms.TypedMultipleChoiceField(choices=get_time_choices,required=True)
-    Additional_scheduling_requirements = forms.CharField(required=True, widget=forms.Textarea)
+    time_slot = forms.TypedMultipleChoiceField(choices=get_time_choices,required=True)

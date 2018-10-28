@@ -4,14 +4,16 @@ from scheduler.forms import FeedbackForm
 from scheduler.forms import ScheduleForm
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect
-from django.template.loader import get_template
+from django.template import loader
+
 
 
 
 site_hdr = "Course Scheduler"
 
 def index(request):
-    return render(request, 'index.html', {'header': site_hdr})
+    form = ScheduleForm()
+    return render(request, 'index.html', {'form':form, 'header': site_hdr})
 
 def about(request):
     return render(request, 'about.html', {'header': site_hdr})
@@ -54,6 +56,20 @@ def requirements(request):
     return render(request, 'requirements.html', {'header': site_hdr})
 
 def schedule(request):
-    form_class = ScheduleForm
-    return render(request, 'schedule.html', {'form': form_class,})
+    
+    if request.method == 'GET':
+        fname = request.GET.get('fname')
+        lname = request.GET.get('lname')
+        email = request.GET.get('email_address')
+
+        context = {
+            'fname': fname,
+            'lname': lname,
+            'email': email
+        }
+
+        template = loader.get_template('schedule.html')
+
+        return HttpResponse(template.render(context, request))
+
 

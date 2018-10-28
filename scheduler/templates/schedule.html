@@ -2,16 +2,36 @@
 
 {% block content %}
 
-    <h1>Course Schedule Form</h1>
-    <p>
-        Enter the required infromation below to schedule your course.</a>
-    </p>
+	<table>
+        	<caption>
+            	Schedule
+        	</caption>
+        
+		<tr>
+		    <th>Time Slot</th>
+		    <th> {{ fname }} </th>
+		</tr>
+	
+		<tr>
+		    <th>9:30AM-10:45AM</th>
+		</tr>
 
-    <form role="form" action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+		<tr>		    
+		    <th>11:00AM-12:15PM</th>
+		</tr>
+	
+		<tr>
+		    <th>12:30PM-1:45PM</th>
+		</tr>
 
+		<tr>		    
+		    <th>2:00PM-3:15PM</th>
+		</tr>
+
+		<tr>
+		    <th>3:30PM-4:45PM</th>
+		</tr>
+
+	</table>
 
 {% endblock content %}

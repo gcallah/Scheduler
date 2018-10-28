@@ -11,4 +11,20 @@
 
     <p> Comments? Suggestions? Feel free to leave <a href="/scheduler/feedback">feedback.</a>
 
+    <br><br>
+
+    <h1>Course Schedule Form</h1>
+ 
+    <form role="form" action="{% url 'scheduler:schedule' %}" method="get">
+        {% csrf_token %}
+	<table>
+		<caption>
+		<br>
+		Enter the required infromation below to schedule your course.
+		</caption>
+        {{ form.as_table }}
+	</table>
+        <input type="submit" value = "Submit">
+    </form>
+
 {% endblock content %}
