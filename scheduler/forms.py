@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 from .models import *
 
 class FeedbackForm(forms.Form):
@@ -7,10 +8,14 @@ class FeedbackForm(forms.Form):
     email_address = forms.EmailField(label='Email Address', required=True)
     comments = forms.CharField(label='Comments', required=True, widget=forms.Textarea)
 
-class ScheduleForm(forms.Form):
-    pname = forms.ModelChoiceField(queryset=Professor.objects.values_list("pname", flat=True), label='Professor Name:', required=True) 
-    cname = forms.ModelChoiceField(queryset=Course.objects.values_list("cname", flat=True), label='Course:', required=True) 
-    room = forms.ModelChoiceField(queryset=Room.objects.values_list("rname", flat=True), label='Room:', required=True) 
-    numStudents = forms.IntegerField(label='Number of Students:')
+class ScheduleForm(ModelForm):
+
+    cname = forms.ModelChoiceField(queryset=Course.objects.all(), label='Course:', required=True)
+    room = forms.ModelChoiceField(queryset=Room.objects.all(), label='Room:', required=True) 
+    numStudents = forms.IntegerField(label='Number of Students:', required=True)
+
+    class Meta:
+        model = Schedule
+        fields = ["cname", "room", "numStudents"]
 
 

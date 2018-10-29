@@ -5,7 +5,7 @@ from scheduler.forms import ScheduleForm
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template import loader
-from .models import TimeSlot
+from .models import Schedule
 from django import forms
 
 
@@ -19,6 +19,8 @@ def index(request):
 def about(request):
     return render(request, 'about.html', {'header': site_hdr})
 
+
+#This feedback form old and will be redone using a model form, similar to the current def schedule function below.
 def feedback(request):
     form_class = FeedbackForm
     
@@ -58,26 +60,13 @@ def requirements(request):
 
 def schedule(request):
 
-    if request.method == 'POST':
-        pname = request.POST.get('pname')
-        cname = request.POST.get('cname')
-        room = request.POST.get('room')
-
-        #time_slot = TimeSlot(pname=pname, cname=cname, room=room)
-        #time_slot.save()
+    if request.method=='POST':
+        form = ScheduleForm(request.POST or None)
         
-        context = {
-            'pname': pname,
-            'cname': cname,
-            'room': room
-        }
+        if form.is_valid():
+            form.save(commit=True)
 
-        template = loader.get_template('schedule.html')
-        return HttpResponse(template.render(context, request))
-
-    else: 
-
-        return render(request, 'schedule.html', {'header': site_hdr})
+    return render(request, "index.html", {'form':form})
 
 
 

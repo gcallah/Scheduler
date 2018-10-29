@@ -1,5 +1,7 @@
 
+from django import forms
 from django.db import models
+from django.forms import ModelForm
 
 # Create your models here.
 
@@ -33,8 +35,9 @@ class ProfessorAvailability(models.Model):
 	end_time = models.TimeField()
 	day_of_week = models.CharField(max_length=128)
 
-#Used to save form submissions. Each "Time Slot" is assigned to a Professor w. their course and room #.
-class TimeSlot(models.Model):
-	pname = models.CharField(max_length=128, blank=False)
+#Used to save form submissions. Each "Schedule" object includes a course name, room, and number of students.
+class Schedule(models.Model):
 	cname = models.CharField(max_length=128, blank=False)
-	room = models.CharField(max_length=128, default="")
+	room = models.CharField(max_length=128, blank=False)
+	numStudents=models.IntegerField(default=0, blank=False)
+
