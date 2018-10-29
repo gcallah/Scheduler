@@ -6,6 +6,8 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template import loader
 from .models import Schedule
+from .models import Course
+from .models import Room
 from django import forms
 
 
@@ -69,16 +71,19 @@ def addCourse(request):
             return HttpResponse(400)
 
 
-
 def schedule(request):
-    if request.method=='POST':
-        form = ScheduleForm(request.POST or None)
-        
-        if form.is_valid():
-            form.save(commit=True)
-            return render(request, "index.html", {'form': form})
-        else:
-            return HttpResponse(400)
-    else:
-        return render(request, "schedule.html")
+    all_courses = Course.objects.all().order_by('-capacity')
+    all_rooms = Room.objects.all().order_by('-capacity')
+
+    scheduled_rooms = {}
+    for course in all_courses:
+        for room in all_rooms:
+            if room.rname not in scheduled_rooms and course.cname not in scheduled_rooms.values():
+                if course.capacity < room.capacity:
+                    scheduled_rooms[room.rname] = course.cname
+
+    print(scheduled_rooms)
+    return render(request, 'createSchedule.html', {'dictionary': scheduled_rooms}) 
+
+
 

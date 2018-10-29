@@ -6,9 +6,7 @@
     <p>
         Welcome to the NYU DevOps Scheduler web app home page! Feel free to take a look at our <a href="https://github.com/gcallah/Scheduler">our source code.</a>
     </p>
-   
-    <p> Want to get straight to the point?  Visit our <a href="/scheduler/schedule">scheduler web app.</a>
-
+    <p> For now, the rooms will be inserted on the back-end, but a form similar to the one below may be created! </p>
     <p> Comments? Suggestions? Feel free to leave <a href="/scheduler/feedback">feedback.</a>
 
     <br><br>
@@ -27,7 +25,7 @@
 	</table>
         <input type="submit" value = "Add Course">
     </form>
-    <form role="form" action="/schedule/" method="post">
+    <form role="form" action="scheduler/schedule/" method="post">
         {% csrf_token %}
     <input type="submit" value = "Schedule Courses">
 
