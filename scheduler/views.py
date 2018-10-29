@@ -58,15 +58,27 @@ def feedback(request):
 def requirements(request):
     return render(request, 'requirements.html', {'header': site_hdr})
 
-def schedule(request):
-
+def addCourse(request):
     if request.method=='POST':
         form = ScheduleForm(request.POST or None)
         
         if form.is_valid():
             form.save(commit=True)
+            return render(request, "index.html", {'form': form})
+        else:
+            return HttpResponse(400)
+
+
+
+def schedule(request):
+    if request.method=='POST':
+        form = ScheduleForm(request.POST or None)
+        
+        if form.is_valid():
+            form.save(commit=True)
+            return render(request, "index.html", {'form': form})
+        else:
+            return HttpResponse(400)
     else:
         return render(request, "schedule.html")
-
-
 

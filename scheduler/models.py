@@ -21,6 +21,7 @@ class Professor(models.Model):
 
 class Course(models.Model):
 	cname = models.CharField(max_length=128, blank=False)
+	capacity = models.IntegerField(default = 0)
 
 	def __str__(self):
 		return self.cname
