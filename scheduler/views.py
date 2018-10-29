@@ -5,7 +5,8 @@ from scheduler.forms import ScheduleForm
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template import loader
-
+from .models import TimeSlot
+from django import forms
 
 
 
@@ -56,20 +57,27 @@ def requirements(request):
     return render(request, 'requirements.html', {'header': site_hdr})
 
 def schedule(request):
-    
-    if request.method == 'GET':
-        fname = request.GET.get('fname')
-        lname = request.GET.get('lname')
-        email = request.GET.get('email_address')
 
+    if request.method == 'POST':
+        pname = request.POST.get('pname')
+        cname = request.POST.get('cname')
+        room = request.POST.get('room')
+
+        #time_slot = TimeSlot(pname=pname, cname=cname, room=room)
+        #time_slot.save()
+        
         context = {
-            'fname': fname,
-            'lname': lname,
-            'email': email
+            'pname': pname,
+            'cname': cname,
+            'room': room
         }
 
         template = loader.get_template('schedule.html')
-
         return HttpResponse(template.render(context, request))
+
+    else: 
+
+        return render(request, 'schedule.html', {'header': site_hdr})
+
 
 

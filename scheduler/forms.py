@@ -1,17 +1,5 @@
 from django import forms
-
-def get_time_choices():
-    choices_list = (
-    ('1', '9:30AM - 10:45AM'),
-    ('2', '11:00AM - 12:15PM'),
-    ('3', '12:30PM - 1:45PM'),
-    ('4', '02:00PM - 03:15PM'),
-    ('5', '03:30PM - 04:45PM'),
-    ('6', '05:00PM - 06:45PM'),
-    ('7', '07:00PM - 8:15PM'),
-    ('8', '08:30PM - 10:00PM'),
-)
-    return choices_list
+from .models import *
 
 class FeedbackForm(forms.Form):
     fname = forms.CharField(label='First Name', required=True)
@@ -20,8 +8,9 @@ class FeedbackForm(forms.Form):
     comments = forms.CharField(label='Comments', required=True, widget=forms.Textarea)
 
 class ScheduleForm(forms.Form):
-    fname = forms.CharField(label='First Name', required=True)
-    lname = forms.CharField(label='Last Name', required=True)
-    email_address = forms.EmailField(label='Email Address', required=True)    
-    Course_being_taught = forms.CharField(required=True)
-    time_slot = forms.TypedMultipleChoiceField(choices=get_time_choices,required=True)
+    pname = forms.ModelChoiceField(queryset=Professor.objects.values_list("pname", flat=True), label='Professor Name:', required=True) 
+    cname = forms.ModelChoiceField(queryset=Course.objects.values_list("cname", flat=True), label='Course:', required=True) 
+    room = forms.ModelChoiceField(queryset=Room.objects.values_list("rname", flat=True), label='Room:', required=True) 
+    numStudents = forms.IntegerField(label='Number of Students:')
+
+

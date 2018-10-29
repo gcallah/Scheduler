@@ -33,3 +33,8 @@ class ProfessorAvailability(models.Model):
 	end_time = models.TimeField()
 	day_of_week = models.CharField(max_length=128)
 
+#Used to save form submissions. Each "Time Slot" is assigned to a Professor w. their course and room #.
+class TimeSlot(models.Model):
+	pname = models.CharField(max_length=128, blank=False)
+	cname = models.CharField(max_length=128, blank=False)
+	room = models.CharField(max_length=128, default="")
