@@ -65,8 +65,8 @@ def schedule(request):
         
         if form.is_valid():
             form.save(commit=True)
-
-    return render(request, "index.html", {'form':form})
+    else:
+        return render(request, "schedule.html")
 
 
 
