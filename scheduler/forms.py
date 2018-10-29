@@ -10,12 +10,10 @@ class FeedbackForm(forms.Form):
 
 class ScheduleForm(ModelForm):
 
-    cname = forms.ModelChoiceField(queryset=Course.objects.all(), label='Course:', required=True)
+    cname = forms.ModelChoiceField(queryset=Course.objects.filter(), label='Course:', required=True)
     room = forms.ModelChoiceField(queryset=Room.objects.all(), label='Room:', required=True) 
     numStudents = forms.IntegerField(label='Number of Students:', required=True)
 
     class Meta:
         model = Schedule
         fields = ["cname", "room", "numStudents"]
-
-

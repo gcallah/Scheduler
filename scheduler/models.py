@@ -13,11 +13,17 @@ class Room(models.Model):
     building = models.CharField(max_length=128, default="", blank=True)
     capacity = models.IntegerField()
 
+    def __str__(self):
+        return self.rname
+
 class Professor(models.Model):
 	pname = models.CharField(max_length=128, blank=False)
 
 class Course(models.Model):
 	cname = models.CharField(max_length=128, blank=False)
+
+	def __str__(self):
+		return self.cname
 
 class Lesson(models.Model):
 	cname = models.ForeignKey(Course, on_delete=models.CASCADE)
