@@ -53,7 +53,8 @@ db:
 	git push origin master
 
 prod: $(SRCS) $(OBJ)
-	./all_tests.sh
+	$(TEST_DIR)/all_tests.sh
+	-git commit -a 
 	git push origin master
 # what to do here?
 #	ssh gcallah@ssh.pythonanywhere.com 'cd /home/gcallah/Emu86; /home/gcallah/Emu86/myutils/prod.sh'
