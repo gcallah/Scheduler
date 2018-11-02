@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Room, Professor, Course, Lesson, CourseCatalog
-from .models import ProfessorAvailability, Schedule
+from .models import Room, Professor, Course, Lesson, Schedule, TimeSlot
 
 admin.site.register(Room)
 admin.site.register(Professor)
