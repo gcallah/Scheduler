@@ -9,9 +9,9 @@ from django.forms import ModelForm
 
 class Room(models.Model):
     rname = models.CharField(max_length=128, default="")
+    capacity = models.IntegerField()
     rtype = models.CharField(max_length=128, default="Lecture")
     building = models.CharField(max_length=128, default="", blank=True)
-    capacity = models.IntegerField()
 
     def __str__(self):
         return self.rname
@@ -26,21 +26,20 @@ class Course(models.Model):
 	def __str__(self):
 		return self.cname
 
+class TimeSlot(models.Model):
+	rname = models.ForeignKey(Room, on_delete=models.CASCADE)
+	cname = models.ForeignKey(Course, on_delete=models.CASCADE)
+	start_time = models.IntegerField(default = 0)
+	end_time = models.IntegerField(default = 0)
+	days = models.CharField(max_length=128)
+
 class Lesson(models.Model):
 	cname = models.ForeignKey(Course, on_delete=models.CASCADE)
 	ctype = models.CharField(max_length=128)
 	rtype = models.CharField(max_length=128)
 	length = models.IntegerField()
 
-class CourseCatalog(models.Model):
-	cname = models.ForeignKey(Course, on_delete=models.CASCADE)
-	pname = models.ForeignKey(Professor, on_delete=models.CASCADE)
 
-class ProfessorAvailability(models.Model):
-	pname = models.ForeignKey(Professor, on_delete=models.CASCADE)
-	start_time = models.TimeField()
-	end_time = models.TimeField()
-	day_of_week = models.CharField(max_length=128)
 
 #Used to save form submissions. Each "Schedule" object includes a course name, room, and number of students.
 class Schedule(models.Model):
