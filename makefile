@@ -1,13 +1,26 @@
 # Need to export as ENV var
 export TEMPLATE_DIR = templates
 export QUIZ_DIR = templates
+export TEST_DIR = tests
+export TEST_DATA = test_data
 
 PTML_DIR = html_src
 UDIR = utils
 INCS = $(TEMPLATE_DIR)/head.txt 
-SCHED_DIR = scheduler/scheduler
+DJANGO_DIR = scheduler
+PYTHONFILES = $(shell ls $(DJANGO_DIR)/*.py)
 
 HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/html_src\///')
+
+FORCE:
+
+tests: FORCE
+	$(TEST_DIR)/all_tests.sh
+
+lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
+
+%.pylint:
+	flake8 $*.py
 
 # rule for making html files from ptml files:
 %.html: $(PTML_DIR)/%.ptml $(INCS)
@@ -23,7 +36,7 @@ website: $(INCS) $(HTML_FILES)
 	git pull origin master
 	git push origin master
 
-# the rest of these targets must be tweaked for this project:
+# the rest of these targets may need to be tweaked for this project:
 container:
 	docker build -t scheduler docker
 
@@ -35,12 +48,13 @@ dblocal:
 db:
 	python3 manage.py makemigrations
 	python3 manage.py migrate
-	git add $(SCHED_DIR)/migrations/*.py
-	-git commit $(SCHED_DIR)/migrations/*.py
+	git add $(DJANGO_DIR)/migrations/*.py
+	-git commit $(DJANGO_DIR)/migrations/*.py
 	git push origin master
 
 prod: $(SRCS) $(OBJ)
-	./all_tests.sh
+	$(TEST_DIR)/all_tests.sh
+	-git commit -a 
 	git push origin master
 # what to do here?
 #	ssh gcallah@ssh.pythonanywhere.com 'cd /home/gcallah/Emu86; /home/gcallah/Emu86/myutils/prod.sh'
