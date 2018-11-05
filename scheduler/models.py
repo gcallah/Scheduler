@@ -33,6 +33,9 @@ class TimeSlot(models.Model):
 	end_time = models.IntegerField(default = 0)
 	days = models.CharField(max_length=128)
 
+	def __unicode__(self):
+		return self.cname
+
 class Lesson(models.Model):
 	cname = models.ForeignKey(Course, on_delete=models.CASCADE)
 	ctype = models.CharField(max_length=128)
@@ -46,4 +49,8 @@ class Schedule(models.Model):
 	cname = models.CharField(max_length=128, blank=False)
 	room = models.CharField(max_length=128, blank=False)
 	numStudents=models.IntegerField(default=0, blank=False)
+
+#These are used solely for populating forms without creating misc. room/timeslot object, etc.
+class Enrollment(models.Model):
+    capacity = models.IntegerField(default=0)
 
