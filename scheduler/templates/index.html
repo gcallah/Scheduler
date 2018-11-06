@@ -20,11 +20,28 @@
 		<br>
 		Enter the required infromation below to schedule your course.
         </caption>
+
+        <tr>
+            <th></th>
+            <th>Course Name</th>
+            <th>Enrollment</th>
+            <th>Time</th>
+        </tr>
+
+        {% for item in query %}
+            
+            <tr>
+                <td> {{ form.as_p }}</td>
+                <td>{{ item.cname }}</td>
+                <td>{{ item.start_time }} to {{item.end_time}}</td>
+            </tr>
         
-        {{ form.as_table }}
+        {% endfor %}
+
 	</table>
         <input type="submit" value = "Add Course">
     </form>
+    
     <form role="form" action="scheduler/schedule/" method="post">
         {% csrf_token %}
     <input type="submit" value = "Schedule Courses">

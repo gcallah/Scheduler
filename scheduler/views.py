@@ -8,6 +8,7 @@ from django.template import loader
 from .models import Schedule
 from .models import Course
 from .models import Room
+from .models import TimeSlot
 from django import forms
 
 
@@ -16,13 +17,14 @@ site_hdr = "Course Scheduler"
 
 def index(request):
     form = ScheduleForm()
-    return render(request, 'index.html', {'form':form, 'header': site_hdr})
+    query_results = TimeSlot.objects.all()
+    return render(request, 'index.html', {'form': form, 'query': query_results, 'header': site_hdr})
 
 def about(request):
     return render(request, 'about.html', {'header': site_hdr})
 
 
-#This feedback form old and will be redone using a model form, similar to the current def schedule function below.
+#This feedback form old and will be redone using a model form, similar to the current def schedule function.
 def feedback(request):
     form_class = FeedbackForm
     
@@ -62,14 +64,14 @@ def requirements(request):
 
 def addCourse(request):
     if request.method=='POST':
-        form = ScheduleForm(request.POST or None)
+        
+        #form = ScheduleForm(request.POST or None)
         
         if form.is_valid():
             form.save(commit=True)
             return render(request, "index.html", {'form': form})
         else:
             return HttpResponse(400)
-
 
 def schedule(request):
     all_courses = Course.objects.all().order_by('-capacity')
@@ -84,6 +86,3 @@ def schedule(request):
 
     print(scheduled_rooms)
     return render(request, 'createSchedule.html', {'dictionary': scheduled_rooms}) 
-
-
-

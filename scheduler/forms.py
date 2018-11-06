@@ -10,11 +10,9 @@ class FeedbackForm(forms.Form):
                                widget=forms.Textarea)
 
 class ScheduleForm(ModelForm):
-
-    cname = forms.CharField(label='Course Name:', required=True)
-   # room = forms.CharField(label='Room:', required=True)
-    capacity = forms.IntegerField(label='Number of Students:', required=True)
+    
+    cname = forms.ModelMultipleChoiceField(queryset=TimeSlot.objects.filter(), widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model = Course
-        fields = ["cname", "capacity"]
+        fields = ["cname"]
