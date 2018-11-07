@@ -1,5 +1,6 @@
 Django==2.1.2
 django-extensions==2.1.2
+setuptools==40.4.3
 pytz==2018.5
 six==1.11.0
 coverage==4.5.1
