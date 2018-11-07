@@ -1,24 +1,28 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from scheduler.forms import FeedbackForm
-from scheduler.forms import ScheduleForm
+from scheduler.forms import CourseForm
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template import loader
 from .models import Schedule
 from .models import Course
 from .models import Room
-from .models import TimeSlot
 from django import forms
-
-
 
 site_hdr = "Course Scheduler"
 
+def add_filter(request, kwargs, get_name, kwarg_name):
+    val = request.GET[get_name]
+    if val != '':
+        kwargs[kwarg_name] = val
+
 def index(request):
-    form = ScheduleForm()
-    query_results = TimeSlot.objects.all()
-    return render(request, 'index.html', {'form': form, 'query': query_results, 'header': site_hdr})
+    form = CourseForm()
+
+    course_list = Course.objects.all().order_by('cname')
+
+    return render(request, 'index.html', {'form': form, 'course_list': course_list, 'header': site_hdr})
 
 def about(request):
     return render(request, 'about.html', {'header': site_hdr})
@@ -74,6 +78,7 @@ def addCourse(request):
             return HttpResponse(400)
 
 def schedule(request):
+
     all_courses = Course.objects.all().order_by('-capacity')
     all_rooms = Room.objects.all().order_by('-capacity')
 
@@ -85,4 +90,4 @@ def schedule(request):
                     scheduled_rooms[room.rname] = course.cname
 
     print(scheduled_rooms)
-    return render(request, 'createSchedule.html', {'dictionary': scheduled_rooms}) 
+    return render(request, 'schedule.html', {'dictionary': scheduled_rooms}) 

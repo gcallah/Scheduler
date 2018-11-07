@@ -1,45 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-	<table>
-        	<caption>
-            	Schedule
-        	</caption>
-        
-		<tr>
-		    <th>Time Slot/Day</th>
-			<th>Monday</th>
-			<th>Tuesday</th>
-			<th>Wednesday</th>
-			<th>Thursday</th>
-			<th>Friday</th>
-			<th>Saturday</th>
-			<th>Sunday</th>
-			
-		</tr>
 	
-		<tr>
-			<th>9:30AM-10:45AM</th>
-			<!-- Example listing -->
-			<th>{{ pname }} <br> {{cname}}</th> 
-		</tr>
+	<h1>Proposed Schedule</h1>
 
-		<tr>		    
-		    <th>11:00AM-12:15PM</th>
-		</tr>
-	
+	<table style="width:60%">
 		<tr>
-		    <th>12:30PM-1:45PM</th>
+			<th>Room Name</th>
+			<th>Course Name</th>
 		</tr>
-
-		<tr>		    
-		    <th>2:00PM-3:15PM</th>
-		</tr>
-
-		<tr>
-		    <th>3:30PM-4:45PM</th>
-		</tr>
+		{% for key, value in dictionary.items %}
+			<tr>
+				<td>{{key}}</td>
+	    		<td>{{value}}</td>
+	    	</tr>
+		{% endfor %}
 
 	</table>
 

@@ -9,10 +9,10 @@ class FeedbackForm(forms.Form):
     comments = forms.CharField(label='Comments', required=True,
                                widget=forms.Textarea)
 
-class ScheduleForm(ModelForm):
+class CourseForm(ModelForm):
     
-    cname = forms.ModelMultipleChoiceField(queryset=TimeSlot.objects.filter(), widget=forms.CheckboxSelectMultiple)
+    isSelected=forms.BooleanField(label='', required=False)
 
     class Meta:
         model = Course
-        fields = ["cname"]
+        fields = ["isSelected"]

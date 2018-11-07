@@ -1,4 +1,3 @@
-
 from django import forms
 from django.db import models
 from django.forms import ModelForm
@@ -6,6 +5,8 @@ from django.forms import ModelForm
 # Create your models here.
 
 # we're going to need tables for rooms, courses, professors, and...?
+
+
 
 class Room(models.Model):
     rname = models.CharField(max_length=128, default="")
@@ -20,6 +21,7 @@ class Professor(models.Model):
 	pname = models.CharField(max_length=128, blank=False)
 
 class Course(models.Model):
+	isSelected=models.BooleanField(default=False, primary_key=True)
 	cname = models.CharField(max_length=128, blank=False)
 	capacity = models.IntegerField(default = 0)
 
@@ -42,15 +44,9 @@ class Lesson(models.Model):
 	rtype = models.CharField(max_length=128)
 	length = models.IntegerField()
 
-
-
 #Used to save form submissions. Each "Schedule" object includes a course name, room, and number of students.
 class Schedule(models.Model):
 	cname = models.CharField(max_length=128, blank=False)
 	room = models.CharField(max_length=128, blank=False)
 	numStudents=models.IntegerField(default=0, blank=False)
-
-#These are used solely for populating forms without creating misc. room/timeslot object, etc.
-class Enrollment(models.Model):
-    capacity = models.IntegerField(default=0)
 
