@@ -6,8 +6,6 @@ from django.forms import ModelForm
 
 # we're going to need tables for rooms, courses, professors, and...?
 
-
-
 class Room(models.Model):
     rname = models.CharField(max_length=128, default="")
     capacity = models.IntegerField()
@@ -21,7 +19,6 @@ class Professor(models.Model):
 	pname = models.CharField(max_length=128, blank=False)
 
 class Course(models.Model):
-	isSelected=models.BooleanField(default=False, primary_key=True)
 	cname = models.CharField(max_length=128, blank=False)
 	capacity = models.IntegerField(default = 0)
 
@@ -38,15 +35,8 @@ class TimeSlot(models.Model):
 	def __unicode__(self):
 		return self.cname
 
-class Lesson(models.Model):
-	cname = models.ForeignKey(Course, on_delete=models.CASCADE)
-	ctype = models.CharField(max_length=128)
-	rtype = models.CharField(max_length=128)
-	length = models.IntegerField()
-
 #Used to save form submissions. Each "Schedule" object includes a course name, room, and number of students.
 class Schedule(models.Model):
 	cname = models.CharField(max_length=128, blank=False)
 	room = models.CharField(max_length=128, blank=False)
 	numStudents=models.IntegerField(default=0, blank=False)
-
