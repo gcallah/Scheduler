@@ -32,10 +32,8 @@ def requirements(request):
 
 
 def schedule(request):
-
     all_courses = Course.objects.all().order_by('-capacity')
     all_rooms = Room.objects.all().order_by('-capacity')
-
     scheduled_rooms = {}
     for course in all_courses:
         for room in all_rooms:
@@ -44,5 +42,9 @@ def schedule(request):
                 if course.capacity < room.capacity:
                     scheduled_rooms[room.rname] = course.cname
 
-    # print(scheduled_rooms)
-    return render(request, 'schedule.html', {'dictionary': scheduled_rooms})
+    unscheduled_rooms = []
+    for course in all_courses:
+        if course.cname not in scheduled_rooms.values():
+            unscheduled_rooms.append(course.cname)
+
+    return render(request, 'schedule.html', {'dictionary': scheduled_rooms, 'unscheduled': unscheduled_rooms})

@@ -18,4 +18,11 @@
 
 	</table>
 
+	{% if unscheduled %}
+		<p> Failed to schedule: </p>
+		{% for item in unscheduled %}
+			<p>{{item}}</p>
+		{% endfor %}
+	{% endif %}
+
 {% endblock content %}
