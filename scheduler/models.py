@@ -1,10 +1,8 @@
-from django import forms
 from django.db import models
-from django.forms import ModelForm
 
 # Create your models here.
-
 # we're going to need tables for rooms, courses, professors, and...?
+
 
 class Room(models.Model):
     rname = models.CharField(max_length=128, default="")
@@ -15,27 +13,25 @@ class Room(models.Model):
     def __str__(self):
         return self.rname
 
+
 class Professor(models.Model):
-	pname = models.CharField(max_length=128, blank=False)
+    pname = models.CharField(max_length=128, blank=False)
+
 
 class Course(models.Model):
-	cname = models.CharField(max_length=128, blank=False)
-	capacity = models.IntegerField(default = 0)
+    cname = models.CharField(max_length=128, blank=False)
+    capacity = models.IntegerField(default=0)
 
-	def __str__(self):
-		return self.cname
+    def __str__(self):
+        return self.cname
+
 
 class TimeSlot(models.Model):
-	rname = models.ForeignKey(Room, on_delete=models.CASCADE)
-	cname = models.ForeignKey(Course, on_delete=models.CASCADE)
-	start_time = models.IntegerField(default = 0)
-	end_time = models.IntegerField(default = 0)
-	days = models.CharField(max_length=128)
+    rname = models.ForeignKey(Room, on_delete=models.CASCADE)
+    cname = models.ForeignKey(Course, on_delete=models.CASCADE)
+    start_time = models.IntegerField(default=0)
+    end_time = models.IntegerField(default=0)
+    days = models.CharField(max_length=128)
 
-	def __unicode__(self):
-		return self.cname
-
-#Used to save form submissions. Each "Schedule" object includes a course name, room, and number of students.
-class Schedule(models.Model):
-	cname = models.CharField(max_length=128, blank=False)
-	capacity=models.IntegerField(default=0, blank=False)
+    def __unicode__(self):
+        return self.cname

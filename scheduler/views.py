@@ -5,7 +5,6 @@ from scheduler.forms import CourseForm
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template import loader
-from .models import Schedule
 from .models import Course
 from .models import Room
 from django import forms
