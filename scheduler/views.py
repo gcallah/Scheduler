@@ -32,19 +32,26 @@ def requirements(request):
 
 
 def schedule(request):
+    print(request.POST)
     all_courses = Course.objects.all().order_by('-capacity')
     all_rooms = Room.objects.all().order_by('-capacity')
-    scheduled_rooms = {}
+    scheduled_courses = make_schedule(all_courses, all_rooms)
+    unscheduled_courses = get_unscheduled_course(all_courses, scheduled_courses)
+    return render(request, 'schedule.html', {'dictionary': scheduled_courses, 'unscheduled': unscheduled_courses})
+
+def make_schedule(all_courses, all_rooms): 
+    scheduled_courses = {}
     for course in all_courses:
         for room in all_rooms:
-            if (room.rname not in scheduled_rooms and course.cname
-                    not in scheduled_rooms.values()):
+            if (room.rname not in scheduled_courses and course.cname
+                    not in scheduled_courses.values()):
                 if course.capacity < room.capacity:
-                    scheduled_rooms[room.rname] = course.cname
+                    scheduled_courses[room.rname] = course.cname
+    return scheduled_courses
 
-    unscheduled_rooms = []
+def get_unscheduled_course(all_courses, scheduled_courses):
+    unscheduled_courses = []
     for course in all_courses:
-        if course.cname not in scheduled_rooms.values():
-            unscheduled_rooms.append(course.cname)
-
-    return render(request, 'schedule.html', {'dictionary': scheduled_rooms, 'unscheduled': unscheduled_rooms})
+        if course.cname not in scheduled_courses.values():
+            unscheduled_courses.append(course.cname)
+    return unscheduled_courses
