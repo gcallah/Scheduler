@@ -12,17 +12,16 @@ from django import forms
 
 site_hdr = "Course Scheduler"
 
-def add_filter(request, kwargs, get_name, kwarg_name):
-    val = request.GET[get_name]
-    if val != '':
-        kwargs[kwarg_name] = val
-
 def index(request):
-    form = CourseForm()
-
+    form = CourseForm
     course_list = Course.objects.all().order_by('cname')
 
-    return render(request, 'index.html', {'form': form, 'course_list': course_list, 'header': site_hdr})
+    context = {'course_list':course_list,
+                'form':form,
+                'header':site_hdr,
+    }
+
+    return render(request, 'index.html', context)
 
 def about(request):
     return render(request, 'about.html', {'header': site_hdr})
@@ -89,5 +88,5 @@ def schedule(request):
                 if course.capacity < room.capacity:
                     scheduled_rooms[room.rname] = course.cname
 
-    print(scheduled_rooms)
+    #print(scheduled_rooms)
     return render(request, 'schedule.html', {'dictionary': scheduled_rooms}) 
