@@ -36,10 +36,13 @@ def schedule(request):
     all_courses = Course.objects.all().order_by('-capacity')
     all_rooms = Room.objects.all().order_by('-capacity')
     scheduled_courses = make_schedule(all_courses, all_rooms)
-    unscheduled_courses = get_unscheduled_course(all_courses, scheduled_courses)
-    return render(request, 'schedule.html', {'dictionary': scheduled_courses, 'unscheduled': unscheduled_courses})
+    unscheduled_courses = get_unscheduled_course(
+        all_courses, scheduled_courses)
+    return render(request, 'schedule.html', {
+        'dictionary': scheduled_courses, 'unscheduled': unscheduled_courses})
 
-def make_schedule(all_courses, all_rooms): 
+
+def make_schedule(all_courses, all_rooms):
     scheduled_courses = {}
     for course in all_courses:
         for room in all_rooms:
@@ -48,6 +51,7 @@ def make_schedule(all_courses, all_rooms):
                 if course.capacity < room.capacity:
                     scheduled_courses[room.rname] = course.cname
     return scheduled_courses
+
 
 def get_unscheduled_course(all_courses, scheduled_courses):
     unscheduled_courses = []
