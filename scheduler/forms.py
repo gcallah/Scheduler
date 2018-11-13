@@ -1,4 +1,5 @@
 from django import forms
+from .models import Course
 
 
 class FeedbackForm(forms.Form):
@@ -11,5 +12,4 @@ class FeedbackForm(forms.Form):
 
 
 class CourseForm(forms.Form):
-
     isSelected = forms.BooleanField(label='', required=False)
