@@ -31,9 +31,20 @@ def requirements(request):
     return render(request, 'requirements.html', {'header': site_hdr})
 
 
+def add_filter(request, kwargs, get_name, kwarg_name):
+    courses = request.GET.getlist(get_name)
+
+    for course in courses:
+        if course != '':
+            kwargs.append(course)
+
+
 def schedule(request):
-    print(request.POST)
-    all_courses = Course.objects.all().order_by('-capacity')
+
+    kwargs = []
+    add_filter(request, kwargs, "isSelected", "cname")
+
+    all_courses = Course.objects.filter(cname__in=kwargs).order_by('-capacity')
     all_rooms = Room.objects.all().order_by('-capacity')
     scheduled_courses = make_schedule(all_courses, all_rooms)
     unscheduled_courses = get_unscheduled_course(
