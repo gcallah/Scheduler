@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django import forms
 from .models import Course
 
 
@@ -11,5 +11,5 @@ class FeedbackForm(forms.Form):
                                widget=forms.Textarea)
 
 
-class CourseForm(ModelForm):
+class CourseForm(forms.Form):
     isSelected = forms.BooleanField(label='', required=False)

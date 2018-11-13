@@ -8,5 +8,4 @@ urlpatterns = [
     url(r'^scheduler/about/*$', views.about, name='about'),
     url(r'^scheduler/feedback/*$', views.feedback, name='feedback'),
     url(r'^scheduler/schedule/*$', views.schedule, name='schedule'),
-    url(r'^scheduler/addCourse/*$', views.addCourse, name='addCourse'),
 ]
