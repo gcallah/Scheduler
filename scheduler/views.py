@@ -1,93 +1,61 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from scheduler.forms import FeedbackForm
 from scheduler.forms import CourseForm
-from django.core.mail import EmailMessage
-from django.shortcuts import redirect
-from django.template import loader
-from .models import Schedule
 from .models import Course
 from .models import Room
-from django import forms
 
 site_hdr = "Course Scheduler"
 
-def add_filter(request, kwargs, get_name, kwarg_name):
-    val = request.GET[get_name]
-    if val != '':
-        kwargs[kwarg_name] = val
 
 def index(request):
-    form = CourseForm()
-
+    form = CourseForm
     course_list = Course.objects.all().order_by('cname')
 
-    return render(request, 'index.html', {'form': form, 'course_list': course_list, 'header': site_hdr})
+    context = {'course_list': course_list, 'form': form, 'header': site_hdr}
+
+    return render(request, 'index.html', context)
+
 
 def about(request):
     return render(request, 'about.html', {'header': site_hdr})
 
 
-#This feedback form old and will be redone using a model form, similar to the current def schedule function.
+# This feedback form old and will be redone using a model form.
 def feedback(request):
     form_class = FeedbackForm
-    
-    if request.method == 'POST':
-        form = form_class(data=request.POST)
 
-        if form.is_valid():
-            First_name = request.POST.get('First_name', '')
-            Last_name = request.POST.get('Last_name', '')
-            contact_email = request.POST.get('contact_email', '')
-            comments = request.POST.get('Comments', '')
+    return render(request, 'feedback.html', {'form': form_class})
 
-            template = get_template('feedback_template.txt')
-            context = {
-                'First_name': First_name,
-                'Last_name': Last_name,
-                'Contact_email': contact_email,
-                'Comments': comments,
-            }
-            content = template.render(context)
-
-            email = EmailMessage(
-                "New contact form submission",
-                content,
-                "Your website" +'',
-                ['youremail@gmail.com'],
-                headers = {'Reply-To': contact_email }
-            )
-            email.send()
-
-            return redirect('/scheduler/feedback')
-
-    return render(request, 'feedback.html', {'form': form_class,})
 
 def requirements(request):
     return render(request, 'requirements.html', {'header': site_hdr})
 
-def addCourse(request):
-    if request.method=='POST':
-        
-        #form = ScheduleForm(request.POST or None)
-        
-        if form.is_valid():
-            form.save(commit=True)
-            return render(request, "index.html", {'form': form})
-        else:
-            return HttpResponse(400)
 
 def schedule(request):
-
+    print(request.POST)
     all_courses = Course.objects.all().order_by('-capacity')
     all_rooms = Room.objects.all().order_by('-capacity')
+    scheduled_courses = make_schedule(all_courses, all_rooms)
+    unscheduled_courses = get_unscheduled_course(
+        all_courses, scheduled_courses)
+    return render(request, 'schedule.html', {
+        'dictionary': scheduled_courses, 'unscheduled': unscheduled_courses})
 
-    scheduled_rooms = {}
+
+def make_schedule(all_courses, all_rooms):
+    scheduled_courses = {}
     for course in all_courses:
         for room in all_rooms:
-            if room.rname not in scheduled_rooms and course.cname not in scheduled_rooms.values():
+            if (room.rname not in scheduled_courses and course.cname
+                    not in scheduled_courses.values()):
                 if course.capacity < room.capacity:
-                    scheduled_rooms[room.rname] = course.cname
+                    scheduled_courses[room.rname] = course.cname
+    return scheduled_courses
 
-    print(scheduled_rooms)
-    return render(request, 'schedule.html', {'dictionary': scheduled_rooms}) 
+
+def get_unscheduled_course(all_courses, scheduled_courses):
+    unscheduled_courses = []
+    for course in all_courses:
+        if course.cname not in scheduled_courses.values():
+            unscheduled_courses.append(course.cname)
+    return unscheduled_courses

@@ -1,7 +1,5 @@
 from django.db import models
 
-# we're going to need tables for rooms, courses, professors, and...?
-
 
 class Room(models.Model):
     rname = models.CharField(max_length=128, default="")
@@ -42,3 +40,6 @@ class Schedule(models.Model):
     cname = models.CharField(max_length=128, blank=False)
     room = models.CharField(max_length=128, blank=False)
     numStudents = models.IntegerField(default=0, blank=False)
+
+    def __str__(self):
+        return self.cname
