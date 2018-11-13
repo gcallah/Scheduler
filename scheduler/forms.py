@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-from .models import *
+from .models import Course
+
 
 class FeedbackForm(forms.Form):
     fname = forms.CharField(label='First Name', required=True)
@@ -9,9 +10,9 @@ class FeedbackForm(forms.Form):
     comments = forms.CharField(label='Comments', required=True,
                                widget=forms.Textarea)
 
+
 class CourseForm(ModelForm):
-    
-    isSelected=forms.BooleanField(label='', required=False)
+    isSelected = forms.BooleanField(label='', required=False)
 
     class Meta:
         model = Course

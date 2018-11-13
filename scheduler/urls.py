@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.urls import path 
 
 from . import views
 
@@ -11,7 +10,4 @@ urlpatterns = [
     url(r'^scheduler/feedback/*$', views.feedback, name='feedback'),
     url(r'^scheduler/schedule/*$', views.schedule, name='schedule'),
     url(r'^scheduler/addCourse/*$', views.addCourse, name='addCourse'),
-
-
 ]
- 
