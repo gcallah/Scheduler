@@ -40,17 +40,23 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 
 
 def schedule(request):
+    if (request.method == 'POST'):
+        form_data = request.POST
+        courses = {}
 
-    kwargs = []
-    add_filter(request, kwargs, "isSelected", "cname")
-
-    all_courses = Course.objects.filter(cname__in=kwargs).order_by('-capacity')
-    all_rooms = Room.objects.all().order_by('-capacity')
-    scheduled_courses = make_schedule(all_courses, all_rooms)
-    unscheduled_courses = get_unscheduled_course(
-        all_courses, scheduled_courses)
-    return render(request, 'schedule.html', {
-        'dictionary': scheduled_courses, 'unscheduled': unscheduled_courses})
+        # Returns a dictionary of courses and the number of sections to schedule for each course
+        # If number of sections is 0, then course name does not get added to dictionary
+        for key, value in form_data.items():
+            if (key != 'csrfmiddlewaretoken' and int(value) != 0):
+                courses[key] = value
+        
+        all_courses = Course.objects.filter(cname__in=list(courses.keys())).order_by('-capacity')
+        all_rooms = Room.objects.all().order_by('-capacity')
+        scheduled_courses = make_schedule(all_courses, all_rooms)
+        unscheduled_courses = get_unscheduled_course(
+            all_courses, scheduled_courses)
+        return render(request, 'schedule.html', {
+            'dictionary': scheduled_courses, 'unscheduled': unscheduled_courses})
 
 
 def make_schedule(all_courses, all_rooms):
