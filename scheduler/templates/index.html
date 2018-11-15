@@ -13,7 +13,7 @@
 
     <h1>Course Schedule Form</h1>
     
-    <form role="form" action="{% url 'scheduler:schedule' %}" method="get">
+    <form role="form" action="{% url 'scheduler:schedule' %}" method="post">
         {% csrf_token %}
 		
 		<p>Select which courses to schedule.</p>
@@ -28,7 +28,13 @@
     {% for course in course_list %}
 
         <tr>
-            <td><input type="checkbox" name="isSelected" value = {{course.cname}} /></td>
+            <!-- <td><input type="checkbox" name="isSelected" value = {{course.cname}} /></td> -->
+            <td> 
+                <select name={{course.cname}}>
+                    <option value="0"> 0 </option>
+                    <option value="1"> 1 </option>
+                </select>
+            </td>
             <td>{{ course.cname }}</td>
             <td>{{ course.capacity }}</td>
         </tr>
