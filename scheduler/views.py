@@ -40,7 +40,7 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 
 
 def schedule(request):
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         form_data = request.POST
         courses = {}
 
@@ -56,23 +56,33 @@ def schedule(request):
         unscheduled_courses = get_unscheduled_course(
             all_courses, scheduled_courses)
         return render(request, 'schedule.html', {
-            'dictionary': scheduled_courses, 'unscheduled': unscheduled_courses})
+            'scheduled': scheduled_courses, 'unscheduled': unscheduled_courses})
 
 
 def make_schedule(all_courses, all_rooms):
-    scheduled_courses = {}
+    scheduled_courses = []
     for course in all_courses:
         for room in all_rooms:
-            if (room.rname not in scheduled_courses and course.cname
-                    not in scheduled_courses.values()):
+            scheduled_rnames = list(map(lambda course: course['rname'], scheduled_courses))
+            scheduled_cnames = list(map(lambda course: course['cname'], scheduled_courses))
+
+            if (room.rname not in scheduled_rnames and
+                course.cname not in scheduled_cnames):
                 if course.capacity < room.capacity:
-                    scheduled_courses[room.rname] = course.cname
+                    scheduled_course = {
+                        "rname": room.rname,
+                        "cname": course.cname,
+                        "course_capacity": course.capacity,
+                        "room_capacity": room.capacity
+                    }
+
+                    scheduled_courses.append(scheduled_course)
     return scheduled_courses
 
 
 def get_unscheduled_course(all_courses, scheduled_courses):
     unscheduled_courses = []
     for course in all_courses:
-        if course.cname not in scheduled_courses.values():
+        if course.cname not in [d['cname'] for d in scheduled_courses]:
             unscheduled_courses.append(course.cname)
     return unscheduled_courses
