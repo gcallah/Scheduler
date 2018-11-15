@@ -23,12 +23,11 @@
         <tr>
                 <th></th>
                 <th>Course Name</th>
-                <th>Enrollment</th>
+                <th>Capacity</th>
         </tr>         
     {% for course in course_list %}
 
         <tr>
-            <!-- <td><input type="checkbox" name="isSelected" value = {{course.cname}} /></td> -->
             <td> 
                 <select name={{course.cname}}>
                     <option value="0"> 0 </option>
