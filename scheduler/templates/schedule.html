@@ -6,16 +6,25 @@
 
 	<table style="width:60%">
 		<tr>
-			<th>Room Name</th>
-			<th>Course Name</th>
+			<th> Room Name </th>
+			<th> Room Capacity </th>
+			<th> Course Name </th>
+			<th> Course Capacity </th>
 		</tr>
-		{% for key, value in dictionary.items %}
+		<!-- {% for key, value in dictionary.items %}
 			<tr>
 				<td>{{key}}</td>
 	    		<td>{{value}}</td>
 	    	</tr>
+		{% endfor %} -->
+		{% for scheduled_course in scheduled %}
+			<tr>
+				<td> {{ scheduled_course.rname }} </td>
+				<td> {{ scheduled_course.room_capacity }} </td>
+				<td> {{ scheduled_course.cname }} </td> 
+				<td> {{ scheduled_course.course_capacity }} </td>
+			</tr>
 		{% endfor %}
-
 	</table>
 
 	{% if unscheduled %}
