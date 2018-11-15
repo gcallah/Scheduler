@@ -36,7 +36,7 @@ th, td {
 }
 
 th {
-    background: #444;
+    background: #7386D5;
 }
 
 th.table-head {
@@ -44,7 +44,8 @@ th.table-head {
 }
 
 td {
-    background: #444;
+    background: #cfcfcf;
+    color: black;
 }
 
 p {
