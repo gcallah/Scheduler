@@ -72,9 +72,11 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
         for room in all_rooms:
             scheduled_rnames = list(map(
                 lambda course: course['rname'], scheduled_courses))
+            scheduled_cnames = list(map(
+                lambda course: course['cname'], scheduled_courses))
             if (room.rname not in scheduled_rnames and
                     all_courses_total.count(course.cname)
-                    != scheduled_courses.count(course.cname)):
+                    != scheduled_cnames.count(course.cname)):
                 if course.capacity < room.capacity:
                     scheduled_course = {
                         "rname": room.rname,
