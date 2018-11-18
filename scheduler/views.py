@@ -1,17 +1,15 @@
 from django.shortcuts import render
 from scheduler.forms import FeedbackForm
-from scheduler.forms import CourseForm
 from .models import Course
 from .models import Room
+from .models import TimeSlot
 
 site_hdr = "Course Scheduler"
 
 
 def index(request):
-    form = CourseForm
     course_list = Course.objects.all().order_by('cname')
-
-    context = {'course_list': course_list, 'form': form, 'header': site_hdr}
+    context = {'course_list': course_list, 'header': site_hdr }
 
     return render(request, 'index.html', context)
 
@@ -78,7 +76,9 @@ def make_schedule(all_courses, all_rooms):
                         "rname": room.rname,
                         "cname": course.cname,
                         "course_capacity": course.capacity,
-                        "room_capacity": room.capacity
+                        "room_capacity": room.capacity,
+                        "start_time": course.start_time,
+                        "end_time": course.end_time
                     }
 
                     scheduled_courses.append(scheduled_course)

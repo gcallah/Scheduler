@@ -9,6 +9,3 @@ class FeedbackForm(forms.Form):
     comments = forms.CharField(label='Comments', required=True,
                                widget=forms.Textarea)
 
-
-class CourseForm(forms.Form):
-    isSelected = forms.BooleanField(label='', required=False)
