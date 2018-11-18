@@ -42,23 +42,23 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 def schedule(request):
     if request.method == 'POST':
         form_data = request.POST
-        courses = {}
 
         # Returns a dictionary of courses and the number of sections
         # to schedule for each course. If number of sections is 0,
         # then course name does not get added to dictionary
         courses_from_form = create_list_of_all_courses(form_data.items())
-        print(courses_from_form)
         all_courses = Course.objects.filter(cname__in=list(
             courses_from_form)).order_by('capacity')
-        print(all_courses)
         all_rooms = Room.objects.all().order_by('capacity')
-        scheduled_courses = make_schedule(all_courses, all_rooms, courses_from_form)
+        scheduled_courses = make_schedule(all_courses,
+                                          all_rooms,
+                                          courses_from_form)
         unscheduled_courses = get_unscheduled_course(
-            all_courses, scheduled_courses)
+            all_courses, scheduled_courses, courses_from_form)
         return render(request, 'schedule.html', {
             'scheduled': scheduled_courses,
             'unscheduled': unscheduled_courses})
+
 
 def create_list_of_all_courses(form_data):
     all_courses = []
@@ -68,16 +68,16 @@ def create_list_of_all_courses(form_data):
                 all_courses.append(key)
     return all_courses
 
+
 def make_schedule(all_courses, all_rooms, all_courses_total):
     scheduled_courses = []
     for course in all_courses:
         for room in all_rooms:
             scheduled_rnames = list(map(
                 lambda course: course['rname'], scheduled_courses))
-            scheduled_cnames = list(map(
-                lambda course: course['cname'], scheduled_courses))
             if (room.rname not in scheduled_rnames and
-                   all_courses_total.count(course.cname) != scheduled_courses.count(course.cname)):
+                    all_courses_total.count(course.cname)
+                    != scheduled_courses.count(course.cname)):
                 if course.capacity < room.capacity:
                     scheduled_course = {
                         "rname": room.rname,
@@ -90,9 +90,11 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
     return scheduled_courses
 
 
-def get_unscheduled_course(all_courses, scheduled_courses):
+def get_unscheduled_course(all_courses, scheduled_courses, all_courses_total):
     unscheduled_courses = []
-    for course in all_courses:
-        if course.cname not in [d['cname'] for d in scheduled_courses]:
-            unscheduled_courses.append(course.cname)
+    course_names = [d['cname'] for d in scheduled_courses]
+    for course in all_courses_total:
+        if course_names.count(course) + unscheduled_courses.count(course) != all_courses_total.count(course):
+            unscheduled_courses.append(course)
+
     return unscheduled_courses
