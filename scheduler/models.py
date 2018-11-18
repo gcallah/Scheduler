@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 class Room(models.Model):
@@ -18,13 +19,14 @@ class Professor(models.Model):
 class Course(models.Model):
     cname = models.CharField(max_length=128, blank=False)
     capacity = models.IntegerField(default=0)
+    start_time = models.TimeField(default=datetime.now, blank=True)
+    end_time = models.TimeField(default=datetime.now, blank=True)
 
     def __str__(self):
         return self.cname
 
 
 class TimeSlot(models.Model):
-    rname = models.ForeignKey(Room, on_delete=models.CASCADE)
     cname = models.ForeignKey(Course, on_delete=models.CASCADE)
     start_time = models.IntegerField(default=0)
     end_time = models.IntegerField(default=0)

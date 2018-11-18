@@ -6,10 +6,11 @@
 
 	<table style="width:60%">
 		<tr>
-			<th> Room Name </th>
-			<th> Room Capacity </th>
 			<th> Course Name </th>
-			<th> Course Capacity </th>
+			<th> Course Time </th>
+			<th> Course Capacity</th>
+			<th> Room </th>
+			<th> Room Capacity </th>
 		</tr>
 		<!-- {% for key, value in dictionary.items %}
 			<tr>
@@ -19,10 +20,11 @@
 		{% endfor %} -->
 		{% for scheduled_course in scheduled %}
 			<tr>
+				<td> {{ scheduled_course.cname }} </td> 
+				<td> {{ scheduled_course.start_time }} - {{ scheduled_course.end_time }} </td>
+				<td> {{ scheduled_course.course_capacity }} </td>
 				<td> {{ scheduled_course.rname }} </td>
 				<td> {{ scheduled_course.room_capacity }} </td>
-				<td> {{ scheduled_course.cname }} </td> 
-				<td> {{ scheduled_course.course_capacity }} </td>
 			</tr>
 		{% endfor %}
 	</table>
