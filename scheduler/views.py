@@ -2,14 +2,13 @@ from django.shortcuts import render
 from scheduler.forms import FeedbackForm
 from .models import Course
 from .models import Room
-from .models import TimeSlot
 
 site_hdr = "Course Scheduler"
 
 
 def index(request):
     course_list = Course.objects.all().order_by('cname')
-    context = {'course_list': course_list, 'header': site_hdr }
+    context = {'course_list': course_list, 'header': site_hdr}
 
     return render(request, 'index.html', context)
 

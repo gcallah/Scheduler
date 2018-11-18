@@ -8,4 +8,3 @@ class FeedbackForm(forms.Form):
     email_address = forms.EmailField(label='Email Address', required=True)
     comments = forms.CharField(label='Comments', required=True,
                                widget=forms.Textarea)
-

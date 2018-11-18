@@ -22,7 +22,6 @@ class Course(models.Model):
     start_time = models.TimeField(default=datetime.now, blank=True)
     end_time = models.TimeField(default=datetime.now, blank=True)
 
-
     def __str__(self):
         return self.cname
 
