@@ -47,22 +47,28 @@ def schedule(request):
         # Returns a dictionary of courses and the number of sections
         # to schedule for each course. If number of sections is 0,
         # then course name does not get added to dictionary
-        for key, value in form_data.items():
-            if (key != 'csrfmiddlewaretoken' and int(value) != 0):
-                courses[key] = value
-
+        courses_from_form = create_list_of_all_courses(form_data.items())
+        print(courses_from_form)
         all_courses = Course.objects.filter(cname__in=list(
-            courses.keys())).order_by('capacity')
+            courses_from_form)).order_by('capacity')
+        print(all_courses)
         all_rooms = Room.objects.all().order_by('capacity')
-        scheduled_courses = make_schedule(all_courses, all_rooms)
+        scheduled_courses = make_schedule(all_courses, all_rooms, courses_from_form)
         unscheduled_courses = get_unscheduled_course(
             all_courses, scheduled_courses)
         return render(request, 'schedule.html', {
             'scheduled': scheduled_courses,
             'unscheduled': unscheduled_courses})
 
+def create_list_of_all_courses(form_data):
+    all_courses = []
+    for key, value in form_data:
+        if (key != 'csrfmiddlewaretoken' and int(value) != 0):
+            for i in range(int(value)):
+                all_courses.append(key)
+    return all_courses
 
-def make_schedule(all_courses, all_rooms):
+def make_schedule(all_courses, all_rooms, all_courses_total):
     scheduled_courses = []
     for course in all_courses:
         for room in all_rooms:
@@ -70,9 +76,8 @@ def make_schedule(all_courses, all_rooms):
                 lambda course: course['rname'], scheduled_courses))
             scheduled_cnames = list(map(
                 lambda course: course['cname'], scheduled_courses))
-
             if (room.rname not in scheduled_rnames and
-                    course.cname not in scheduled_cnames):
+                   all_courses_total.count(course.cname) != scheduled_courses.count(course.cname)):
                 if course.capacity < room.capacity:
                     scheduled_course = {
                         "rname": room.rname,
