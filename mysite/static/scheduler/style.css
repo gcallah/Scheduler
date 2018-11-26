@@ -300,5 +300,8 @@ input[type=submit] {
     border: 0 none;
     -webkit-border-radius: .5em;
     border-radius: .5em;
-    margin: .2em 2.5em .2em 14.5em;
+    margin: 2.0em 2.5em 2.0em 14.5em;
+    cursor: pointer;
 }
+
+input[type=submit] .
