@@ -21,27 +21,22 @@
         
     <table>  
         <tr>
-                <th></th>
-                <th>Course Name</th>
-                <th>Capacity</th>
+            <th></th>
+            <th>Course Name</th>
+            <th>Capacity</th>
         </tr>         
     {% for course in course_list %}
-
         <tr>
             <td> 
                 <select name={{course.cname}}>
-                    <option value="0"> 0 </option>
-                    <option value="1"> 1 </option>
-                    <option value="2"> 2 </option>
-                    <option value="3"> 3 </option>
-                    <option value="4"> 4 </option>
-                    <option value="5"> 5 </option>
+                    {% for i in max_sections %}
+                        <option value={{i}}> {{i}} </option>
+                    {% endfor %}
                 </select>
             </td>
             <td>{{ course.cname }}</td>
             <td>{{ course.capacity }}</td>
         </tr>
-    
     {% endfor %}
     </table>    
         <br>
