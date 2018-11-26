@@ -4,11 +4,11 @@ from .models import Course
 from .models import Room
 
 site_hdr = "Course Scheduler"
-
+max_sections = 5
 
 def index(request):
     course_list = Course.objects.all().order_by('cname')
-    context = {'course_list': course_list, 'header': site_hdr}
+    context = {'course_list': course_list, 'header': site_hdr, 'max_sections': range(max_sections + 1) }
 
     return render(request, 'index.html', context)
 
