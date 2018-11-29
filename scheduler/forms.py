@@ -2,7 +2,6 @@ from django import forms
 
 
 class FeedbackForm(forms.Form):
-
     fname = forms.CharField(label='First Name', required=True)
     lname = forms.CharField(label='Last Name', required=True)
     email_address = forms.EmailField(label='Email Address', required=True)
