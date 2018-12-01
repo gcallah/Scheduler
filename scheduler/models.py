@@ -36,9 +36,11 @@ class TimeSlot(models.Model):
         return self.cname
 
 
-# Used to save form submissions. Each "Schedule" object includes a
-# course name, room, and number of students.
 class Schedule(models.Model):
+    """
+    Used to save form submissions. Each Schedule object includes a
+    course name, room, and number of students.
+    """
     cname = models.CharField(max_length=128, blank=False)
     room = models.CharField(max_length=128, blank=False)
     numStudents = models.IntegerField(default=0, blank=False)
