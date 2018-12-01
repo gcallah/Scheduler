@@ -6,9 +6,14 @@ from .models import Room
 site_hdr = "Course Scheduler"
 max_sections = 5
 
+
 def index(request):
     course_list = Course.objects.all().order_by('cname')
-    context = {'course_list': course_list, 'header': site_hdr, 'max_sections': range(max_sections + 1) }
+    context = {
+        'course_list': course_list,
+        'header': site_hdr,
+        'max_sections': range(max_sections + 1)
+    }
 
     return render(request, 'index.html', context)
 
@@ -95,7 +100,10 @@ def get_unscheduled_course(all_courses, scheduled_courses, all_courses_total):
     unscheduled_courses = []
     course_names = [d['cname'] for d in scheduled_courses]
     for course in all_courses_total:
-        if course_names.count(course) + unscheduled_courses.count(course) != all_courses_total.count(course):
+        num_scheduled = course_names.count(course)
+        num_unscheduled = unscheduled_courses.count(course)
+        total_num = all_courses_total.count(course)
+        if num_scheduled + num_unscheduled != total_num:
             unscheduled_courses.append(course)
 
     return unscheduled_courses
