@@ -89,7 +89,8 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
                         "course_capacity": course.capacity,
                         "room_capacity": room.capacity,
                         "start_time": course.start_time,
-                        "end_time": course.end_time
+                        "end_time": course.end_time,
+                        "day_of_week": course.days
                     }
 
                     scheduled_courses.append(scheduled_course)

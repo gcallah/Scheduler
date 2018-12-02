@@ -1,6 +1,16 @@
 from django.db import models
 from datetime import datetime
 
+DAYS_OF_WEEK = (
+    ("Monday", 'Monday'),
+    ("Tuesday", 'Tuesday'),
+    ("Wednesday", 'Wednesday'),
+    ("Thursday", 'Thursday'),
+    ("Friday", 'Friday'),
+    ("Saturday", 'Saturday'),
+    ("sunday", 'Sunday'),
+)
+
 
 class Room(models.Model):
     rname = models.CharField(max_length=128, default="")
@@ -21,6 +31,7 @@ class Course(models.Model):
     capacity = models.IntegerField(default=0)
     start_time = models.TimeField(default=datetime.now, blank=True)
     end_time = models.TimeField(default=datetime.now, blank=True)
+    days = models.CharField(default="Monday", max_length=9, choices=DAYS_OF_WEEK)
 
     def __str__(self):
         return self.cname
