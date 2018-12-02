@@ -17,17 +17,15 @@ class Room(models.Model):
     capacity = models.IntegerField()
     rtype = models.CharField(max_length=128, default="Lecture")
     building = models.CharField(max_length=128, default="", blank=True)
+    start_time = models.TimeField(default=datetime.now, blank=True)
+    end_time = models.TimeField(default=datetime.now, blank=True)
 
     def __str__(self):
         return self.rname
 
-
-class Professor(models.Model):
-    pname = models.CharField(max_length=128, blank=False)
-
-
 class Course(models.Model):
     cname = models.CharField(max_length=128, blank=False)
+    pname = models.CharField(default="", max_length=128, blank=False)
     capacity = models.IntegerField(default=0)
     start_time = models.TimeField(default=datetime.now, blank=True)
     end_time = models.TimeField(default=datetime.now, blank=True)
