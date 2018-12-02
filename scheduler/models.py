@@ -23,13 +23,16 @@ class Room(models.Model):
     def __str__(self):
         return self.rname
 
+
 class Course(models.Model):
     cname = models.CharField(max_length=128, blank=False)
     pname = models.CharField(default="", max_length=128, blank=False)
     capacity = models.IntegerField(default=0)
     start_time = models.TimeField(default=datetime.now, blank=True)
-    end_time = models.TimeField(default=datetime.now, blank=True)
-    days = models.CharField(default="Monday", max_length=9, choices=DAYS_OF_WEEK)
+    end_time = models.TimeField(default=datetime.now,
+                                blank=True)
+    days = models.CharField(default="Monday", max_length=9,
+                            choices=DAYS_OF_WEEK)
 
     def __str__(self):
         return self.cname
