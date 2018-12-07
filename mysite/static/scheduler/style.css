@@ -308,3 +308,9 @@ div.schedule {
     display: inline-block;
     text-align: center;
 }
+
+ul.errors li {
+    font-size: 1.0em;
+    margin-top: 15px;
+    margin-left: 5px;
+}
