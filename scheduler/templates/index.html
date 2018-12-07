@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <h1>NYU DevOps Scheduler</h1>
     <p>
         Welcome to the NYU DevOps Scheduler web app home page! Feel free to take a look at our <a href="https://github.com/gcallah/Scheduler">our source code.</a>
     </p>
@@ -11,7 +9,7 @@
 
     <br><br>
 
-    <h1>Course Schedule Form</h1>
+    <h3> Schedule a Course </h3>
     
     <form role="form" action="{% url 'scheduler:schedule' %}" method="post">
         {% csrf_token %}
