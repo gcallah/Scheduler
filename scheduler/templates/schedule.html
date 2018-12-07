@@ -2,30 +2,32 @@
 
 {% block content %}
 	
-	<h4>Proposed Schedule</h4>
+	<div class="schedule">
+		<h4>Proposed Schedule</h4>
 
-	<table style="width:60%">
-		<tr>
-			<th></th>
-			<th> Course Name </th>
-			<th> Course Time </th>
-			<th> Course Capacity</th>
-			<th> Room </th>
-			<th> Room Capacity </th>
-		</tr>
-		{% for scheduled_course in scheduled %}
+		<table>
 			<tr>
-				<td> <input type="checkbox" /> </td>
-				<td> {{ scheduled_course.cname }} </td> 
-				<td> {{ scheduled_course.day_of_week }} : {{ scheduled_course.start_time }} - {{ scheduled_course.end_time }} </td>
-				<td> {{ scheduled_course.course_capacity }} </td>
-				<td> {{ scheduled_course.rname }} </td>
-				<td> {{ scheduled_course.room_capacity }} </td>
+				<th></th>
+				<th> Course Name </th>
+				<th> Course Time </th>
+				<th> Course Capacity</th>
+				<th> Room </th>
+				<th> Room Capacity </th>
 			</tr>
-		{% endfor %}
-	</table>
+			{% for scheduled_course in scheduled %}
+				<tr>
+					<td> <input type="checkbox" /> </td>
+					<td> {{ scheduled_course.cname }} </td> 
+					<td> {{ scheduled_course.day_of_week }} : {{ scheduled_course.start_time }} - {{ scheduled_course.end_time }} </td>
+					<td> {{ scheduled_course.course_capacity }} </td>
+					<td> {{ scheduled_course.rname }} </td>
+					<td> {{ scheduled_course.room_capacity }} </td>
+				</tr>
+			{% endfor %}
+		</table>
 
-	<input type="submit" value="Reschedule Checked Courses" />
+		<input type="submit" value="Reschedule Checked Courses" />
+	</div>
 
 	{% if unscheduled %}
 		<p> Failed to schedule: </p>
