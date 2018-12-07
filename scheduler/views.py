@@ -59,7 +59,9 @@ def schedule(request):
             all_courses, scheduled_courses, courses_from_form)
         return render(request, 'schedule.html', {
             'scheduled': scheduled_courses,
-            'unscheduled': unscheduled_courses})
+            'unscheduled': unscheduled_courses,
+            'header': site_hdr
+        })
 
 
 def create_list_of_all_courses(form_data):
