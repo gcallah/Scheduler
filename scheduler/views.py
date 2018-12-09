@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from scheduler.forms import FeedbackForm
+from .schedule import schedule_algo
 from .models import Course
 from .models import Room
 
@@ -41,6 +42,11 @@ def add_filter(request, kwargs, get_name, kwarg_name):
             kwargs.append(course)
 
 
+def schedule(request):
+    if request.method == 'POST':
+        return schedule_algo(request)
+
+'''
 def schedule(request):
     if request.method == 'POST':
         form_data = request.POST
@@ -110,3 +116,4 @@ def get_unscheduled_course(all_courses, scheduled_courses, all_courses_total):
             unscheduled_courses.append(course)
 
     return unscheduled_courses
+'''
