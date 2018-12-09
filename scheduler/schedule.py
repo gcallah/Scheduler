@@ -4,8 +4,8 @@ from .models import Room
 
 site_hdr = "Course Scheduler"
 
-def schedule_algo(request):
 
+def schedule_algo(request):
     form_data = request.POST
     # Returns a dictionary of courses and the number of sections
     # to schedule for each course. If number of sections is 0,
