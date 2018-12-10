@@ -19,8 +19,6 @@ def schedule_algo(request):
                                       courses_from_form)
     unscheduled_courses = get_unscheduled_course(
         all_courses, scheduled_courses, courses_from_form)
-    print(unscheduled_courses)
-    print(request)
     return render(request, 'schedule.html', {
         'scheduled': scheduled_courses,
         'unscheduled': unscheduled_courses,

@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from scheduler.models import Course, Room
-from scheduler.views import make_schedule, get_unscheduled_course
+from scheduler.schedule import make_schedule, get_unscheduled_course
 
 
 class AlgorithmTestCase(TestCase):
