@@ -19,6 +19,8 @@ class Room(models.Model):
     building = models.CharField(max_length=128, default="", blank=True)
     start_time = models.TimeField(default=datetime.now, blank=True)
     end_time = models.TimeField(default=datetime.now, blank=True)
+    days = models.CharField(default="Monday", max_length=9,
+                            choices=DAYS_OF_WEEK)
 
     def __str__(self):
         return self.rname
