@@ -48,7 +48,8 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
             if (room.rname not in scheduled_rnames and
                     all_courses_total.count(course.cname)
                     != scheduled_cnames.count(course.cname)):
-                if course.capacity < room.capacity:
+                if (course.capacity < room.capacity 
+                    and course.days == room.days):
                     scheduled_course = {
                         "rname": room.rname,
                         "cname": course.cname,
