@@ -8,6 +8,7 @@ PTML_DIR = html_src
 UDIR = utils
 INCS = $(TEMPLATE_DIR)/head.txt 
 DJANGO_DIR = scheduler
+DOCKER_DIR = docker
 PYTHONFILES = $(shell ls $(DJANGO_DIR)/*.py)
 
 HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/html_src\///')
@@ -30,9 +31,11 @@ lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
 
 local: $(HTML_FILES) 
 
-# the rest of these targets may need to be tweaked for this project:
-container:
-	docker build -t scheduler docker
+dev_container:
+	docker build -t scheduler $(DOCKER_DIR)
+
+deploy_container:
+	docker build -t nyuscheduler -f $(DOCKER_DIR)/Deployable $(DOCKER_DIR)
 
 
 dblocal:
