@@ -304,6 +304,11 @@ input[type=submit] {
     cursor: pointer;
 }
 
+.schedule-button {
+    margin: 15px;
+    margin-left: 50px;
+}
+
 div.schedule {
     display: inline-block;
     text-align: center;
