@@ -1,9 +1,7 @@
 from django import forms
+from .models import Feedback
 
-
-class FeedbackForm(forms.Form):
-    fname = forms.CharField(label='First Name', required=True)
-    lname = forms.CharField(label='Last Name', required=True)
-    email_address = forms.EmailField(label='Email Address', required=True)
-    comments = forms.CharField(label='Comments', required=True,
-                               widget=forms.Textarea)
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['fname', 'lname', 'email_address', 'comments']

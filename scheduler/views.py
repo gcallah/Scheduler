@@ -24,9 +24,12 @@ def about(request):
 
 # This feedback form old and will be redone using a model form.
 def feedback(request):
-    form_class = FeedbackForm
+    form = FeedbackForm(request.POST)
 
-    return render(request, 'feedback.html', {'form': form_class})
+    if form.is_valid():
+        form.save()
+
+    return render(request, 'feedback.html', {'form': form})
 
 
 def requirements(request):
