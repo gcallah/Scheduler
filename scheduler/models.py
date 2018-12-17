@@ -62,8 +62,11 @@ class Schedule(models.Model):
     def __str__(self):
         return self.cname
 
+
 class Feedback(models.Model):
     fname = models.CharField("First Name", max_length=20, blank=True)
-    lname = models.CharField("Last Name", max_length=20, blank=True)
-    email_address = models.CharField("Email Address", max_length=128, blank=True)
+    lname = models.CharField("Last Name", max_length=20,
+                             blank=True)
+    email_address = models.CharField("Email Address", max_length=128,
+                                     blank=True)
     comments = models.CharField("Comments", max_length=500, blank=True)
