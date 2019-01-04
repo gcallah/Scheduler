@@ -25,7 +25,9 @@ SECRET_KEY = 'sw&i-w06^rozik7uybu=qxh=mgbd9z$190d@g(0r3%e7drthv4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1',
+                 'localhost',
+                 'aci-demo222.eastus.azurecontainer.io']
 
 
 # Application definition
@@ -63,7 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                
+
             ],
         },
     },
