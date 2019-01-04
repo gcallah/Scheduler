@@ -37,6 +37,8 @@ dev_container:
 deploy_container:
 	docker build -t nyuscheduler -f $(DOCKER_DIR)/Deployable $(DOCKER_DIR)
 
+ship_container:
+	docker push gcallah/nyuscheduler
 
 dblocal:
 	python3 manage.py makemigrations
