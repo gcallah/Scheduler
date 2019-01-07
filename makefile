@@ -35,10 +35,11 @@ dev_container:
 	docker build -t scheduler $(DOCKER_DIR)
 
 deploy_container:
-	docker build -t nyuscheduler -f $(DOCKER_DIR)/Deployable $(DOCKER_DIR)
+	docker system prune
+	docker build -t gcallah/nyusched --no-cache -f $(DOCKER_DIR)/Deployable $(DOCKER_DIR)
 
 ship_container:
-	docker push gcallah/nyuscheduler
+	docker push gcallah/nyusched
 
 dblocal:
 	python3 manage.py makemigrations

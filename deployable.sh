@@ -4,7 +4,7 @@ if [ $1 ]
 then
     HOST_PORT=$1
 fi
-export CONT_NM="nyuscheduler"
+export CONT_NM="gcallah/nyusched"
 export HOME_DIR="/home/Scheduler"
 
 docker rm $CONT_NM 2> /dev/null || true 
