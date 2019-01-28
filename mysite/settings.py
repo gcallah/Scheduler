@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1',
                  'localhost',
-                 'aci-demo222.eastus.azurecontainer.io']
+                 'nyuscheduler.azurewebsites.net']
 
 
 # Application definition
