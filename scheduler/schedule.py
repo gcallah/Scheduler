@@ -46,11 +46,11 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
             if (room.rname not in scheduled_rnames and
                     all_courses_total.count(course.cname)
                     != scheduled_cnames.count(course.cname)):
-                if (course.capacity < room.capacity
-                        and course.days == room.days
-                        and course.start_time >= room.start_time
-                        and course.start_time < room.end_time
-                        and course.end_time <= room.end_time):
+                if (course.capacity < room.capacity):
+                        #and course.days == room.days
+                        #and course.start_time >= room.start_time
+                        #and course.start_time < room.end_time
+                        #and course.end_time <= room.end_time):
 
                     scheduled_course = {
                         "rname": room.rname,
