@@ -29,7 +29,7 @@ def feedback(request):
     if form.is_valid():
         form.save()
 
-    return render(request, 'feedback.html', {'form': form})
+    return render(request, 'feedback.html', {'header': site_hdr, 'form': form})
 
 
 def requirements(request):
