@@ -1,19 +1,23 @@
 from django.shortcuts import render
 from .models import Course
 from .models import Room
+import json
 
 site_hdr = "Course Scheduler"
 
+def sched(data):
+    data_dict = json.loads(data)
+    print(type(data_dict))
 
 def schedule_algo(request):
+
     form_data = request.POST
-    # Returns a dictionary of courses and the number of sections
-    # to schedule for each course. If number of sections is 0,
-    # then course name does not get added to dictionary
     courses_from_form = create_list_of_all_courses(form_data.items())
     all_courses = Course.objects.filter(cname__in=list(
         courses_from_form)).order_by('capacity')
     all_rooms = Room.objects.all().order_by('capacity')
+    print(all_courses)
+    print(courses_from_form)
     scheduled_courses = make_schedule(all_courses,
                                       all_rooms,
                                       courses_from_form)

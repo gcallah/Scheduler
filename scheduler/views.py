@@ -47,3 +47,18 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 def schedule(request):
     if request.method == 'POST':
         return schedule_algo(request)
+
+
+# This method calls organize to format JSON
+# It then calls the scheduling algorithm
+# Finally it returns a rendered request to the front-end
+def schedule_json(request):
+    if request.method == "POST":
+        data = organize(request.POST)
+        ret_data = sched(json.dumps(data))
+        ret_dict = json.loads(ret_data)
+        return render(request, 'schedule.html', {
+            'scheduled': ret_dict[scheduled_courses],
+            'unscheduled': ret_dict[unscheduled_courses],
+            'header': site_hdr
+        })
