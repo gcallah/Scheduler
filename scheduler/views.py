@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from scheduler.forms import FeedbackForm
-from .schedule import schedule_algo
+from .schedule import schedule_algo, sched
 from .models import Course
+from .organize_data import organize
+import json
 
 site_hdr = "Course Scheduler"
 max_sections = 5
@@ -58,7 +60,7 @@ def schedule_json(request):
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
         return render(request, 'schedule.html', {
-            'scheduled': ret_dict[scheduled_courses],
-            'unscheduled': ret_dict[unscheduled_courses],
+            'scheduled': ret_dict['scheduled'],
+            'unscheduled': ret_dict['unscheduled'],
             'header': site_hdr
         })
