@@ -47,10 +47,14 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
                 lambda course: course['rname'], scheduled_courses))
             scheduled_cnames = list(map(
                 lambda course: course['cname'], scheduled_courses))
-            if (room.rname not in scheduled_rnames and
-                    all_courses_total.count(course.cname)
-                    != scheduled_cnames.count(course.cname)):
-                if (course.capacity < room.capacity):
+            cur_course_cnt = all_courses_total.count(course.cname)
+            sched_course_cnt = scheduled_cnames.count(course.cname)
+            if (room.rname not in scheduled_rnames 
+                and course.cname not in scheduled_cnames
+                and (cur_course_cnt!=sched_course_cnt 
+                      or (cur_course_cnt == sched_course_cnt 
+                        and cur_course_cnt == 0))):
+                if (course.capacity <= room.capacity):
                         #and course.days == room.days
                         #and course.start_time >= room.start_time
                         #and course.start_time < room.end_time
@@ -74,7 +78,7 @@ def get_unscheduled_course(all_courses, scheduled_courses, all_courses_total):
     unscheduled_courses = []
     course_names = [d['cname'] for d in scheduled_courses]
     for course in all_courses_total:
-        num_scheduled = course_names.count(course)
+        num_scheduled = course_names.count(course.cname)
         num_unscheduled = unscheduled_courses.count(course)
         total_num = all_courses_total.count(course)
         if num_scheduled + num_unscheduled != total_num:
