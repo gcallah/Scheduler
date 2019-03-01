@@ -41,26 +41,29 @@ class AlgorithmTestCase(TestCase):
     def test_course_with_no_room_available(self):
         all_courses = Course.objects.all()
         all_rooms = Room.objects.all()
+        all_courses_list = list(all_courses)
 
-        returned_scheduled = make_schedule(all_courses, all_rooms, all_courses)
+        returned_scheduled = make_schedule(all_courses, all_rooms, all_courses_list)
         returned_unscheduled = get_unscheduled_course(
-           all_courses, returned_scheduled, all_courses)
+           all_courses, returned_scheduled, all_courses_list)
 
-        self.assertEqual(returned_unscheduled.size(), 1)
+        self.assertEqual(len(returned_unscheduled), 1)
 
     def test_courses_with_rooms_available_scheduled(self):
-        all_courses = Course.objects.filter("capacity < 150")
+        all_courses = Course.objects.filter(capacity__lt=150)
         all_rooms = Room.objects.all()
+        all_courses_list = list(all_courses)
 
         returned_unscheduled = make_schedule(
-            all_courses, all_rooms, all_courses)
+            all_courses, all_rooms, all_courses_list)
 
-        self.assertEqual(returned_unscheduled.size(), all_courses.size())
+        self.assertEqual(len(returned_unscheduled), all_courses.count())
 
     def test_course_and_room_with_same_capacity(self):
-        course50 = Course.objects.filter("capacity = 50")
-        room50 = Room.objects.filter("capacity = 50")
+        course50 = Course.objects.filter(capacity=50)
+        room50 = Room.objects.filter(capacity=50)
+        course50_list = list(course50)
 
-        returned_schedule = make_schedule(course50, room50, course50)
+        returned_schedule = make_schedule(course50, room50, course50_list)
 
-        self.assertEqual(returned_schedule.size(), 1)
+        self.assertEqual(len(returned_schedule), 1)
