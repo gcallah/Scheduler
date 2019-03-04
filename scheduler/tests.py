@@ -42,12 +42,10 @@ class AlgorithmTestCase(TestCase):
     def test_courses_with_rooms_available_scheduled(self):
         all_courses = Course.objects.filter(capacity__lt=150)
         all_rooms = Room.objects.all()
-        all_courses_list = list(all_courses)
+        all_courses_total = [d.cname for d in all_courses]
 
         returned_unscheduled = make_schedule(all_courses, all_rooms,
-                                             all_courses_list)
-
-
+                                             all_courses_total)
         self.assertEqual(len(returned_unscheduled), all_courses.count())
 
     def test_course_and_room_with_same_capacity(self):
