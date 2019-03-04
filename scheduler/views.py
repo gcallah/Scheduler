@@ -48,7 +48,13 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 
 def schedule(request):
     if request.method == 'POST':
-        return schedule_algo(request)
+        scheduled_courses, unscheduled_courses = schedule_algo(request)
+        return render(
+            request, 'schedule.html', {
+                'scheduled': scheduled_courses,
+                'unscheduled': unscheduled_courses,
+                'header': site_hdr
+            })
 
 
 # This method calls organize to format JSON
@@ -57,6 +63,8 @@ def schedule(request):
 def schedule_json(request):
     if request.method == "POST":
         data = organize(request.POST)
+
+        '''
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
         return render(
@@ -65,3 +73,14 @@ def schedule_json(request):
                 'unscheduled': ret_dict['unscheduled'],
                 'header': site_hdr
             })
+        '''
+
+        scheduled_courses, unscheduled_courses = schedule_algo(request)
+        return render(
+            request, 'schedule.html', {
+                'scheduled': scheduled_courses,
+                'unscheduled': unscheduled_courses,
+                'header': site_hdr
+            })
+
+

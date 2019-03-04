@@ -1,9 +1,6 @@
-from django.shortcuts import render
 from .models import Course
 from .models import Room
 import json
-
-site_hdr = "Course Scheduler"
 
 
 def sched(data):
@@ -17,24 +14,20 @@ def schedule_algo(request):
     all_courses = Course.objects.filter(
         cname__in=list(courses_from_form)).order_by('capacity')
     all_rooms = Room.objects.all().order_by('capacity')
-    print(all_courses)
-    print(courses_from_form)
+
     scheduled_courses = make_schedule(all_courses, all_rooms,
                                       courses_from_form)
     unscheduled_courses = get_unscheduled_course(
         all_courses, scheduled_courses, courses_from_form)
-    return render(
-        request, 'schedule.html', {
-            'scheduled': scheduled_courses,
-            'unscheduled': unscheduled_courses,
-            'header': site_hdr
-        })
+
+    return scheduled_courses, unscheduled_courses
+
 
 
 def create_list_of_all_courses(form_data):
     all_courses = []
     for key, value in form_data:
-        if (key != 'csrfmiddlewaretoken' and int(value) != 0):
+        if key != 'csrfmiddlewaretoken' and int(value) != 0:
             for i in range(int(value)):
                 all_courses.append(key)
     return all_courses
@@ -52,10 +45,10 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
             sched_course_cnt = scheduled_cnames.count(course.cname)
             if (room.rname not in scheduled_rnames 
                 and course.cname not in scheduled_cnames
-                and (cur_course_cnt!=sched_course_cnt 
+                and (cur_course_cnt != sched_course_cnt
                       or (cur_course_cnt == sched_course_cnt 
                         and cur_course_cnt == 0))):
-                if (course.capacity <= room.capacity):
+                if course.capacity <= room.capacity:
                         #and course.days == room.days
                         #and course.start_time >= room.start_time
                         #and course.start_time < room.end_time
@@ -78,8 +71,9 @@ def make_schedule(all_courses, all_rooms, all_courses_total):
 def get_unscheduled_course(all_courses, scheduled_courses, all_courses_total):
     unscheduled_courses = []
     course_names = [d['cname'] for d in scheduled_courses]
+
     for course in all_courses_total:
-        num_scheduled = course_names.count(course.cname)
+        num_scheduled = course_names.count(course)
         num_unscheduled = unscheduled_courses.count(course)
         total_num = all_courses_total.count(course)
         if num_scheduled + num_unscheduled != total_num:
