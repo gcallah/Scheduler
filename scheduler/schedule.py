@@ -5,29 +5,30 @@ import json
 
 site_hdr = "Course Scheduler"
 
+
 def sched(data):
     data_dict = json.loads(data)
     print(type(data_dict))
 
-def schedule_algo(request):
 
+def schedule_algo(request):
     form_data = request.POST
     courses_from_form = create_list_of_all_courses(form_data.items())
-    all_courses = Course.objects.filter(cname__in=list(
-        courses_from_form)).order_by('capacity')
+    all_courses = Course.objects.filter(
+        cname__in=list(courses_from_form)).order_by('capacity')
     all_rooms = Room.objects.all().order_by('capacity')
     print(all_courses)
     print(courses_from_form)
-    scheduled_courses = make_schedule(all_courses,
-                                      all_rooms,
+    scheduled_courses = make_schedule(all_courses, all_rooms,
                                       courses_from_form)
     unscheduled_courses = get_unscheduled_course(
         all_courses, scheduled_courses, courses_from_form)
-    return render(request, 'schedule.html', {
-        'scheduled': scheduled_courses,
-        'unscheduled': unscheduled_courses,
-        'header': site_hdr
-    })
+    return render(
+        request, 'schedule.html', {
+            'scheduled': scheduled_courses,
+            'unscheduled': unscheduled_courses,
+            'header': site_hdr
+        })
 
 
 def create_list_of_all_courses(form_data):

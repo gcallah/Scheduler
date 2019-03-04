@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
-from scheduler.models import Course, Room
-from scheduler.schedule import make_schedule, get_unscheduled_course
+from .models import Course, Room
+from .schedule import make_schedule, get_unscheduled_course
 
 
 class AlgorithmTestCase(TestCase):
@@ -15,28 +15,18 @@ class AlgorithmTestCase(TestCase):
             "Course5000": 5000
         }
 
-        rooms = {
-            "Room20": 20,
-            "Room50": 50,
-            "Room75": 75,
-            "Room150": 150
-        }
+        rooms = {"Room20": 20, "Room50": 50, "Room75": 75, "Room150": 150}
         self.username = 'schedulerTests'
         self.password = 'valid_password'
         self.client = Client()
-        self.user = User.objects.create_user(self.username,
-                                             'fake@email.com',
+        self.user = User.objects.create_user(self.username, 'fake@email.com',
                                              self.password)
 
         for key in courses.keys():
-            Course.objects.create(
-                cname=key,
-                capacity=courses[key])
+            Course.objects.create(cname=key, capacity=courses[key])
 
         for key in rooms:
-            Room.objects.create(
-                rname=key,
-                capacity=rooms[key])
+            Room.objects.create(rname=key, capacity=rooms[key])
 
     def test_course_with_no_room_available(self):
         all_courses = Course.objects.all()
@@ -45,7 +35,7 @@ class AlgorithmTestCase(TestCase):
 
         returned_scheduled = make_schedule(all_courses, all_rooms, all_courses_list)
         returned_unscheduled = get_unscheduled_course(
-           all_courses, returned_scheduled, all_courses_list)
+            all_courses, returned_scheduled, all_courses)
 
         self.assertEqual(len(returned_unscheduled), 1)
 
@@ -54,8 +44,9 @@ class AlgorithmTestCase(TestCase):
         all_rooms = Room.objects.all()
         all_courses_list = list(all_courses)
 
-        returned_unscheduled = make_schedule(
-            all_courses, all_rooms, all_courses_list)
+        returned_unscheduled = make_schedule(all_courses, all_rooms,
+                                             all_courses)
+
 
         self.assertEqual(len(returned_unscheduled), all_courses.count())
 

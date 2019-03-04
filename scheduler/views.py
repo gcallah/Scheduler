@@ -59,8 +59,9 @@ def schedule_json(request):
         data = organize(request.POST)
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
-        return render(request, 'schedule.html', {
-            'scheduled': ret_dict['scheduled'],
-            'unscheduled': ret_dict['unscheduled'],
-            'header': site_hdr
-        })
+        return render(
+            request, 'schedule.html', {
+                'scheduled': ret_dict['scheduled'],
+                'unscheduled': ret_dict['unscheduled'],
+                'header': site_hdr
+            })
