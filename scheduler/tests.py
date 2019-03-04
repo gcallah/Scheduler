@@ -35,7 +35,7 @@ class AlgorithmTestCase(TestCase):
 
         returned_scheduled = make_schedule(all_courses, all_rooms, all_courses_list)
         returned_unscheduled = get_unscheduled_course(
-            all_courses, returned_scheduled, all_courses)
+            all_courses, returned_scheduled, all_courses_list)
 
         self.assertEqual(len(returned_unscheduled), 1)
 
@@ -45,7 +45,7 @@ class AlgorithmTestCase(TestCase):
         all_courses_list = list(all_courses)
 
         returned_unscheduled = make_schedule(all_courses, all_rooms,
-                                             all_courses)
+                                             all_courses_list)
 
 
         self.assertEqual(len(returned_unscheduled), all_courses.count())
