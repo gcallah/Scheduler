@@ -5,7 +5,7 @@ import json
 
 def sched(data):
     data_dict = json.loads(data)
-    print(type(data_dict))
+    print(data_dict)
 
 
 def schedule_algo(request):
