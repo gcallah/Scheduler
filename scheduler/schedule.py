@@ -1,11 +1,7 @@
 from .models import Course
 from .models import Room
 import json
-
-
-def sched(data):
-    data_dict = json.loads(data)
-    print(data_dict)
+from collections import Counter
 
 
 def schedule_algo(request):
@@ -80,3 +76,60 @@ def get_unscheduled_course(all_courses, scheduled_courses, all_courses_total):
             unscheduled_courses.append(course)
 
     return unscheduled_courses
+
+
+
+#BELOW IS THE METHOD WITH THE APPLIED MIGRATED LOGIC FOR JSON COMMUNICATION
+def sched(data):
+    data_dict = json.loads(data)
+    all_courses = data_dict["courses"]
+    all_rooms = data_dict["rooms"]
+    sched = make_sched(all_courses, all_rooms)
+    unsched = get_unsched(all_courses, sched)
+    ret_val = {}
+    ret_val["scheduled"] = sched
+    ret_val["unscheduled"] = unsched
+    return json.dumps(ret_val)
+
+
+def make_sched(all_courses, all_rooms):
+    scheduled_courses = []
+    for course in all_courses:
+        for room in all_rooms:
+            scheduled_rnames = list(map(
+                lambda course: course['rname'], scheduled_courses))
+            scheduled_cnames = list(map(
+                lambda course: course['cname'], scheduled_courses))
+            cur_course_cnt = all_courses.count(course["cname"])
+            sched_course_cnt = scheduled_cnames.count(course["cname"])
+
+            if (room["rname"] not in scheduled_rnames 
+                and course["cname"] not in scheduled_cnames
+                and (cur_course_cnt != sched_course_cnt
+                      or (cur_course_cnt == sched_course_cnt 
+                        and cur_course_cnt == 0))):
+                if course["ccapacity"] <= room["rcapacity"]:
+
+                    scheduled_course = {
+                        "rname": room["rname"],
+                        "cname": course["cname"],
+                        "course_capacity": course["ccapacity"],
+                        "room_capacity": room["rcapacity"],
+                    }
+
+                    scheduled_courses.append(scheduled_course)
+    return scheduled_courses
+
+
+def get_unsched(all_courses, scheduled_courses):
+    unscheduled_courses = []
+    sched_course_names = [d['cname'] for d in scheduled_courses]
+    all_course_names = [d['cname'] for d in all_courses]
+    
+    for course in sched_course_names:
+        try:
+            all_course_names.remove(course)
+        except ValueError:
+            pass  
+
+    return all_course_names
