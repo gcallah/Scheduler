@@ -93,11 +93,15 @@ def sched(data):
 
 
 def make_sched(all_courses, resources):
+    all_courses = sorted(all_courses, key=lambda k: k['attributes'][0]['value'], reverse=True)
+    print(all_courses)
+
     scheduled_courses = []
     counter_cnt = Counter([c['name'] for c in all_courses])
     for course in all_courses:
         for type_resource in course['type']:
             resource = resources[type_resource]
+            resource = sorted(resource, key=lambda k: k['attributes'][0]['value'], reverse=True)
             for room in resource:
                 scheduled_rnames = list(map(
                     lambda item: item['rname'], scheduled_courses))
