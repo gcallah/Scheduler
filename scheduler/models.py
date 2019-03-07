@@ -19,8 +19,8 @@ class Room(models.Model):
     building = models.CharField(max_length=128, default="", blank=True)
     start_time = models.TimeField(default=datetime.now, blank=True)
     end_time = models.TimeField(default=datetime.now, blank=True)
-    days = models.CharField(default="Monday", max_length=9,
-                            choices=DAYS_OF_WEEK)
+    days = models.CharField(
+        default="Monday", max_length=9, choices=DAYS_OF_WEEK)
 
     def __str__(self):
         return self.rname
@@ -31,10 +31,9 @@ class Course(models.Model):
     pname = models.CharField(default="", max_length=128, blank=False)
     capacity = models.IntegerField(default=0)
     start_time = models.TimeField(default=datetime.now, blank=True)
-    end_time = models.TimeField(default=datetime.now,
-                                blank=True)
-    days = models.CharField(default="Monday", max_length=9,
-                            choices=DAYS_OF_WEEK)
+    end_time = models.TimeField(default=datetime.now, blank=True)
+    days = models.CharField(
+        default="Monday", max_length=9, choices=DAYS_OF_WEEK)
 
     def __str__(self):
         return self.cname
@@ -65,8 +64,7 @@ class Schedule(models.Model):
 
 class Feedback(models.Model):
     fname = models.CharField("First Name", max_length=20, blank=True)
-    lname = models.CharField("Last Name", max_length=20,
-                             blank=True)
-    email_address = models.CharField("Email Address", max_length=128,
-                                     blank=True)
+    lname = models.CharField("Last Name", max_length=20, blank=True)
+    email_address = models.CharField(
+        "Email Address", max_length=128, blank=True)
     comments = models.CharField("Comments", max_length=500, blank=True)

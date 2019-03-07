@@ -319,3 +319,15 @@ ul.errors li {
     margin-top: 15px;
     margin-left: 5px;
 }
+
+button[type="submit"] {
+    padding: .7em 1.2em;
+    background: #cbe;
+    color: #933;
+    font-weight: bold;
+    border: 0 none;
+    -webkit-border-radius: .5em;
+    border-radius: .5em;
+    margin-left: 3em;
+    cursor: pointer;
+}
