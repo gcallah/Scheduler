@@ -93,6 +93,10 @@ def sched(data):
 
 
 def make_sched(all_courses, all_rooms):
+    all_courses = sorted(all_courses, key=lambda k: k['ccapacity'], reverse=True) 
+    all_rooms = sorted(all_rooms, key=lambda k: k['rcapacity'], reverse=True)
+    print(all_courses)
+    print(all_rooms)
     scheduled_courses = []
     for course in all_courses:
         for room in all_rooms:
