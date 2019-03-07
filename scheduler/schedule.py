@@ -100,14 +100,15 @@ def make_sched(all_courses, all_rooms):
                 lambda course: course['rname'], scheduled_courses))
             scheduled_cnames = list(map(
                 lambda course: course['cname'], scheduled_courses))
-            cur_course_cnt = all_courses.count(course["cname"])
+
+            counter_cnt = Counter([c['cname'] for c in all_courses])
+            tot_course_cnt = counter_cnt[course["cname"]]
+
+            cur_course_cnt = scheduled_cnames.count(course["cname"])
             sched_course_cnt = scheduled_cnames.count(course["cname"])
 
-            if (room["rname"] not in scheduled_rnames 
-                and course["cname"] not in scheduled_cnames
-                and (cur_course_cnt != sched_course_cnt
-                      or (cur_course_cnt == sched_course_cnt 
-                        and cur_course_cnt == 0))):
+            if (room["rname"] not in scheduled_rnames
+                and tot_course_cnt != sched_course_cnt): 
                 if course["ccapacity"] <= room["rcapacity"]:
 
                     scheduled_course = {
@@ -116,8 +117,8 @@ def make_sched(all_courses, all_rooms):
                         "course_capacity": course["ccapacity"],
                         "room_capacity": room["rcapacity"],
                     }
-
                     scheduled_courses.append(scheduled_course)
+
     return scheduled_courses
 
 
