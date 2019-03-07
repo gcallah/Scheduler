@@ -94,6 +94,7 @@ def sched(data):
 
 def make_sched(all_courses, resources):
     scheduled_courses = []
+    counter_cnt = Counter([c['name'] for c in all_courses])
     for course in all_courses:
         for type_resource in course['type']:
             resource = resources[type_resource]
@@ -102,14 +103,13 @@ def make_sched(all_courses, resources):
                     lambda item: item['rname'], scheduled_courses))
                 scheduled_cnames = list(map(
                     lambda item: item['cname'], scheduled_courses))
-                cur_course_cnt = all_courses.count(course['name'])
-                sched_course_cnt = scheduled_cnames.count(course['name'])
+
+                tot_course_cnt = counter_cnt[course['name']]
+                sched_course_cnt = scheduled_cnames.count(course["name"])
 
                 if (room['name'] not in scheduled_rnames
-                        and course['name'] not in scheduled_cnames
-                        and (cur_course_cnt != sched_course_cnt
-                             or (cur_course_cnt == sched_course_cnt
-                                 and cur_course_cnt == 0))):
+                        and tot_course_cnt != sched_course_cnt):
+
                     ccap = course['attributes'][0]['value']
                     rcap = room['attributes'][0]['value']
                     if ccap <= rcap:
@@ -121,6 +121,7 @@ def make_sched(all_courses, resources):
                         }
 
                         scheduled_courses.append(scheduled_course)
+
     return scheduled_courses
 
 

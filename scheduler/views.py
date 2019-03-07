@@ -44,7 +44,7 @@ def add_filter(request, kwargs, get_name, kwarg_name):
     for course in courses:
         if course != '':
             kwargs.append(course)
-
+'''
 def schedule(request):
     if request.method == 'POST':
         scheduled_courses, unscheduled_courses = schedule_algo(request)
@@ -55,13 +55,15 @@ def schedule(request):
                 'header': site_hdr
             })
 
+'''
 
-
-# BELOW IS THE METHOD WITH THE APPLIED MIGRATED LOGIC FOR JSON COMMUNICATION
+#BELOW IS THE METHOD WITH THE APPLIED MIGRATED LOGIC FOR JSON COMMUNICATION
 # This method calls organize to format JSON
 # It then calls the scheduling algorithm
 # Finally it returns a rendered request to the front-end
-def schedule_json(request):
+
+
+def schedule(request):
     if request.method == "POST":
         data = organize(request.POST)
 
