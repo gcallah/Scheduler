@@ -56,22 +56,26 @@ def schedule(request):
             })
 
 
-'''
-BELOW IS THE METHOD WITH THE APPLIED MIGRATED LOGIC FOR JSON COMMUNICATION
+
+# BELOW IS THE METHOD WITH THE APPLIED MIGRATED LOGIC FOR JSON COMMUNICATION
 # This method calls organize to format JSON
 # It then calls the scheduling algorithm
 # Finally it returns a rendered request to the front-end
-def schedule(request):
+def schedule_json(request):
     if request.method == "POST":
         data = organize(request.POST)
 
+        print(data)
 
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
+
+        print(ret_dict)
+
         return render(
             request, 'schedule.html', {
                 'scheduled': ret_dict['scheduled'],
                 'unscheduled': ret_dict['unscheduled'],
                 'header': site_hdr
             })
-'''
+
