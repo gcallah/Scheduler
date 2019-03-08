@@ -331,3 +331,7 @@ button[type="submit"] {
     margin-left: 3em;
     cursor: pointer;
 }
+
+#user-tools a {
+    margin: 0 0.5em;
+}
