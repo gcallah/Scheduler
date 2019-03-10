@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from scheduler.forms import FeedbackForm
-from .schedule import schedule_algo, sched
+from .schedule import sched
 from .models import Course
 from .organize_data import organize
 import json
@@ -44,35 +44,13 @@ def add_filter(request, kwargs, get_name, kwarg_name):
     for course in courses:
         if course != '':
             kwargs.append(course)
-'''
-def schedule(request):
-    if request.method == 'POST':
-        scheduled_courses, unscheduled_courses = schedule_algo(request)
-        return render(
-            request, 'schedule.html', {
-                'scheduled': scheduled_courses,
-                'unscheduled': unscheduled_courses,
-                'header': site_hdr
-            })
-
-'''
-
-#BELOW IS THE METHOD WITH THE APPLIED MIGRATED LOGIC FOR JSON COMMUNICATION
-# This method calls organize to format JSON
-# It then calls the scheduling algorithm
-# Finally it returns a rendered request to the front-end
-
 
 def schedule(request):
     if request.method == "POST":
         data = organize(request.POST)
 
-        print(data)
-
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
-
-        print(ret_dict)
 
         return render(
             request, 'schedule.html', {
