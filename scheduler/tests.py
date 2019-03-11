@@ -1,58 +1,124 @@
-from django.test import TestCase, Client
-from django.contrib.auth.models import User
-from .models import Course, Room
-from .schedule import make_schedule, get_unscheduled_course
-
+# from django.test import Client
+# from django.contrib.auth.models import User
+from unittest import TestCase
+from .schedule import sched, make_sched, get_unsched
+import json
 
 class AlgorithmTestCase(TestCase):
 
     # Setup the courses and rooms
     def setUp(self):
-        courses = {
-            "Course15": 15,
-            "Course50": 50,
-            "Course100": 100,
-            "Course5000": 5000
+        json_data = {
+            "resources": {
+                "room": [{
+                        "name": "room20",
+                        "attributes": {
+                            "capacity": 20,
+                            "video": True
+                        }
+                    },
+                    {
+                        "name": "room50",
+                        "attributes": {
+                            "capacity": 50,
+                            "video": False
+                        }
+                    },
+                    {
+                        "name": "room75",
+                        "attributes": {
+                            "capacity": 75,
+                            "video": False
+                        }
+                    },
+                    {
+                        "name": "room150",
+                        "attrubutes": {
+                            "capacity": 150,
+                            "video": True
+                        }
+                    }
+                ],
+                "prof": []
+            },
+            "consumers": [{
+                    "type": [],
+                    "name": "course50",
+                    "attributes": [
+                        {
+                            "value": 50
+                        },
+                        {
+                            "video": True
+                        }
+                    ]
+                },
+                {
+                    "type": [],
+                    "name": "course15",
+                    "attributes": [
+                        {
+                            "value": 15
+                        },
+                        {
+                            "video": False
+                        }
+                    ]
+                },
+                {
+                    "type": [],
+                    "name": "course500",
+                    "attributes": [
+                        {
+                            "value": 500
+                        },
+                        {
+                            "value": True
+                        }
+                    ]
+                },
+                {
+                    "type": [],
+                    "name": "course100",
+                    "attributes": [
+                        {
+                            "value": 100
+                        },
+                        {
+                            "value": False
+                        }
+                    ]
+                }
+            ]
         }
-
-        rooms = {"Room20": 20, "Room50": 50, "Room75": 75, "Room150": 150}
-        self.username = 'schedulerTests'
-        self.password = 'valid_password'
-        self.client = Client()
-        self.user = User.objects.create_user(self.username, 'fake@email.com',
-                                             self.password)
-
-        for key in courses.keys():
-            Course.objects.create(cname=key, capacity=courses[key])
-
-        for key in rooms:
-            Room.objects.create(rname=key, capacity=rooms[key])
+        self.json_str = json.dumps(json_data)
+        # self.username = 'schedulerTests'
+        # self.password = 'valid_password'
+        # self.client = Client()
+        # self.user = User.objects.create_user(self.username, 'fake@email.com',
+        #                                      self.password)
 
     def test_course_with_no_room_available(self):
-        all_courses = Course.objects.all()
-        all_rooms = Room.objects.all()
-        all_courses_list = list(all_courses)
+        sched_result = sched(self.json_str)
+        sched_dict = json.loads(sched_result)
+        unsched = sched_dict['unscheduled']
 
-        returned_scheduled = make_schedule(all_courses, all_rooms, all_courses_list)
-        returned_unscheduled = get_unscheduled_course(
-            all_courses, returned_scheduled, all_courses_list)
+        self.assertEqual(len(unsched), 1)
 
-        self.assertEqual(len(returned_unscheduled), 1)
+    # def test_courses_with_rooms_available_scheduled(self):
+    #     all_courses = Course.objects.filter(capacity__lt=150)
+    #     all_rooms = Room.objects.all()
+    #     all_courses_total = [d.cname for d in all_courses]
 
-    def test_courses_with_rooms_available_scheduled(self):
-        all_courses = Course.objects.filter(capacity__lt=150)
-        all_rooms = Room.objects.all()
-        all_courses_total = [d.cname for d in all_courses]
+    #     returned_unscheduled = make_schedule(all_courses, all_rooms,
+    #                                          all_courses_total)
+    #     self.assertEqual(len(returned_unscheduled), all_courses.count())
 
-        returned_unscheduled = make_schedule(all_courses, all_rooms,
-                                             all_courses_total)
-        self.assertEqual(len(returned_unscheduled), all_courses.count())
+    # def test_course_and_room_with_same_capacity(self):
+    #     course50 = Course.objects.filter(capacity=50)
+    #     room50 = Room.objects.filter(capacity=50)
+    #     course50_list = list(course50)
 
-    def test_course_and_room_with_same_capacity(self):
-        course50 = Course.objects.filter(capacity=50)
-        room50 = Room.objects.filter(capacity=50)
-        course50_list = list(course50)
+    #     returned_schedule = make_schedule(course50, room50, course50_list)
 
-        returned_schedule = make_schedule(course50, room50, course50_list)
-
-        self.assertEqual(len(returned_schedule), 1)
+    #     self.assertEqual(len(returned_schedule), 1)
