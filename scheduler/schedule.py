@@ -21,7 +21,6 @@ def sched(data):
 
 def make_sched(all_courses, resources):
     all_courses = sorted(all_courses, key=lambda k: k['attributes'][0]['value'], reverse=True)
-    print(all_courses)
 
     scheduled_courses = []
     counter_cnt = Counter([c['name'] for c in all_courses])

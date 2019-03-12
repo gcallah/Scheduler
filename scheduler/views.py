@@ -48,7 +48,7 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 def schedule(request):
     if request.method == "POST":
         data = organize(request.POST)
-
+        print(data)
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
 

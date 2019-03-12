@@ -1,7 +1,7 @@
 # from django.test import Client
 # from django.contrib.auth.models import User
 from unittest import TestCase
-from .schedule import sched, make_sched, get_unsched
+from scheduler.schedule import sched, make_sched, get_unsched
 import json
 
 class AlgorithmTestCase(TestCase):
@@ -100,6 +100,7 @@ class AlgorithmTestCase(TestCase):
 
     def test_course_with_no_room_available(self):
         sched_result = sched(self.json_str)
+        print(sched_result)
         sched_dict = json.loads(sched_result)
         unsched = sched_dict['unscheduled']
 
