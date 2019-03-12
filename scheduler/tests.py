@@ -92,6 +92,7 @@ class AlgorithmTestCase(unittest.TestCase):
 
     def test_course_with_no_room_available(self):
         sched_result = sched(self.json_str)
+        print(sched_result)
         sched_dict = json.loads(sched_result)
         unsched = sched_dict['unscheduled']
 
