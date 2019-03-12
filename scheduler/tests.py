@@ -1,5 +1,5 @@
 import unittest, json
-from schedule import sched, make_sched, get_unsched
+from scheduler.schedule import sched, make_sched, get_unsched
 
 class TestScheduler(unittest.TestCase):
 
@@ -73,6 +73,7 @@ class TestScheduler(unittest.TestCase):
         unsched = sched_dict['unscheduled']
 
         self.assertEqual(len(unsched), 3)
+
 
     # def test_courses_with_rooms_available_scheduled(self):
     #     all_courses = Course.objects.filter(capacity__lt=150)
