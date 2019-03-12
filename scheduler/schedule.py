@@ -1,5 +1,3 @@
-from .models import Course
-from .models import Room
 import json
 from collections import Counter
 
@@ -16,7 +14,6 @@ def sched(data):
     ret_val['scheduled'] = sched
     ret_val['unscheduled'] = unsched
     return json.dumps(ret_val)
-
 
 
 def make_sched(all_courses, resources):

@@ -45,6 +45,7 @@ def add_filter(request, kwargs, get_name, kwarg_name):
         if course != '':
             kwargs.append(course)
 
+
 def schedule(request):
     if request.method == "POST":
         data = organize(request.POST)
