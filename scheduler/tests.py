@@ -1,92 +1,68 @@
 import unittest, json
 from schedule import sched, make_sched, get_unsched
 
-class AlgorithmTestCase(unittest.TestCase):
+class TestScheduler(unittest.TestCase):
 
     # Setup the courses and rooms
     def setUp(self):
         json_data = {
-            "resources": {
-                "room": [{
-                        "name": "room20",
-                        "attributes": {
-                            "capacity": 20,
-                            "video": True
-                        }
-                    },
-                    {
-                        "name": "room50",
-                        "attributes": {
-                            "capacity": 50,
-                            "video": False
-                        }
-                    },
-                    {
-                        "name": "room75",
-                        "attributes": {
-                            "capacity": 75,
-                            "video": False
-                        }
-                    },
-                    {
-                        "name": "room150",
-                        "attrubutes": {
-                            "capacity": 150,
-                            "video": True
-                        }
-                    }
-                ],
-                "prof": []
-            },
             "consumers": [{
-                    "type": [],
-                    "name": "course50",
-                    "attributes": [
-                        {
-                            "value": 50
-                        },
-                        {
-                            "video": True
-                        }
-                    ]
-                },
-                {
-                    "type": [],
-                    "name": "course15",
-                    "attributes": [
-                        {
-                            "value": 15
-                        },
-                        {
-                            "video": False
-                        }
-                    ]
-                },
-                {
-                    "type": [],
-                    "name": "course500",
-                    "attributes": [
-                        {
-                            "value": 500
-                        },
-                        {
-                            "value": True
-                        }
-                    ]
-                },
-                {
-                    "type": [],
-                    "name": "course100",
-                    "attributes": [
-                        {
-                            "value": 100
-                        },
-                        {
-                            "value": False
-                        }
-                    ]
-                }
-            ]
+                "name": "Algorithms",
+                "type": ["rooms"],
+                "attributes": [{
+                    "name": "capacity",
+                    "value": 60
+                }]
+            }, {
+                "name": "Algorithms",
+                "type": ["rooms"],
+                "attributes": [{
+                    "name": "capacity",
+                    "value": 60
+                }]
+            }, {
+                "name": "Algorithms",
+                "type": ["rooms"],
+                "attributes": [{
+                    "name": "capacity",
+                    "value": 60
+                }]
+            }, {
+                "name": "DevOps",
+                "type": ["rooms"],
+                "attributes": [{
+                    "name": "capacity",
+                    "value": 120
+                }]
+            }, {
+                "name": "DevOps",
+                "type": ["rooms"],
+                "attributes": [{
+                    "name": "capacity",
+                    "value": 120
+                }]
+            }],
+            "resources": {
+                "rooms": [{
+                    "name": "Small Room",
+                    "attributes": [{
+                        "name": "capacity",
+                        "value": 30
+                    }]
+                }, {
+                    "name": "Medium Room",
+                    "attributes": [{
+                        "name": "capacity",
+                        "value": 70
+                    }]
+                }, {
+                    "name": "Big Room",
+                    "attributes": [{
+                        "name": "capacity",
+                        "value": 150
+                    }]
+                }]
+            }
         }
         self.json_str = json.dumps(json_data)
 
@@ -96,7 +72,7 @@ class AlgorithmTestCase(unittest.TestCase):
         sched_dict = json.loads(sched_result)
         unsched = sched_dict['unscheduled']
 
-        self.assertEqual(len(unsched), 1)
+        self.assertEqual(len(unsched), 3)
 
     # def test_courses_with_rooms_available_scheduled(self):
     #     all_courses = Course.objects.filter(capacity__lt=150)
@@ -116,5 +92,5 @@ class AlgorithmTestCase(unittest.TestCase):
 
     #     self.assertEqual(len(returned_schedule), 1)
 
-    if __name__ == '__main__':
-        unittest.main()
+suite = unittest.TestLoader().loadTestsFromTestCase(TestScheduler)
+unittest.TextTestRunner(verbosity=2).run(suite)
