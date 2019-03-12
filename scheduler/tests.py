@@ -1,10 +1,7 @@
-# from django.test import Client
-# from django.contrib.auth.models import User
-from unittest import TestCase
-from .schedule import sched, make_sched, get_unsched
-import json
+import unittest, json
+from schedule import sched, make_sched, get_unsched
 
-class AlgorithmTestCase(TestCase):
+class AlgorithmTestCase(unittest.TestCase):
 
     # Setup the courses and rooms
     def setUp(self):
@@ -92,11 +89,6 @@ class AlgorithmTestCase(TestCase):
             ]
         }
         self.json_str = json.dumps(json_data)
-        # self.username = 'schedulerTests'
-        # self.password = 'valid_password'
-        # self.client = Client()
-        # self.user = User.objects.create_user(self.username, 'fake@email.com',
-        #                                      self.password)
 
     def test_course_with_no_room_available(self):
         sched_result = sched(self.json_str)
@@ -122,3 +114,6 @@ class AlgorithmTestCase(TestCase):
     #     returned_schedule = make_schedule(course50, room50, course50_list)
 
     #     self.assertEqual(len(returned_schedule), 1)
+
+    if __name__ == '__main__':
+        unittest.main()

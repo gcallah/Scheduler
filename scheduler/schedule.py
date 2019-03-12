@@ -1,5 +1,3 @@
-from .models import Course
-from .models import Room
 import json
 from collections import Counter
 
