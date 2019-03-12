@@ -1,5 +1,7 @@
-import unittest, json
+import unittest
+import json
 from scheduler.schedule import sched, make_sched, get_unsched
+
 
 class TestScheduler(unittest.TestCase):
 
@@ -9,58 +11,66 @@ class TestScheduler(unittest.TestCase):
             "consumers": [{
                 "name": "Algorithms",
                 "type": ["rooms"],
-                "attributes": [{
-                    "name": "capacity",
-                    "value": 60
-                }]
+                "attributes": {
+                    "capacity": {
+                        "value": 60
+                    }
+                }
             }, {
                 "name": "Algorithms",
                 "type": ["rooms"],
-                "attributes": [{
-                    "name": "capacity",
-                    "value": 60
-                }]
+                "attributes": {
+                    "capacity": {
+                        "value": 60
+                    }
+                }
             }, {
                 "name": "Algorithms",
                 "type": ["rooms"],
-                "attributes": [{
-                    "name": "capacity",
-                    "value": 60
-                }]
+                "attributes": {
+                    "capacity": {
+                        "value": 60
+                    }
+                }
             }, {
                 "name": "DevOps",
                 "type": ["rooms"],
-                "attributes": [{
-                    "name": "capacity",
-                    "value": 120
-                }]
+                "attributes": {
+                    "capacity": {
+                        "value": 120
+                    }
+                }
             }, {
                 "name": "DevOps",
                 "type": ["rooms"],
-                "attributes": [{
-                    "name": "capacity",
-                    "value": 120
-                }]
+                "attributes": {
+                    "capacity": {
+                        "value": 120
+                    }
+                }
             }],
             "resources": {
                 "rooms": [{
                     "name": "Small Room",
-                    "attributes": [{
-                        "name": "capacity",
-                        "value": 30
-                    }]
+                    "attributes": {
+                        "capacity": {
+                            "value": 30
+                        }
+                    }
                 }, {
                     "name": "Medium Room",
-                    "attributes": [{
-                        "name": "capacity",
-                        "value": 70
-                    }]
+                    "attributes": {
+                        "capacity": {
+                            "value": 70
+                        }
+                    }
                 }, {
                     "name": "Big Room",
-                    "attributes": [{
-                        "name": "capacity",
-                        "value": 150
-                    }]
+                    "attributes": {
+                        "capacity": {
+                            "value": 150
+                        }
+                    }
                 }]
             }
         }
@@ -93,5 +103,7 @@ class TestScheduler(unittest.TestCase):
 
     #     self.assertEqual(len(returned_schedule), 1)
 
-suite = unittest.TestLoader().loadTestsFromTestCase(TestScheduler)
-unittest.TextTestRunner(verbosity=2).run(suite)
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestScheduler)
+    unittest.TextTestRunner(verbosity=2).run(suite)
