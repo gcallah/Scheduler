@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from scheduler.forms import FeedbackForm
-from .schedule import sched
+from .schedalgo.schedule import sched
 from .models import Course
 from .organize_data import organize
 import json

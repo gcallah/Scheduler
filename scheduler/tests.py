@@ -1,6 +1,6 @@
 import unittest
 import json
-from scheduler.schedule import sched, make_sched, get_unsched
+from .schedalgo.schedule import sched, make_sched, get_unsched
 
 
 class TestScheduler(unittest.TestCase):
