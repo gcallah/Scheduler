@@ -16,51 +16,50 @@ def sched(data):
     return json.dumps(ret_val)
 
 
-def make_sched(all_courses, resources):
-    all_courses = sorted(all_courses, key=lambda k: k['attributes']['capacity']['value'], reverse=True)
+def make_sched(consumers, resources):
+    consumers = sorted(consumers, key=lambda k: k['attributes']['capacity']['value'], reverse=True)
 
-    scheduled_courses = []
-    counter_cnt = Counter([c['name'] for c in all_courses])
-    for course in all_courses:
-        for type_resource in course['type']:
+    scheduled_consumers = []
+    counter_cnt = Counter([c['name'] for c in consumers])
+    for consumer in consumers:
+        for type_resource in consumer['type']:
             resource = resources[type_resource]
             resource = sorted(resource, key=lambda k: k['attributes']['capacity']['value'], reverse=True)
-            for room in resource:
+            for individ_resource in resource:
                 scheduled_rnames = list(map(
-                    lambda item: item['rname'], scheduled_courses))
+                    lambda item: item['rname'], scheduled_consumers))
                 scheduled_cnames = list(map(
-                    lambda item: item['cname'], scheduled_courses))
+                    lambda item: item['cname'], scheduled_consumers))
+                tot_consumer_cnt = counter_cnt[consumer['name']]
+                sched_consumer_cnt = scheduled_cnames.count(consumer["name"])
 
-                tot_course_cnt = counter_cnt[course['name']]
-                sched_course_cnt = scheduled_cnames.count(course["name"])
+                if (individ_resource['name'] not in scheduled_rnames
+                        and tot_consumer_cnt != sched_consumer_cnt):
 
-                if (room['name'] not in scheduled_rnames
-                        and tot_course_cnt != sched_course_cnt):
-
-                    ccap = course['attributes']['capacity']['value']
-                    rcap = room['attributes']['capacity']['value']
+                    ccap = consumer['attributes']['capacity']['value']
+                    rcap = individ_resource['attributes']['capacity']['value']
                     if ccap <= rcap:
-                        scheduled_course = {
-                            'rname': room['name'],
-                            'cname': course['name'],
+                        scheduled_consumer = {
+                            'rname': individ_resource['name'],
+                            'cname': consumer['name'],
                             'course_capacity': ccap,
                             'room_capacity': rcap,
                         }
 
-                        scheduled_courses.append(scheduled_course)
+                        scheduled_consumers.append(scheduled_consumer)
 
-    return scheduled_courses
+    return scheduled_consumers
 
 
-def get_unsched(all_courses, scheduled_courses):
-    unscheduled_courses = []
-    sched_course_names = [d['cname'] for d in scheduled_courses]
-    all_course_names = [d['name'] for d in all_courses]
+def get_unsched(all_consumers, scheduled_consumers):
+    unscheduled_consumers = []
+    sched_consumer_names = [d['cname'] for d in scheduled_consumers]
+    all_consumer_names = [d['name'] for d in all_consumers]
 
-    for course in sched_course_names:
+    for consumer in sched_consumer_names:
         try:
-            all_course_names.remove(course)
+            all_consumer_names.remove(consumer)
         except ValueError:
             pass
 
-    return all_course_names
+    return all_consumer_names
