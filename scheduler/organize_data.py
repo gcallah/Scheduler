@@ -34,13 +34,12 @@ def organize_courses(courses_from_form, all_courses):
             curr_course = {
                 'name': course,
                 'type': ['rooms'],
-                'attributes': [{
-                    'name': 'capacity',
-                    'value': all_courses_dict[course]
+                'attributes': {
+                    'capacity': {
+                        'value': all_courses_dict[course]
+                    }
                 }
-                ]
             }
-            curr_course['attributes'].sort(key=lambda x: x['name'])
             ret_courses.append(curr_course)
     return ret_courses
 
@@ -50,12 +49,11 @@ def organize_rooms(all_rooms):
     for room in all_rooms:
         curr_room = {
             "name": room.rname,
-            'attributes': [{
-                'name': 'capacity',
-                'value': room.capacity
+            'attributes': {
+                'capacity': {
+                    'value': room.capacity
+                }
             }
-            ]
         }
-        curr_room['attributes'].sort(key=lambda x: x['name'])
         ret_rooms.append(curr_room)
     return ret_rooms
