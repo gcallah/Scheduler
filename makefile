@@ -34,11 +34,11 @@ local: $(HTML_FILES)
 dev_container:
 	docker build -t scheduler $(DOCKER_DIR)
 
-deploy_container:
+prod_container:
 	docker system prune
 	docker build -t gcallah/nyusched --no-cache -f $(DOCKER_DIR)/Deployable $(DOCKER_DIR)
 
-ship_container:
+deploy_container:
 	docker push gcallah/nyusched
 
 dblocal:
