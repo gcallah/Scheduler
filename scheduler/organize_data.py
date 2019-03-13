@@ -41,7 +41,8 @@ def organize_courses(courses_from_form, all_courses):
                 }
             }
             ret_courses.append(curr_course)
-    return ret_courses
+
+    return sorted(ret_courses, key=lambda k: k['attributes']['capacity']['value'], reverse=True)
 
 
 def organize_rooms(all_rooms):
@@ -56,4 +57,4 @@ def organize_rooms(all_rooms):
             }
         }
         ret_rooms.append(curr_room)
-    return ret_rooms
+    return sorted(ret_rooms, key=lambda k: k['attributes']['capacity']['value'])

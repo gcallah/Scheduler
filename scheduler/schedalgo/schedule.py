@@ -17,36 +17,38 @@ def sched(data):
 
 
 def make_sched(consumers, resources):
-    consumers = sorted(consumers, key=lambda k: k['attributes']['capacity']['value'], reverse=True)
 
     scheduled_consumers = []
     counter_cnt = Counter([c['name'] for c in consumers])
     for consumer in consumers:
         for type_resource in consumer['type']:
             resource = resources[type_resource]
-            resource = sorted(resource, key=lambda k: k['attributes']['capacity']['value'], reverse=True)
             for individ_resource in resource:
                 scheduled_rnames = list(map(
                     lambda item: item['rname'], scheduled_consumers))
                 scheduled_cnames = list(map(
                     lambda item: item['cname'], scheduled_consumers))
+
                 tot_consumer_cnt = counter_cnt[consumer['name']]
                 sched_consumer_cnt = scheduled_cnames.count(consumer["name"])
 
                 if (individ_resource['name'] not in scheduled_rnames
                         and tot_consumer_cnt != sched_consumer_cnt):
 
-                    ccap = consumer['attributes']['capacity']['value']
-                    rcap = individ_resource['attributes']['capacity']['value']
-                    if ccap <= rcap:
-                        scheduled_consumer = {
-                            'rname': individ_resource['name'],
-                            'cname': consumer['name'],
-                            'course_capacity': ccap,
-                            'room_capacity': rcap,
-                        }
+                    for attribute in consumer['attributes']:
+                        if attribute in individ_resource['attributes']:
 
-                        scheduled_consumers.append(scheduled_consumer)
+                            ccap = consumer['attributes'][attribute]['value']
+                            rcap = individ_resource['attributes'][attribute]['value']
+                            if ccap <= rcap:
+                                scheduled_consumer = {
+                                    'rname': individ_resource['name'],
+                                    'cname': consumer['name'],
+                                    'course_capacity': ccap,
+                                    'room_capacity': rcap,
+                                }
+
+                                scheduled_consumers.append(scheduled_consumer)
 
     return scheduled_consumers
 
