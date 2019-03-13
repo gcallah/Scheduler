@@ -35,7 +35,6 @@ dev_container:
 	docker build -t scheduler $(DOCKER_DIR)
 
 prod_container:
-	docker system prune
 	docker build -t gcallah/nyusched --no-cache -f $(DOCKER_DIR)/Deployable $(DOCKER_DIR)
 
 deploy_container:
