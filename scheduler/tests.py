@@ -7,73 +7,8 @@ class TestScheduler(unittest.TestCase):
 
     # Setup the courses and rooms
     def setUp(self):
-        json_data = {
-            "consumers": [{
-                "name": "Algorithms",
-                "type": ["rooms"],
-                "attributes": {
-                    "capacity": {
-                        "value": 60
-                    }
-                }
-            }, {
-                "name": "Algorithms",
-                "type": ["rooms"],
-                "attributes": {
-                    "capacity": {
-                        "value": 60
-                    }
-                }
-            }, {
-                "name": "Algorithms",
-                "type": ["rooms"],
-                "attributes": {
-                    "capacity": {
-                        "value": 60
-                    }
-                }
-            }, {
-                "name": "DevOps",
-                "type": ["rooms"],
-                "attributes": {
-                    "capacity": {
-                        "value": 120
-                    }
-                }
-            }, {
-                "name": "DevOps",
-                "type": ["rooms"],
-                "attributes": {
-                    "capacity": {
-                        "value": 120
-                    }
-                }
-            }],
-            "resources": {
-                "rooms": [{
-                    "name": "Small Room",
-                    "attributes": {
-                        "capacity": {
-                            "value": 30
-                        }
-                    }
-                }, {
-                    "name": "Medium Room",
-                    "attributes": {
-                        "capacity": {
-                            "value": 70
-                        }
-                    }
-                }, {
-                    "name": "Big Room",
-                    "attributes": {
-                        "capacity": {
-                            "value": 150
-                        }
-                    }
-                }]
-            }
-        }
+        with open("tests/test.json") as f:
+            json_data = json.load(f)
         self.json_str = json.dumps(json_data)
 
     def test_course_with_no_room_available(self):

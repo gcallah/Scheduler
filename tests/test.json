@@ -1,0 +1,95 @@
+
+{
+    "consumers": [
+        {
+            "name": "Algorithms",
+            "type": ["rooms"],
+            "attributes":
+            {
+                "capacity":
+                {
+                    "value": 60
+                }
+            }
+        },
+        {
+            "name": "Algorithms",
+            "type": ["rooms"],
+            "attributes":
+            {
+                "capacity":
+                {
+                    "value": 60
+                }
+            }
+        },
+        {
+            "name": "Algorithms",
+            "type": ["rooms"],
+            "attributes":
+            {
+                "capacity":
+                {
+                    "value": 60
+                }
+            }
+        },
+        {
+            "name": "DevOps",
+            "type": ["rooms"],
+            "attributes":
+            {
+                "capacity":
+                {
+                    "value": 120
+                }
+            }
+        },
+        {
+            "name": "DevOps",
+            "type": ["rooms"],
+            "attributes":
+            {
+                "capacity":
+                {
+                    "value": 120
+                }
+            }
+        }
+    ],
+    "resources":
+    {
+        "rooms": [
+            {
+                "name": "Small Room",
+                "attributes":
+                {
+                    "capacity":
+                    {
+                        "value": 30
+                    }
+                }
+            },
+            {
+                "name": "Medium Room",
+                "attributes":
+                {
+                    "capacity":
+                    {
+                        "value": 70
+                    }
+                }
+            },
+            {
+                "name": "Big Room",
+                "attributes":
+                {
+                    "capacity":
+                    {
+                        "value": 150
+                    }
+                }
+            }
+        ]
+    }
+}
