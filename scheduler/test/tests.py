@@ -1,13 +1,12 @@
 import unittest
 import json
-from .schedalgo.schedule import sched, make_sched, get_unsched
-
+from scheduler.schedalgo.schedule import sched
 
 class TestScheduler(unittest.TestCase):
 
     # Setup the courses and rooms
     def setUp(self):
-        with open("tests/test.json") as f:
+        with open("test_data/test.json") as f:
             json_data = json.load(f)
         self.json_str = json.dumps(json_data)
 
@@ -40,5 +39,4 @@ class TestScheduler(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestScheduler)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+	unittest.main()
