@@ -66,7 +66,8 @@
                 {
                     "capacity":
                     {
-                        "value": 30
+                        "value": 30,
+                        "op_type": "GE"
                     }
                 }
             },
@@ -76,7 +77,8 @@
                 {
                     "capacity":
                     {
-                        "value": 70
+                        "value": 70,
+                        "op_type": "GE"
                     }
                 }
             },
@@ -86,7 +88,8 @@
                 {
                     "capacity":
                     {
-                        "value": 150
+                        "value": 150,
+                        "op_type": "GE"
                     }
                 }
             }

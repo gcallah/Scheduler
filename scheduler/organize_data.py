@@ -52,7 +52,8 @@ def organize_rooms(all_rooms):
             "name": room.rname,
             'attributes': {
                 'capacity': {
-                    'value': room.capacity
+                    'value': room.capacity,
+                    'op_type': "GE"
                 }
             }
         }

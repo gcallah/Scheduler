@@ -1,5 +1,6 @@
 import json
 from collections import Counter
+import operator
 
 
 def sched(data):
@@ -38,14 +39,26 @@ def make_sched(consumers, resources):
                     for attribute in consumer['attributes']:
                         if attribute in individ_resource['attributes']:
 
-                            ccap = consumer['attributes'][attribute]['value']
-                            rcap = individ_resource['attributes'][attribute]['value']
-                            if ccap <= rcap:
+                            op = individ_resource['attributes'][attribute]['op_type']
+
+                            cvalue = consumer['attributes'][attribute]['value']
+                            rvalue = individ_resource['attributes'][attribute]['value']
+
+                            flag = False
+
+                            if op == 'GE':
+                                flag = operator.ge(rvalue, cvalue)
+                            elif op == 'eq':
+                                flag = operator.eq(rvalue, cvalue)
+                            elif op == 'le':
+                                flag = operator.le(rvalue, cvalue)
+
+                            if flag:
                                 scheduled_consumer = {
                                     'rname': individ_resource['name'],
                                     'cname': consumer['name'],
-                                    'course_capacity': ccap,
-                                    'room_capacity': rcap,
+                                    'course_capacity': cvalue,
+                                    'room_capacity': rvalue,
                                 }
 
                                 scheduled_consumers.append(scheduled_consumer)
