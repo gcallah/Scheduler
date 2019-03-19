@@ -53,10 +53,24 @@ def schedule(request):
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
 
+        scheduled = ret_dict['scheduled']
+        unscheduled = ret_dict['unscheduled']
+
+        ret_scheduled = []
+
+        for item in scheduled:
+            new_item = {
+                'rname': item['rname'],
+                'cname': item['cname'],
+                'course_capacity': item['cattributes']['capacity']['value'],
+                'room_capacity': item['rattributes']['capacity']['value'],
+            }
+            ret_scheduled.append(new_item)
+
         return render(
             request, 'schedule.html', {
-                'scheduled': ret_dict['scheduled'],
-                'unscheduled': ret_dict['unscheduled'],
+                'scheduled': ret_scheduled,
+                'unscheduled': unscheduled,
                 'header': site_hdr
             })
 

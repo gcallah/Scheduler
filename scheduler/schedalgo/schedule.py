@@ -36,6 +36,8 @@ def make_sched(consumers, resources):
                 if (individ_resource['name'] not in scheduled_rnames
                         and tot_consumer_cnt != sched_consumer_cnt):
 
+                    flag = True
+
                     for attribute in consumer['attributes']:
                         if attribute in individ_resource['attributes']:
 
@@ -44,24 +46,22 @@ def make_sched(consumers, resources):
                             cvalue = consumer['attributes'][attribute]['value']
                             rvalue = individ_resource['attributes'][attribute]['value']
 
-                            flag = False
-
                             if op == 'GE':
-                                flag = operator.ge(rvalue, cvalue)
+                                flag &= operator.ge(rvalue, cvalue)
                             elif op == 'eq':
-                                flag = operator.eq(rvalue, cvalue)
+                                flag &= operator.eq(rvalue, cvalue)
                             elif op == 'le':
-                                flag = operator.le(rvalue, cvalue)
+                                flag &= operator.le(rvalue, cvalue)
 
-                            if flag:
-                                scheduled_consumer = {
-                                    'rname': individ_resource['name'],
-                                    'cname': consumer['name'],
-                                    'course_capacity': cvalue,
-                                    'room_capacity': rvalue,
-                                }
+                        if flag:
+                            scheduled_consumer = {
+                                'rname': individ_resource['name'],
+                                'cname': consumer['name'],
+                                'cattributes': consumer['attributes'],
+                                'rattributes': individ_resource['attributes'],
+                            }
 
-                                scheduled_consumers.append(scheduled_consumer)
+                            scheduled_consumers.append(scheduled_consumer)
 
     return scheduled_consumers
 
