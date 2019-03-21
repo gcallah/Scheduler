@@ -25,9 +25,9 @@
 				</tr>
 			{% endfor %}
 		</table>
-
-		<input type="submit" value="Reschedule Checked Courses" />
+		<input type="submit" value="Reschedule Checked Courses" />	
 	</div>
+	
 
 	{% if unscheduled %}
 		<h4> Failed to schedule: </h4>
@@ -37,5 +37,6 @@
 		{% endfor %}
 		</ul>
 	{% endif %}
-
+	<br/>
+	<a class="back" href="{% url 'scheduler:index' %}">Back Home</a>
 {% endblock content %}
