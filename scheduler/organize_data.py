@@ -13,7 +13,7 @@ def organize(form_data):
         },
         'scheduled': []
     }
-    print(data)
+    # print(data)
     return data
 
 
