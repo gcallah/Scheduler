@@ -8,29 +8,18 @@
             {
                 "capacity":
                 {
-                    "value": 60
+                    "value": 30
                 }
             }
         },
         {
-            "name": "Algorithms",
+            "name": "CloudComputing",
             "type": ["rooms"],
             "attributes":
             {
                 "capacity":
                 {
-                    "value": 60
-                }
-            }
-        },
-        {
-            "name": "Algorithms",
-            "type": ["rooms"],
-            "attributes":
-            {
-                "capacity":
-                {
-                    "value": 60
+                    "value": 70
                 }
             }
         },
@@ -41,18 +30,7 @@
             {
                 "capacity":
                 {
-                    "value": 120
-                }
-            }
-        },
-        {
-            "name": "DevOps",
-            "type": ["rooms"],
-            "attributes":
-            {
-                "capacity":
-                {
-                    "value": 120
+                    "value": 100
                 }
             }
         }
@@ -72,12 +50,34 @@
                 }
             },
             {
+                "name": "Small Room 2",
+                "attributes":
+                {
+                    "capacity":
+                    {
+                        "value": 50,
+                        "op_type": "GE"
+                    }
+                }
+            },
+            {
                 "name": "Medium Room",
                 "attributes":
                 {
                     "capacity":
                     {
                         "value": 70,
+                        "op_type": "GE"
+                    }
+                }
+            },
+            {
+                "name": "Medium Room 2",
+                "attributes":
+                {
+                    "capacity":
+                    {
+                        "value": 100,
                         "op_type": "GE"
                     }
                 }
