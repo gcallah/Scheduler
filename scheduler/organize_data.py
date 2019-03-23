@@ -10,8 +10,10 @@ def organize(form_data):
         'consumers': organize_courses(courses_from_form, all_courses),
         'resources': {
             'rooms': organize_rooms(all_rooms)
-        }
+        },
+        'scheduled': []
     }
+    print(data)
     return data
 
 
