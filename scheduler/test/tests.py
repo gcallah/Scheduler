@@ -1,42 +1,25 @@
-import unittest
-import json
+import unittest, json, os
 from scheduler.schedalgo.schedule import sched
+from ddt import ddt, file_data, unpack
 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+@ddt
 class TestScheduler(unittest.TestCase):
 
-    # Setup the courses and rooms
     def setUp(self):
-        with open("test_data/test_no_room_available.json") as f:
-            json_no_room = json.load(f)
-        self.json_str_no_room_available = json.dumps(json_no_room)
-        with open("test_data/test_same_capacity.json") as f:
-            json_same_capacity = json.load(f)
-        self.json_str_same_capacity = json.dumps(json_same_capacity)
-        with open("test_data/test_room_available.json") as f: 
-            self.josn_room_available = json.load(f)
-        self.json_str_room_available = json.dumps(self.josn_room_available)
+        pass
 
-    def test_course_with_no_room_available(self):
-        sched_result = sched(self.json_str_no_room_available)
+    @file_data(os.path.join(ROOT_DIR, "test_data/test.json"))
+    def test_sched_classes(self, data, expect_sched, expect_unsched):
+        json_str_no_room_available = json.dumps(data)
+        sched_result = sched(json_str_no_room_available)
         sched_dict = json.loads(sched_result)
         unsched = sched_dict['unscheduled']
+        scheded = sched_dict['scheduled']
 
-        self.assertEqual(len(unsched), 3)
-
-    def test_course_and_room_with_same_capacity(self):
-        sched_result = sched(self.json_str_same_capacity)
-        sched_dict = json.loads(sched_result)
-        unsched = sched_dict['unscheduled']
-
-        self.assertEqual(len(unsched), 0)
-
-    def test_courses_with_rooms_available_scheduled(self):
-        courses_cnt = len(self.josn_room_available['consumers'])
-        sched_result = sched(self.json_str_room_available)
-        sched_dict = json.loads(sched_result)
-        sched_courses = sched_dict['scheduled']
-
-        self.assertEqual(len(sched_courses), courses_cnt)
+        self.assertEqual(len(unsched), expect_unsched)
+        self.assertEqual(len(scheded), expect_sched)
 
 if __name__ == '__main__':
 	unittest.main()
