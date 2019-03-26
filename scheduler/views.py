@@ -2,7 +2,7 @@ from django.shortcuts import render
 from scheduler.forms import FeedbackForm
 from .schedalgo.schedule import sched
 from .models import Course
-from .organize_data import organize
+from .organize_data import organize, organize_output
 import json
 
 site_hdr = "Course Scheduler"
@@ -49,23 +49,13 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 def schedule(request):
     if request.method == "POST":
         data = organize(request.POST)
-        print(data)
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
 
         scheduled = ret_dict['scheduled']
         unscheduled = ret_dict['unscheduled']
 
-        ret_scheduled = []
-
-        for item in scheduled:
-            new_item = {
-                'rname': item['rname'],
-                'cname': item['cname'],
-                'course_capacity': item['cattributes']['capacity']['value'],
-                'room_capacity': item['rattributes']['capacity']['value'],
-            }
-            ret_scheduled.append(new_item)
+        ret_scheduled = organize_output(scheduled)
 
         return render(
             request, 'schedule.html', {

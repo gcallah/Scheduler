@@ -13,7 +13,6 @@ def organize(form_data):
         },
         'scheduled': []
     }
-    # print(data)
     return data
 
 
@@ -61,3 +60,18 @@ def organize_rooms(all_rooms):
         }
         ret_rooms.append(curr_room)
     return sorted(ret_rooms, key=lambda k: k['attributes']['capacity']['value'])
+
+
+def organize_output(scheduled):
+    ret_scheduled = []
+
+    for item in scheduled:
+        new_item = {
+            'rname': item['rname'],
+            'cname': item['cname'],
+            'course_capacity': item['cattributes']['capacity']['value'],
+            'room_capacity': item['rattributes']['capacity']['value'],
+        }
+        ret_scheduled.append(new_item)
+
+    return ret_scheduled
