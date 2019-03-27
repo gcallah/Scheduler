@@ -46,12 +46,9 @@ def make_sched(consumers, resources):
                             cvalue = consumer['attributes'][attribute]['value']
                             rvalue = individ_resource['attributes'][attribute]['value']
 
-                            if op == 'GE':
-                                flag &= operator.ge(rvalue, cvalue)
-                            elif op == 'eq':
-                                flag &= operator.eq(rvalue, cvalue)
-                            elif op == 'le':
-                                flag &= operator.le(rvalue, cvalue)
+                            match_fun = get_operation_function(op)
+
+                            flag &= match_fun(rvalue, cvalue)
 
                         if flag:
                             scheduled_consumer = {
@@ -78,3 +75,15 @@ def get_unsched(all_consumers, scheduled_consumers):
             pass
 
     return all_consumer_names
+
+
+def get_operation_function(op_type):
+
+    if op_type == 'GE':
+        return lambda x, y: x > y
+    elif op_type == 'eq':
+        return lambda x, y: x == y
+    elif op_type == 'le':
+        return lambda x, y: x < y
+    else:
+        raise RuntimeError("Operation Type Wrong!")
