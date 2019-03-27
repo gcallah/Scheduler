@@ -80,10 +80,10 @@ def get_unsched(all_consumers, scheduled_consumers):
 def get_operation_function(op_type):
 
     if op_type == 'GE':
-        return lambda x, y: x > y
+        return lambda x, y: x >= y
     elif op_type == 'eq':
         return lambda x, y: x == y
     elif op_type == 'le':
-        return lambda x, y: x < y
+        return lambda x, y: x <= y
     else:
         raise RuntimeError("Operation Type Wrong!")

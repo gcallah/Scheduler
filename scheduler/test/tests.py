@@ -21,5 +21,6 @@ class TestScheduler(unittest.TestCase):
         self.assertEqual(len(unsched), expect_unsched)
         self.assertEqual(len(scheded), expect_sched)
 
+
 if __name__ == '__main__':
 	unittest.main()
