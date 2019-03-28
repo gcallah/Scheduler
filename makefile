@@ -16,7 +16,7 @@ HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's
 FORCE:
 
 tests: FORCE
-	$(TEST_DIR)/all_tests.sh
+	python3 -m unittest scheduler/test/tests.py
 
 lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
 
@@ -44,9 +44,7 @@ dblocal:
 	python3 manage.py makemigrations
 	python3 manage.py migrate
 
-db:
-	python3 manage.py makemigrations
-	python3 manage.py migrate
+db: dblocal
 	git add $(DJANGO_DIR)/migrations/*.py
 	-git commit $(DJANGO_DIR)/migrations/*.py
 	git push origin master
@@ -55,5 +53,4 @@ prod: $(SRCS) $(OBJ)
 	$(TEST_DIR)/all_tests.sh
 	-git commit -a 
 	git push origin master
-# what to do here?
-#	ssh gcallah@ssh.pythonanywhere.com 'cd /home/gcallah/Emu86; /home/gcallah/Emu86/myutils/prod.sh'
+	# now Travis should take over and deploy!
