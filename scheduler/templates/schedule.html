@@ -7,7 +7,6 @@
 
 		<table>
 			<tr>
-				<th></th>
 				<th> Course Name </th>
 				<th> Course Time </th>
 				<th> Course Capacity</th>
@@ -16,7 +15,6 @@
 			</tr>
 			{% for scheduled_course in scheduled %}
 				<tr>
-					<td> <input type="checkbox" /> </td>
 					<td> {{ scheduled_course.cname }} </td> 
 					<td> {{ scheduled_course.day_of_week }} : {{ scheduled_course.start_time }} - {{ scheduled_course.end_time }} </td>
 					<td> {{ scheduled_course.course_capacity }} </td>
