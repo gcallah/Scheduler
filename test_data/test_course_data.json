@@ -1,0 +1,10 @@
+{
+    "case1": {
+        "cname":" ",
+        "expected_cname": " " 
+    },
+    "case2": {
+        "cname":"Computational Geometry",
+        "expected_cname": "Computational Geometry" 
+    }
+}

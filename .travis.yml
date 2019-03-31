@@ -13,7 +13,7 @@ env:
     - PYTHONPATH=/home/travis/build/gcallah/Scheduler
 
 script:
-    - python3 -m "nose" --exe --verbose --with-coverage --cover-package=scheduler
+    - python3 manage.py test scheduler/tests/test_schedule.py scheduler/tests
 
 notifications:
   slack: nyuscheduler:OjE5yRLUjVvk0yQscXyJ1E1p

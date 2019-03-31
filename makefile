@@ -16,7 +16,7 @@ HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's
 FORCE:
 
 tests: FORCE
-	python3 -m "nose" --exe --verbose --with-coverage --cover-package=scheduler
+	python3 manage.py test scheduler/tests/test_schedule.py scheduler/tests
 
 lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
 

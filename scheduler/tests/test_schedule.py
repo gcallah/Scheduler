@@ -10,7 +10,7 @@ class TestScheduler(unittest.TestCase):
     def setUp(self):
         pass
 
-    @file_data(os.path.join(ROOT_DIR, "test_data/test.json"))
+    @file_data(os.path.join(ROOT_DIR, "test_data/test_schedule_data.json"))
     def test_sched_classes(self, data, expect_sched, expect_unsched):
         json_str_no_room_available = json.dumps(data)
         sched_result = sched(json_str_no_room_available)

@@ -1,0 +1,14 @@
+{
+    "case_1": {
+        "rname": "RH301",
+        "capacity": 55,
+        "expected_rname":"RH301",
+        "expected_capacity": 55
+    },
+    "case_2": {
+        "rname": "LARGE____ROOM",
+        "capacity": 200,
+        "expected_rname":"LARGE____ROOM",
+        "expected_capacity": 200
+    }
+}
