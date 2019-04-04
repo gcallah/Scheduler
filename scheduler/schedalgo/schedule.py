@@ -1,6 +1,5 @@
 import json
 from collections import Counter
-import operator
 
 
 def sched(data):
@@ -20,45 +19,47 @@ def sched(data):
 def make_sched(consumers, resources):
 
     scheduled_consumers = []
-    counter_cnt = Counter([c['name'] for c in consumers])
-    for consumer in consumers:
+    counter_cnt = Counter([c for c in consumers.keys()])
+
+    for consumer_name, consumer in consumers.items():
         for type_resource in consumer['type']:
             resource = resources[type_resource]
-            for individ_resource in resource:
+            for resource_name, individ_resource in resource.items():
+
                 scheduled_rnames = list(map(
                     lambda item: item['rname'], scheduled_consumers))
                 scheduled_cnames = list(map(
                     lambda item: item['cname'], scheduled_consumers))
 
-                tot_consumer_cnt = counter_cnt[consumer['name']]
-                sched_consumer_cnt = scheduled_cnames.count(consumer["name"])
+                tot_consumer_cnt = counter_cnt[consumer_name]
+                sched_consumer_cnt = scheduled_cnames.count(consumer_name)
 
-                if (individ_resource['name'] not in scheduled_rnames
+                if (resource_name not in scheduled_rnames
                         and tot_consumer_cnt != sched_consumer_cnt):
 
                     flag = True
 
-                    for attribute in consumer['attributes']:
-                        if attribute in individ_resource['attributes']:
+                    for attribute in consumer:
+                        if attribute in individ_resource:
 
-                            op = individ_resource['attributes'][attribute]['op_type']
+                            op = individ_resource[attribute]['op_type']
 
-                            cvalue = consumer['attributes'][attribute]['value']
-                            rvalue = individ_resource['attributes'][attribute]['value']
+                            cvalue = consumer[attribute]['value']
+                            rvalue = individ_resource[attribute]['value']
 
                             match_fun = get_operation_function(op)
 
                             flag &= match_fun(rvalue, cvalue)
 
-                        if flag:
-                            scheduled_consumer = {
-                                'rname': individ_resource['name'],
-                                'cname': consumer['name'],
-                                'cattributes': consumer['attributes'],
-                                'rattributes': individ_resource['attributes'],
-                            }
+                    if flag:
+                        scheduled_consumer = {
+                            'rname': resource_name,
+                            'cname': consumer_name,
+                            'cattributes': consumer,
+                            'rattributes': individ_resource,
+                        }
 
-                            scheduled_consumers.append(scheduled_consumer)
+                        scheduled_consumers.append(scheduled_consumer)
 
     return scheduled_consumers
 
@@ -66,7 +67,7 @@ def make_sched(consumers, resources):
 def get_unsched(all_consumers, scheduled_consumers):
     unscheduled_consumers = []
     sched_consumer_names = [d['cname'] for d in scheduled_consumers]
-    all_consumer_names = [d['name'] for d in all_consumers]
+    all_consumer_names = [d for d in all_consumers.keys()]
 
     for consumer in sched_consumer_names:
         try:

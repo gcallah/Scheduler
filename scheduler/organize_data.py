@@ -24,41 +24,39 @@ def create_list_of_all_courses(form_data):
 
 
 def organize_courses(courses_from_form, all_courses):
-    all_courses_dict = {}
+    course_cap = {}
+    course_cnt = {}
     for course in all_courses:
-        all_courses_dict[course.cname] = course.capacity
+        course_cap[course.cname] = course.capacity
+        course_cnt[course.cname] = 0
 
-    ret_courses = []
+    ret_courses = {}
     for course in courses_from_form:
-        if course in all_courses_dict:
+        if course in course_cap:
             curr_course = {
-                'name': course,
                 'type': ['rooms'],
-                'attributes': {
-                    'capacity': {
-                        'value': all_courses_dict[course]
-                    }
+                'capacity': {
+                    'value': course_cap[course]
                 }
             }
-            ret_courses.append(curr_course)
+            course_name = course + "_" + str(course_cnt[course])
+            course_cnt[course] += 1
+            ret_courses[course_name] = curr_course
 
-    return sorted(ret_courses, key=lambda k: k['attributes']['capacity']['value'], reverse=True)
+    return dict(sorted(ret_courses.items(), key=lambda k: k[1]['capacity']['value'], reverse=True))
 
 
 def organize_rooms(all_rooms):
-    ret_rooms = []
+    ret_rooms = {}
     for room in all_rooms:
         curr_room = {
-            "name": room.rname,
-            'attributes': {
-                'capacity': {
-                    'value': room.capacity,
-                    'op_type': "GE"
-                }
+            'capacity': {
+                'value': room.capacity,
+                'op_type': "GE"
             }
         }
-        ret_rooms.append(curr_room)
-    return sorted(ret_rooms, key=lambda k: k['attributes']['capacity']['value'])
+        ret_rooms[room.rname] = curr_room
+    return dict(sorted(ret_rooms.items(), key=lambda k: k[1]['capacity']['value']))
 
 
 def organize_output(scheduled):
