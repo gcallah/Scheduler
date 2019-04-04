@@ -39,8 +39,8 @@ def organize_courses(courses_from_form, all_courses):
                     'value': course_cap[course]
                 }
             }
-            course_name = course + "_" + str(course_cnt[course])
             course_cnt[course] += 1
+            course_name = course + "_" + str(course_cnt[course])
             ret_courses[course_name] = curr_course
 
     return dict(sorted(ret_courses.items(), key=lambda k: k[1]['capacity']['value'], reverse=True))
