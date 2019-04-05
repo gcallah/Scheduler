@@ -310,14 +310,15 @@ input[type=submit] {
 }
 
 div.schedule {
-    display: inline-block;
+    display: block;
     text-align: center;
+    margin-left: auto; 
+    margin-right: auto;
 }
 
-ul.errors li {
-    font-size: 1.0em;
-    margin-top: 15px;
-    margin-left: 5px;
+.schedule table {
+    margin-left: auto; 
+    margin-right: auto;
 }
 
 button[type="submit"] {
@@ -336,7 +337,7 @@ button[type="submit"] {
     margin: 0 0.5em;
 }
 
-.back {
-    margin-top: 3em;
-    margin-left: 3em;
+a.back {
+    display: block;
+    margin-top: 1em;
 }
