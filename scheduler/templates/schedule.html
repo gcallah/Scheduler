@@ -25,18 +25,27 @@
 				</tr>
 			{% endfor %}
 		</table>
-		<input type="submit" value="Reschedule Checked Courses" />	
-	</div>
+	
 	
 
-	{% if unscheduled %}
-		<h4> Failed to schedule: </h4>
-		<ul class="errors"> 
-		{% for item in unscheduled %}
-			<li>{{item}}</li>
-		{% endfor %}
-		</ul>
-	{% endif %}
-	<br/>
-	<a class="back" href="{% url 'scheduler:index' %}">Back Home</a>
+		{% if unscheduled %}
+			<h4> Failed to Schedule </h4>
+			<table>
+				<tr>
+					<th> Need Schedule? </th>
+					<th> Course Name </th>
+				</tr>
+				{% for item in unscheduled %}
+					<tr>
+						<td> <input type="checkbox" /> </td>
+						<td> {{ item }} </td> 
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+		<br/>
+		<input type="submit" value="Reschedule Checked Courses" />	
+		<br/>
+		<a class="back" href="{% url 'scheduler:index' %}">Back Home</a>
+	</div>
 {% endblock content %}
