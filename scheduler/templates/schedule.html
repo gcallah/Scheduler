@@ -3,45 +3,48 @@
 {% block content %}
 	
 	<div class="schedule">
-		<h4>Proposed Schedule</h4>
+		<form role="form" action="{% url 'scheduler:schedule' %}" method="post">
+        	{% csrf_token %}
+			<h4>Proposed Schedule</h4>
 
-		<table>
-			<tr>
-				<th> Need Reschedule? </th>
-				<th> Course Name </th>
-				<th> Course Time </th>
-				<th> Course Capacity</th>
-				<th> Room </th>
-				<th> Room Capacity </th>
-			</tr>
-			{% for scheduled_course in scheduled %}
-				<tr>
-					<td> <input type="checkbox" /> </td>
-					<td> {{ scheduled_course.cname }} </td> 
-					<td> {{ scheduled_course.day_of_week }} : {{ scheduled_course.start_time }} - {{ scheduled_course.end_time }} </td>
-					<td> {{ scheduled_course.course_capacity }} </td>
-					<td> {{ scheduled_course.rname }} </td>
-					<td> {{ scheduled_course.room_capacity }} </td>
-				</tr>
-			{% endfor %}
-		</table>
-	
-		{% if unscheduled %}
-			<h4> Failed to Schedule </h4>
 			<table>
 				<tr>
-					<th> Need Schedule? </th>
+					<th> Need Reschedule? </th>
 					<th> Course Name </th>
+					<th> Course Time </th>
+					<th> Course Capacity</th>
+					<th> Room </th>
+					<th> Room Capacity </th>
 				</tr>
-				{% for item in unscheduled %}
+				{% for scheduled_course in scheduled %}
 					<tr>
 						<td> <input type="checkbox" /> </td>
-						<td> {{ item }} </td> 
+						<td> {{ scheduled_course.cname }} </td> 
+						<td> {{ scheduled_course.day_of_week }} : {{ scheduled_course.start_time }} - {{ scheduled_course.end_time }} </td>
+						<td> {{ scheduled_course.course_capacity }} </td>
+						<td> {{ scheduled_course.rname }} </td>
+						<td> {{ scheduled_course.room_capacity }} </td>
 					</tr>
 				{% endfor %}
 			</table>
-		{% endif %}
-		<input type="submit" value="Reschedule Checked Courses" />	
+		
+			{% if unscheduled %}
+				<h4> Failed to Schedule </h4>
+				<table>
+					<tr>
+						<th> Need Schedule? </th>
+						<th> Course Name </th>
+					</tr>
+					{% for item in unscheduled %}
+						<tr>
+							<td> <input type="checkbox" /> </td>
+							<td> {{ item }} </td> 
+						</tr>
+					{% endfor %}
+				</table>
+			{% endif %}
+			<input type="submit" value="Reschedule Checked Courses" />
+		</form>	
 		<a class="back" href="{% url 'scheduler:index' %}">Back Home</a>
 	</div>
 {% endblock content %}
