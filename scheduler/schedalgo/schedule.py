@@ -59,6 +59,8 @@ def make_sched(consumers, resources):
                             'rattributes': individ_resource,
                         }
 
+                        update(consumer, individ_resource)
+
                         scheduled_consumers.append(scheduled_consumer)
 
     return scheduled_consumers
@@ -81,10 +83,18 @@ def get_unsched(all_consumers, scheduled_consumers):
 def get_operation_function(op_type):
 
     if op_type == 'GE':
-        return lambda x, y: x >= y
-    elif op_type == 'eq':
+        return lambda x, y: x >= y                              # The x and y are integer
+    elif op_type == 'Eq':
         return lambda x, y: x == y
-    elif op_type == 'le':
+    elif op_type == 'Le':
         return lambda x, y: x <= y
+    elif op_type == 'In':
+        return lambda x, y: False not in [_ in y for _ in x]    # The x is a list, y is a list or a dictionary
     else:
         raise RuntimeError("Operation Type Wrong!")
+
+
+def update(consumer, resource):
+    # TODO:
+    # Update the value of the attributes in resource.
+    pass
