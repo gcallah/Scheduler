@@ -89,10 +89,14 @@ def get_operation_function(op_type):
     elif op_type == 'Le':
         return lambda x, y: x <= y
     elif op_type == 'In':
-        return lambda x, y: False not in [_ in y for _ in x]    # The x is a list, y is a list or a dictionary
+        return time_slot_in
     else:
         raise RuntimeError("Operation Type Wrong!")
 
+
+def time_slot_in(rvalue, cvalue):
+    fun = lambda x, y: False not in [_ in x for _ in y]     # The x is a list or dictionary, y is a list
+    return True in list(map(lambda x: fun(rvalue, x), cvalue))
 
 def update(consumer, resource):
     # TODO:
