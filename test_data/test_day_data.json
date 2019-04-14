@@ -1,0 +1,14 @@
+{
+    "case_1": {
+        "days": "Monday",
+        "expected_days": "Monday"
+    },
+    "case_2": {
+        "days": "Tu",
+        "expected_days": "Tu"
+    },
+    "case_3": {
+        "days": "Tuesday & Thursday",
+        "expected_days": "Tuesday & Thursday"
+    }
+}
