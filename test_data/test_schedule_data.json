@@ -19,19 +19,25 @@
                     }
                 },
                 "Algorithms_3": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 60
                     }
                 },
                 "DevOps_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 70
                     }
                 },
                 "DevOps_2": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 120
                     }
@@ -67,19 +73,25 @@
         "data": {
             "consumers": {
                 "Algorithms_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 30
                     }
                 },
                 "CloudComputing_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 70
                     }
                 },
                 "DevOps_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 100
                     }
@@ -127,31 +139,41 @@
         "data": {
             "consumers": {
                 "Algorithms_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 30
                     }
                 },
                 "Algorithms_2": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 60
                     }
                 },
                 "CloudComputing_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 70
                     }
                 },
                 "DevOps_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 100
                     }
                 },
                 "BigData_1": {
-                    "type": ["rooms"],
+                    "type": [
+                        "rooms"
+                    ],
                     "capacity": {
                         "value": 50
                     }
@@ -194,5 +216,224 @@
         },
         "expect_sched": 5,
         "expect_unsched": 0
+    },
+    "time_slot_enough": {
+        "data": {
+            "consumers": {
+                "Algorithms_1": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 30
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ],
+                            [
+                                "Tue18",
+                                "Tue19"
+                            ]
+                        ]
+                    }
+                },
+                "Algorithms_2": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 60
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ],
+                            [
+                                "Tue18",
+                                "Tue19"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "resources": {
+                "rooms": {
+                    "Small Room": {
+                        "capacity": {
+                            "value": 30,
+                            "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon8": 1,
+                                "Mon9": 1,
+                                "Mon10": 1,
+                                "Mon11": 1,
+                                "Mon12": 1,
+                                "Mon13": 1,
+                                "Mon14": 1,
+                                "Mon15": 1,
+                                "Mon16": 1,
+                                "Mon17": 1,
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "In"
+                        }
+                    },
+                    "Small Room 2": {
+                        "capacity": {
+                            "value": 50,
+                            "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon8": 1,
+                                "Mon9": 1,
+                                "Mon10": 1,
+                                "Mon11": 1,
+                                "Mon12": 1,
+                                "Mon13": 1,
+                                "Mon14": 1,
+                                "Mon15": 1,
+                                "Mon16": 1,
+                                "Mon17": 1,
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "In"
+                        }
+                    },
+                    "Medium Room": {
+                        "capacity": {
+                            "value": 70,
+                            "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon8": 1,
+                                "Mon9": 1,
+                                "Mon10": 1,
+                                "Mon11": 1,
+                                "Mon12": 1,
+                                "Mon13": 1,
+                                "Mon14": 1,
+                                "Mon15": 1,
+                                "Mon16": 1,
+                                "Mon17": 1,
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "In"
+                        }
+                    }
+                }
+            }
+        },
+        "expect_sched": 2,
+        "expect_unsched": 0
+    },
+    "time_slot_not_enough": {
+        "data": {
+            "consumers": {
+                "Algorithms_1": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 50
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ],
+                            [
+                                "Wed18",
+                                "Wed19"
+                            ]
+                        ]
+                    }
+                },
+                "Algorithms_2": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 50
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ],
+                            [
+                                "Wed18",
+                                "Wed19"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "resources": {
+                "rooms": {
+                    "Small Room": {
+                        "capacity": {
+                            "value": 30,
+                            "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon8": 1,
+                                "Mon9": 1,
+                                "Mon10": 1,
+                                "Mon11": 1,
+                                "Mon12": 1,
+                                "Mon13": 1,
+                                "Mon14": 1,
+                                "Mon15": 1,
+                                "Mon16": 1,
+                                "Mon17": 1,
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "In"
+                        }
+                    },
+                    "Small Room 2": {
+                        "capacity": {
+                            "value": 50,
+                            "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon8": 1,
+                                "Mon9": 1,
+                                "Mon10": 1,
+                                "Mon11": 1,
+                                "Mon12": 1,
+                                "Mon13": 1,
+                                "Mon14": 1,
+                                "Mon15": 1,
+                                "Mon16": 1,
+                                "Mon17": 1,
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "In"
+                        }
+                    }
+                }
+            }
+        },
+        "expect_sched": 1,
+        "expect_unsched": 1
     }
 }
