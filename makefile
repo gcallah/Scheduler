@@ -1,17 +1,13 @@
 # Need to export as ENV var
 export TEMPLATE_DIR = templates
-export QUIZ_DIR = templates
 export TEST_DIR = tests
 export TEST_DATA = test_data
 
-PTML_DIR = html_src
 UDIR = utils
 INCS = $(TEMPLATE_DIR)/head.txt 
 DJANGO_DIR = scheduler
 DOCKER_DIR = docker
 PYTHONFILES = $(shell ls $(DJANGO_DIR)/*.py)
-
-HTML_FILES = $(shell ls $(PTML_DIR)/*.ptml | sed -e 's/.ptml/.html/' | sed -e 's/html_src\///')
 
 FORCE:
 
