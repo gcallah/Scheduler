@@ -386,7 +386,7 @@
                 "rooms": {
                     "Small Room": {
                         "capacity": {
-                            "value": 30,
+                            "value": 50,
                             "op_type": "GE"
                         },
                         "time": {
@@ -398,11 +398,7 @@
                                 "Mon12": 1,
                                 "Mon13": 1,
                                 "Mon14": 1,
-                                "Mon15": 1,
-                                "Mon16": 1,
-                                "Mon17": 1,
-                                "Mon18": 1,
-                                "Mon19": 1
+                                "Mon15": 1
                             },
                             "op_type": "In"
                         }

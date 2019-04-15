@@ -61,6 +61,8 @@ def make_sched(consumers, resources):
 
                         update(consumer, individ_resource)
 
+                        print(individ_resource)
+
                         scheduled_consumers.append(scheduled_consumer)
 
     return scheduled_consumers
@@ -80,10 +82,31 @@ def get_unsched(all_consumers, scheduled_consumers):
     return all_consumer_names
 
 
-def get_operation_function(op_type):
+def update(consumer, resource):
+    # TODO:
+    # Update the value of the attributes in resource.
 
+    for attribute in consumer:
+        if attribute in resource:
+            op = resource[attribute]['op_type']
+
+            cvalue = consumer[attribute]['value']
+            rvalue = resource[attribute]['value']
+
+            fun = update_attribution(op)
+            if fun:
+                fun(rvalue, cvalue)
+
+
+def get_operation_function(op_type):
+    # Customer Design Function
+    def time_slot_in(rvalue, cvalue):
+        fun = lambda x, y: False not in [_ in x for _ in y]  # The x is a list or dictionary, y is a list
+        return True in list(map(lambda x: fun(rvalue, x), cvalue))
+
+    # Return different function based on operator type.
     if op_type == 'GE':
-        return lambda x, y: x >= y                              # The x and y are integer
+        return lambda x, y: x >= y  # The x and y are integer
     elif op_type == 'Eq':
         return lambda x, y: x == y
     elif op_type == 'Le':
@@ -94,11 +117,18 @@ def get_operation_function(op_type):
         raise RuntimeError("Operation Type Wrong!")
 
 
-def time_slot_in(rvalue, cvalue):
-    fun = lambda x, y: False not in [_ in x for _ in y]     # The x is a list or dictionary, y is a list
-    return True in list(map(lambda x: fun(rvalue, x), cvalue))
+def update_attribution(op_type):
+    # Customer Design Function
+    def update_time_slots(rvalue, cvalue):
+        chosen_option = []
+        for option in cvalue:
+            if False not in [_ in rvalue for _ in option]:
+                chosen_option = option
+                break
+        for day_time in chosen_option:
+            del rvalue[day_time]
 
-def update(consumer, resource):
-    # TODO:
-    # Update the value of the attributes in resource.
-    pass
+    if op_type == 'In':
+        return update_time_slots
+    else:
+        return None
