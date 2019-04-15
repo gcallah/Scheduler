@@ -66,8 +66,8 @@ def organize_output(scheduled):
         new_item = {
             'rname': item['rname'],
             'cname': item['cname'],
-            'course_capacity': item['cattributes']['capacity']['value'],
-            'room_capacity': item['rattributes']['capacity']['value'],
+            'course_capacity': item['cattributes']['capacity'],
+            'room_capacity': item['rattributes']['capacity'],
         }
         ret_scheduled.append(new_item)
 

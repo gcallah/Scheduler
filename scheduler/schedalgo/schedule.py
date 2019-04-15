@@ -52,16 +52,15 @@ def make_sched(consumers, resources):
                             flag &= match_fun(rvalue, cvalue)
 
                     if flag:
+
+                        re_consumer, re_resource = update(consumer, individ_resource)
+
                         scheduled_consumer = {
                             'rname': resource_name,
                             'cname': consumer_name,
-                            'cattributes': consumer,
-                            'rattributes': individ_resource,
+                            'cattributes': re_consumer,
+                            'rattributes': re_resource,
                         }
-
-                        update(consumer, individ_resource)
-
-                        print(individ_resource)
 
                         scheduled_consumers.append(scheduled_consumer)
 
@@ -86,6 +85,9 @@ def update(consumer, resource):
     # TODO:
     # Update the value of the attributes in resource.
 
+    re_consumer = {}
+    re_resource = {}
+
     for attribute in consumer:
         if attribute in resource:
             op = resource[attribute]['op_type']
@@ -95,7 +97,21 @@ def update(consumer, resource):
 
             fun = update_attribution(op)
             if fun:
-                fun(rvalue, cvalue)
+                re_cvalue, re_rvalue = fun(rvalue, cvalue)
+                re_consumer[attribute] = re_cvalue
+                re_resource[attribute] = re_rvalue
+
+    for attribute in consumer:
+        if type(attribute) is dict and attribute not in re_consumer:
+            print(attribute)
+            re_consumer[attribute] = consumer[attribute]['value']
+
+    for attribute in resource:
+        if type(attribute) is dict and attribute not in re_resource:
+            re_resource[attribute] = resource[attribute]['value']
+
+    return re_consumer, re_resource
+
 
 
 def get_operation_function(op_type):
@@ -127,8 +143,9 @@ def update_attribution(op_type):
                 break
         for day_time in chosen_option:
             del rvalue[day_time]
+        return chosen_option, chosen_option
 
     if op_type == 'In':
         return update_time_slots
     else:
-        return None
+        return lambda x, y: (x, y)
