@@ -45,8 +45,7 @@ db: dblocal
 	-git commit $(DJANGO_DIR)/migrations/*.py
 	git push origin master
 
-prod: $(SRCS) $(OBJ)
-	$(TEST_DIR)/all_tests.sh
+prod: $(SRCS) $(OBJ) tests
 	-git commit -a 
 	git push origin master
 	# now Travis should take over and deploy!
