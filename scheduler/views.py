@@ -48,7 +48,23 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 
 def schedule(request):
     if request.method == "POST":
-        data = organize(request.POST)
+        data_in = dict()
+        if 'reschedule' in request.POST:
+            for key in request.POST:
+                if key == "csrfmiddlewaretoken":
+                    data_in[key] = request.POST[key]
+                else:
+                    pos = key.find("_") 
+                    if pos != -1:
+                        course_name = key[:pos]
+                        if course_name in data_in:
+                            data_in[course_name] += 1
+                        else:
+                            data_in[course_name] = 1
+        else:
+            data_in = request.POST
+        
+        data = organize(data_in)
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
 
