@@ -18,7 +18,7 @@
 				</tr>
 				{% for scheduled_course in scheduled %}
 					<tr>
-						<td> <input class="sched" type="checkbox" /> </td>
+						<td> <input class="sched" type="checkbox" name="{{ scheduled_course.cname }}"/> </td>
 						<td> {{ scheduled_course.cname }} </td> 
 						<td> {{ scheduled_course.day_of_week }} : {{ scheduled_course.start_time }} - {{ scheduled_course.end_time }} </td>
 						<td> {{ scheduled_course.course_capacity }} </td>
@@ -37,14 +37,15 @@
 					</tr>
 					{% for item in unscheduled %}
 						<tr>
-							<td> <input class="unsched" type="checkbox" /> </td>
+							<td> <input class="unsched" type="checkbox" name="{{ item }}"/> </td>
 							<td> {{ item }} </td> 
 						</tr>
 					{% endfor %}
 				</table>
 			{% endif %}
+			<input style="display: none;" type="checkbox" name="reschedule" checked/>	
 			<input type="submit" value="Reschedule Checked Courses" />
-		</form>	
+		</form>
 		<a class="back" href="{% url 'scheduler:index' %}">Back Home</a>
 	</div>
 
