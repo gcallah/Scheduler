@@ -1,0 +1,98 @@
+{
+    "case_1": {
+        "courses_from": [
+            "Algorithms_2",
+            "Algorithms_3",
+            "DevOps_1"
+        ],
+        "all_courses": {
+            "Algorithms_1": 60,
+            "Algorithms_2": 60,
+            "Algorithms_3": 60,
+            "DevOps_1": 70,
+            "DevOps_2": 120
+        },
+        "expected": {
+            "DevOps_1_1": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 70
+                }
+            },
+            "Algorithms_2_1": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 60
+                }
+            }, 
+            "Algorithms_3_1": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 60
+                }
+            }
+        }
+    },
+    "case_2": {
+        "courses_from": [
+            "Algorithms_2",
+            "Algorithms_2",
+            "DevOps_1"
+        ],
+        "all_courses": {
+            "Algorithms_1": 60,
+            "Algorithms_2": 60,
+            "Algorithms_3": 60,
+            "DevOps_1": 70,
+            "DevOps_2": 120
+        },
+        "expected": {
+            "DevOps_1_1": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 70
+                }
+            },
+            "Algorithms_2_1": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 60
+                }
+            }, 
+            "Algorithms_2_2": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 60
+                }
+            }
+        }
+    },
+    "case_3": {
+        "courses_from": [
+            "Algorithms_2",
+            "Algorithms_3",
+            "Computational_Geometry"
+        ],
+        "all_courses": {
+            "Algorithms_1": 60,
+            "Algorithms_2": 60,
+            "Algorithms_3": 60,
+            "DevOps_1": 70,
+            "DevOps_2": 120
+        },
+        "expected": {
+            "Algorithms_2_1": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 60
+                }
+            }, 
+            "Algorithms_3_1": {
+                "type": ["rooms"],
+                "capacity": {
+                    "value": 60
+                }
+            }
+        }
+    }
+}

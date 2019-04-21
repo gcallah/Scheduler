@@ -1,0 +1,29 @@
+{
+    "case_1": {
+        "all_rooms": {
+            "RH405": 50,
+            "RH304": 30,
+            "RH201": 150
+        }, 
+        "expected": {
+            "RH304": {
+                "capacity": {
+                    "value": 30,
+                    "op_type": "GE"
+                }
+            }, 
+            "RH405": {
+                "capacity": {
+                    "value": 50,
+                    "op_type": "GE"
+                }
+            },
+            "RH201": {
+                "capacity": {
+                    "value": 150,
+                    "op_type": "GE"
+                }
+            }
+        }
+    }
+}
