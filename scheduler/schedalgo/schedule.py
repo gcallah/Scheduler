@@ -97,13 +97,12 @@ def update(consumer, resource):
 
             fun = update_attribution(op)
             if fun:
-                re_cvalue, re_rvalue = fun(rvalue, cvalue)
+                re_rvalue, re_cvalue = fun(rvalue, cvalue)
                 re_consumer[attribute] = re_cvalue
                 re_resource[attribute] = re_rvalue
 
     for attribute in consumer:
         if type(attribute) is dict and attribute not in re_consumer:
-            print(attribute)
             re_consumer[attribute] = consumer[attribute]['value']
 
     for attribute in resource:
