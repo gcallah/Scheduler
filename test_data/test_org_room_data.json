@@ -10,18 +10,30 @@
                 "capacity": {
                     "value": 30,
                     "op_type": "GE"
+                },
+                "time": {
+                    "value": {},
+                    "op_type": "IN"
                 }
             }, 
             "RH405": {
                 "capacity": {
                     "value": 50,
                     "op_type": "GE"
+                },
+                "time": {
+                    "value": {},
+                    "op_type": "IN"
                 }
             },
             "RH201": {
                 "capacity": {
                     "value": 150,
                     "op_type": "GE"
+                },
+                "time": {
+                    "value": {},
+                    "op_type": "IN"
                 }
             }
         }

@@ -283,7 +283,7 @@
                                 "Mon18": 1,
                                 "Mon19": 1
                             },
-                            "op_type": "In"
+                            "op_type": "IN"
                         }
                     },
                     "Small Room 2": {
@@ -306,7 +306,7 @@
                                 "Mon18": 1,
                                 "Mon19": 1
                             },
-                            "op_type": "In"
+                            "op_type": "IN"
                         }
                     },
                     "Medium Room": {
@@ -329,7 +329,7 @@
                                 "Mon18": 1,
                                 "Mon19": 1
                             },
-                            "op_type": "In"
+                            "op_type": "IN"
                         }
                     }
                 }
@@ -400,7 +400,7 @@
                                 "Mon14": 1,
                                 "Mon15": 1
                             },
-                            "op_type": "In"
+                            "op_type": "IN"
                         }
                     },
                     "Small Room 2": {
@@ -423,7 +423,7 @@
                                 "Mon18": 1,
                                 "Mon19": 1
                             },
-                            "op_type": "In"
+                            "op_type": "IN"
                         }
                     }
                 }

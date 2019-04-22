@@ -61,7 +61,6 @@ def make_sched(consumers, resources):
                             'cattributes': re_consumer,
                             'rattributes': re_resource,
                         }
-
                         scheduled_consumers.append(scheduled_consumer)
 
     return scheduled_consumers
@@ -97,9 +96,9 @@ def update(consumer, resource):
 
             fun = update_attribution(op)
             if fun:
-                re_rvalue, re_cvalue = fun(rvalue, cvalue)
-                re_consumer[attribute] = re_cvalue
-                re_resource[attribute] = re_rvalue
+                re_resourse_value, re_customer_value = fun(rvalue, cvalue)
+                re_consumer[attribute] = re_customer_value
+                re_resource[attribute] = re_resourse_value
 
     for attribute in consumer:
         if type(attribute) is dict and attribute not in re_consumer:
@@ -122,11 +121,11 @@ def get_operation_function(op_type):
     # Return different function based on operator type.
     if op_type == 'GE':
         return lambda x, y: x >= y  # The x and y are integer
-    elif op_type == 'Eq':
+    elif op_type == 'EQ':
         return lambda x, y: x == y
-    elif op_type == 'Le':
+    elif op_type == 'LE':
         return lambda x, y: x <= y
-    elif op_type == 'In':
+    elif op_type == 'IN':
         return time_slot_in
     else:
         raise RuntimeError("Operation Type Wrong!")
@@ -144,7 +143,7 @@ def update_attribution(op_type):
             del rvalue[day_time]
         return chosen_option, chosen_option
 
-    if op_type == 'In':
+    if op_type == 'IN':
         return update_time_slots
     else:
         return lambda x, y: (x, y)
