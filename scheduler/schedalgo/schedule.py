@@ -81,8 +81,6 @@ def get_unsched(all_consumers, scheduled_consumers):
 
 
 def update(consumer, resource):
-    # TODO:
-    # Update the value of the attributes in resource.
 
     re_consumer = {}
     re_resource = {}
