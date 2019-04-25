@@ -75,21 +75,27 @@ def organize_rooms(all_rooms):
 
 
 def organize_course_time(times_list, days_list, duration):
+    expand_times_list = []
     expand_day_times_list = []
     for time_object in times_list:
         time_int = int(time_object.times)
-        expand_day_time = []
+        expand_times = []
         for time_slots in range(time_int, time_int + duration):
-            for day_object in days_list:
+            expand_times.append(str(time_slots))
+        expand_times_list.append(expand_times)
+
+    for expand_times in expand_times_list:
+        for day_object in days_list:
+            expand_day_time = []
+            for time_slots in expand_times:
                 day_str = day_object.days
                 if day_str not in ['MW', 'TuTh']:
-                    expand_day_time.append(day_str + str(time_slots))
+                    expand_day_time.append(day_str + time_slots)
                 else:
                     len_str = len(day_str)
-                    expand_day_time.append(day_str[:len_str//2] + str(time_slots))
-                    expand_day_time.append(day_str[len_str//2:] + str(time_slots))
-
-        expand_day_times_list.append(expand_day_time)
+                    expand_day_time.append(day_str[:len_str // 2] + time_slots)
+                    expand_day_time.append(day_str[len_str // 2:] + time_slots)
+            expand_day_times_list.append(expand_day_time)
 
     return expand_day_times_list
 
