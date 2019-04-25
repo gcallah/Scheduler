@@ -1,6 +1,6 @@
 from django.test import TestCase 
 from ddt import ddt, file_data
-from scheduler.organize_data import organize_courses, organize_rooms, organize_course_time
+from scheduler.organize_data import organize_courses, organize_rooms, organize_course_time, organize_room_time
 from scheduler.models import Course, Room, Time, Day
 import os
 
@@ -44,4 +44,12 @@ class OrganizeDataTest(TestCase):
         self.setup_time_and_day(times_list, days_list)
         day_times_list = organize_course_time(Time.objects.all(), Day.objects.all(), duration)
         self.assertEqual(day_times_list, expected)
+
+    @file_data(os.path.join(ROOT_DIR, "test_data/test_org_rtime_data.json"))
+    def test_organize_room_time(self, times_list, days_list, expected): 
+        self.setup_time_and_day(times_list, days_list)
+        day_time_dict = organize_room_time(Time.objects.all(), Day.objects.all())
+        self.assertEqual(day_time_dict, expected)
+
+
 

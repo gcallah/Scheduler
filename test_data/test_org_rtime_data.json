@@ -1,0 +1,19 @@
+{
+    "case_1": {
+        "times_list": [8, 9], 
+        "days_list": ["MW", "TuTh"],
+        "expected": {
+            "MW8": 1, 
+            "TuTh8": 1, 
+            "MW9": 1, 
+            "TuTh9": 1
+        }
+    }, 
+    "case_2": {
+        "times_list": [8, 8], 
+        "days_list": ["F"],
+        "expected": {
+            "F8": 1
+        }
+    }
+}
