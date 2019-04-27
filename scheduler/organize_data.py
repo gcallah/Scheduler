@@ -112,7 +112,7 @@ def organize_timeslots(times):
 	timeslots = []
 
 	times.sort()
-	print(times)
+	# print(times)
 
 	prev_date = None
 	prev_time = None
@@ -142,7 +142,7 @@ def organize_timeslots(times):
 	if prev_date != None:
 		timeslots[-1] = timeslots[-1] + " - {}{}".format(prev_date, str(prev_time + 1))
 
-	print(timeslots)
+	# print(timeslots)
 	return timeslots
 
 def organize_output(scheduled):
