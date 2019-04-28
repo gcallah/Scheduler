@@ -1,0 +1,23 @@
+{
+    "case_1": {
+        "times": [
+            "Mon11", "Mon8", "Tue12", "Fri10", "Wed15"
+        ], 
+        "expected": [
+            "Fri10 - Fri11",
+            "Mon11 - Mon12",
+            "Mon8 - Mon9",
+            "Tue12 - Tue13",
+            "Wed15 - Wed16"
+        ]
+    },
+    "case_2": {
+        "times": [
+            "Mon11", "Mon10", "Mon9"
+        ], 
+        "expected": [
+            "Mon10 - Mon12",
+            "Mon9 - Mon10"
+        ]
+    }
+}
