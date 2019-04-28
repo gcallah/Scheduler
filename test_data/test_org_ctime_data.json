@@ -1,6 +1,6 @@
 {
     "case_1": {
-        "times_list": [8, 9], 
+        "times_list": [8, 9],
         "days_list": ["MW", "TuTh"],
         "duration": 2,
         "expected": [
@@ -9,7 +9,7 @@
             ["M9", "W9", "M10", "W10"],
             ["Tu9", "Th9", "Tu10", "Th10"]
         ]
-    }, 
+    },
     "case_2": {
         "times_list": [11],
         "days_list": ["F", "S"],
