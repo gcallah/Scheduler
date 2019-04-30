@@ -108,11 +108,21 @@ def organize_room_time(times_list, days_list):
 			day_times_dict[time] = 1
 	return day_times_dict
 
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+def natural_keys(text):
+    '''
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    '''
+    return [ atoi(c) for c in re.split(r'(\d+)', text) ]
+
 def organize_timeslots(times):
 	timeslots = []
 
-	times.sort()
-	# print(times)
+	times.sort(key=natural_keys)
 
 	prev_date = None
 	prev_time = None
