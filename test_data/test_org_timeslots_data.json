@@ -5,8 +5,8 @@
         ], 
         "expected": [
             "Fri10 - Fri11",
-            "Mon11 - Mon12",
             "Mon8 - Mon9",
+            "Mon11 - Mon12",
             "Tue12 - Tue13",
             "Wed15 - Wed16"
         ]
