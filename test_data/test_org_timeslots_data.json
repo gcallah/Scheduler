@@ -13,11 +13,19 @@
     },
     "case_2": {
         "times": [
+            "Mon11", "Mon10", "Mon8"
+        ], 
+        "expected": [
+            "Mon8 - Mon9",
+            "Mon10 - Mon12"
+        ]
+    },
+    "case_3": {
+        "times": [
             "Mon11", "Mon10", "Mon9"
         ], 
         "expected": [
-            "Mon10 - Mon12",
-            "Mon9 - Mon10"
+            "Mon9 - Mon12"
         ]
     }
 }
