@@ -50,6 +50,15 @@ class Time(models.Model):
         return self.times
 
 
+class Request(models.Model):
+    date_time = models.DateTimeField(default=datetime.now, blank=True)
+    scheduled = models.TextField(default="{}", blank=False)
+    unscheduled = models.TextField(default="{}", blank=False)
+
+    def __str__(self):
+        return str(self.date_time)
+
+
 class Day(models.Model):
     days = models.CharField(    
         default="Monday", max_length=9, choices=DAYS_OF_WEEK)

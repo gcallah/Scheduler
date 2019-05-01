@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from scheduler.forms import FeedbackForm
 from .schedalgo.schedule import sched
-from .models import Course
+from .models import Course, Request
 from .organize_data import organize, organize_output
 import json
 
@@ -73,10 +73,14 @@ def schedule(request):
 
         ret_scheduled = organize_output(scheduled)
 
+        new_request = Request()
+        new_request.scheduled = str(ret_scheduled)
+        new_request.unscheduled = str(unscheduled)
+        new_request.save()
+
         return render(
             request, 'schedule.html', {
                 'scheduled': ret_scheduled,
                 'unscheduled': unscheduled,
                 'header': site_hdr
             })
-
