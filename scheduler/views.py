@@ -5,6 +5,7 @@ from .schedalgo.schedule import sched
 from .models import Course, Request
 from .organize_data import organize, organize_output
 import json
+import ast
 
 site_hdr = "Course Scheduler"
 max_sections = 5
@@ -98,3 +99,14 @@ def request_history(request):
             'requests': all_requests,
             'header': site_hdr
         })
+
+
+def resubmit(request):
+    request_date = request.GET['request']
+    qs = Request.objects.filter(date_time=request_date)
+    for result in qs:
+        return render(request, 'schedule.html', {
+                'scheduled': ast.literal_eval(result.scheduled),
+                'unscheduled': ast.literal_eval(result.unscheduled),
+                'header': site_hdr
+            })

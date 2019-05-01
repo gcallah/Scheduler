@@ -7,11 +7,13 @@
 			<th> Time </th> 
 			<th> Resubmit? </th> 
 		</tr>
-		{% for r in requests %}
-			<tr> 
-				<td> {{r}} </td> 
-				<td> <button type="button"> Resubmit </button> </td> 
+		
+		{% for req in requests %}
+			<tr> 	
+				<td> {{req}} </td> 
+				<td> <a href="{% url 'scheduler:resubmit' %}?request={{req}}">Resubmit</a> </td> 
 			</tr>
+
 		{% endfor %}
 	</table>
 

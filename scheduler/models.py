@@ -55,8 +55,8 @@ class Request(models.Model):
     scheduled = models.TextField(default="{}", blank=False)
     unscheduled = models.TextField(default="{}", blank=False)
 
-    def __str__(self):
-        return str(self.date_time)
+    #def __str__(self):
+     #   return str(self.date_time)
 
 
 class Day(models.Model):
