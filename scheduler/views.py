@@ -102,7 +102,7 @@ def request_history(request):
 
 
 def resubmit(request):
-    request_date = request.GET['request']
+    request_date = request.GET['req']
     qs = Request.objects.filter(date_time=request_date)
     for result in qs:
         return render(request, 'schedule.html', {
