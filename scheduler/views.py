@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from scheduler.forms import FeedbackForm
+from datetime import datetime
 from .schedalgo.schedule import sched
 from .models import Course, Request
 from .organize_data import organize, organize_output
@@ -74,6 +75,9 @@ def schedule(request):
         ret_scheduled = organize_output(scheduled)
 
         new_request = Request()
+        now = datetime.now()
+        dt = now.strftime("%m/%d/%Y, %H:%M:%S")
+        new_request.date_time = dt
         new_request.scheduled = str(ret_scheduled)
         new_request.unscheduled = str(unscheduled)
         new_request.save()
@@ -84,3 +88,13 @@ def schedule(request):
                 'unscheduled': unscheduled,
                 'header': site_hdr
             })
+
+
+def request_history(request):
+    all_requests = Request.objects.values_list('date_time', flat=True).order_by('-date_time')
+    all_requests = list(filter(lambda x: x in all_requests, all_requests))
+
+    return render(request, 'request_history.html', {
+            'requests': all_requests,
+            'header': site_hdr
+        })

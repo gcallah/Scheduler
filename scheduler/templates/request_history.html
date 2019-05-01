@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<table>
+		<tr> 
+			<th> Time </th> 
+			<th> Resubmit? </th> 
+		</tr>
+		{% for r in requests %}
+			<tr> 
+				<td> {{r}} </td> 
+				<td> <button type="button"> Resubmit </button> </td> 
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock content %}

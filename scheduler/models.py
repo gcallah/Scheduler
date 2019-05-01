@@ -51,7 +51,7 @@ class Time(models.Model):
 
 
 class Request(models.Model):
-    date_time = models.DateTimeField(default=datetime.now, blank=True)
+    date_time = models.CharField(max_length=128, default="")
     scheduled = models.TextField(default="{}", blank=False)
     unscheduled = models.TextField(default="{}", blank=False)
 
