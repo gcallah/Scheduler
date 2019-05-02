@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.cache import cache
 from scheduler.forms import FeedbackForm
 from datetime import datetime
 from .schedalgo.schedule import sched
@@ -103,8 +104,11 @@ def request_history(request):
 
 def resubmit(request):
     request_date = request.GET['req']
-    qs = Request.objects.filter(date_time=request_date)
-    for result in qs:
+    res = cache.get(hash(request_date))
+    if not res:
+        res = Request.objects.filter(date_time=request_date)
+        cache.set(hash(request_date), res)
+    for result in res:
         return render(request, 'schedule.html', {
                 'scheduled': ast.literal_eval(result.scheduled),
                 'unscheduled': ast.literal_eval(result.unscheduled),

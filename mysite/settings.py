@@ -107,6 +107,21 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Local memory Cache
+# https://docs.djangoproject.com/en/2.1/topics/cache/#local-memory-caching
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'history-resubmit',  # unique identifier
+        'TIMEOUT': 3000,
+        'OPTIONS': {
+            'MAX_ENTRIES': 300,
+            'CULL_FREQUENCY': 3,
+        }
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
