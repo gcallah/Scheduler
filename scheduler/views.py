@@ -6,10 +6,11 @@ from .schedalgo.schedule import sched
 from .models import Course, Request
 from .organize_data import organize, organize_output
 import json
-import ast
+import pickle
 
 site_hdr = "Course Scheduler"
 max_sections = 5
+history_data_path = "scheduler/history_schedule_data/"
 
 
 def index(request):
@@ -79,9 +80,13 @@ def schedule(request):
         new_request = Request()
         now = datetime.now()
         dt = now.strftime("%m/%d/%Y, %H:%M:%S")
+
+        path = history_data_path + str(hash(dt))+".pkl"
+        f = open(path, 'wb')
+        pickle.dump((ret_scheduled, unscheduled), f)
+
         new_request.date_time = dt
-        new_request.scheduled = str(ret_scheduled)
-        new_request.unscheduled = str(unscheduled)
+        new_request.path = path
         new_request.save()
 
         return render(
@@ -106,11 +111,14 @@ def resubmit(request):
     request_date = request.GET['req']
     res = cache.get(hash(request_date))
     if not res:
-        res = Request.objects.filter(date_time=request_date)
-        cache.set(hash(request_date), res)
-    for result in res:
-        return render(request, 'schedule.html', {
-                'scheduled': ast.literal_eval(result.scheduled),
-                'unscheduled': ast.literal_eval(result.unscheduled),
-                'header': site_hdr
-            })
+        record = Request.objects.get(date_time=request_date)
+        f = open(record.path, 'rb')
+        res = pickle.load(f)
+
+        cache.set(hash(record.date_time), res)
+
+    return render(request, 'schedule.html', {
+            'scheduled': res[0],
+            'unscheduled': res[1],
+            'header': site_hdr
+        })

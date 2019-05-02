@@ -51,12 +51,11 @@ class Time(models.Model):
 
 
 class Request(models.Model):
-    date_time = models.CharField(max_length=128, default="")
-    scheduled = models.TextField(default="{}", blank=False)
-    unscheduled = models.TextField(default="{}", blank=False)
+    date_time = models.CharField(max_length=128, default="", unique=True)
+    path = models.CharField(max_length=128, default="", blank=False)
 
-    #def __str__(self):
-     #   return str(self.date_time)
+    def __str__(self):
+        return str(self.path)
 
 
 class Day(models.Model):
