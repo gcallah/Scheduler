@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-	<table>
-		<tr> 
-			<th> Time </th> 
-			<th> Resubmit? </th> 
-		</tr>
-		
-		{% for req in requests %}
-			<tr> 	
-				<td> {{req}} </td> 
-				<td> <a class="resubmit" href="{% url 'scheduler:resubmit' %}?req={{req}}">Resubmit</a> </td> 
+	<div class="reschedule">
+		<table>
+			<tr> 
+				<th> Time </th> 
+				<th> Resubmit? </th> 
 			</tr>
+			
+			{% for req in requests %}
+				<tr> 	
+					<td> {{req}} </td> 
+					<td> <a class="resubmit" href="{% url 'scheduler:resubmit' %}?req={{req}}">Resubmit</a> </td> 
+				</tr>
 
-		{% endfor %}
-	</table>
-
+			{% endfor %}
+		</table>
+	</div>
 {% endblock content %}

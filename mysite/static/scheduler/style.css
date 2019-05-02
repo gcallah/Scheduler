@@ -309,14 +309,14 @@ input[type=submit] {
     margin-left: 50px;
 }
 
-div.schedule {
+div.schedule, div.reschedule {
     display: block;
     text-align: center;
     margin-left: auto; 
     margin-right: auto;
 }
 
-.schedule table {
+.schedule table, .reschedule table {
     margin-left: auto; 
     margin-right: auto;
 }
