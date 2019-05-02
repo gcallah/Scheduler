@@ -11,7 +11,7 @@
 		{% for req in requests %}
 			<tr> 	
 				<td> {{req}} </td> 
-				<td> <a href="{% url 'scheduler:resubmit' %}?req={{req}}">Resubmit</a> </td> 
+				<td> <a class="resubmit" href="{% url 'scheduler:resubmit' %}?req={{req}}">Resubmit</a> </td> 
 			</tr>
 
 		{% endfor %}

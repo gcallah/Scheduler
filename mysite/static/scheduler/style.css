@@ -341,3 +341,7 @@ a.back {
     display: block;
     margin-top: 1em;
 }
+
+a.resubmit:link {
+    color: #4d80ef;
+}
