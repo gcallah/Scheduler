@@ -1,5 +1,5 @@
 from django.test import TestCase 
-from unittest import mock
+from unittest.mock import patch
 import json
 
 class ViewsTest(TestCase):
@@ -29,12 +29,21 @@ class ViewsTest(TestCase):
         }
         return json.dumps(res)
 
-    @mock.patch('scheduler.views.organize', mock_organize)
-    @mock.patch('scheduler.views.sched', mock_sched)
+    @patch('scheduler.views.organize', mock_organize)
+    @patch('scheduler.views.sched', mock_sched)
     def test_schedule(self):
         response = self.client.post('/scheduler/schedule', {})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'schedule.html')
+
+    @patch('scheduler.views.sched', mock_sched)
+    def test_schedule_with_reschedule_req(self): 
+        with patch('scheduler.views.organize', return_value={}) as mock_org:
+            response = self.client.post('/scheduler/schedule', {'reschedule':'reschedule', 'devops_1':1, 'devops_2':1})
+            self.assertEqual(response.status_code, 200)
+            mock_org.assert_called_with({'devops':2})
+
+
 
 
 
