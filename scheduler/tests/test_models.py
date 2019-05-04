@@ -1,5 +1,5 @@
 from django.test import TestCase
-from scheduler.models import Room, Course, Time, Day
+from scheduler.models import Room, Course, Time, Day, Request
 from ddt import ddt, file_data
 import os
 
@@ -59,3 +59,9 @@ class DayTest(TestCase):
         self.assertTrue(isinstance(day, Day))
         self.assertEqual(day.__str__(), "Monday")
 
+class RequestTest(TestCase):
+    
+    def test_req_default_creation(self):
+        req = Request.objects.create()
+        self.assertTrue(isinstance(req, Request))
+        self.assertEqual(req.__str__(), "")
