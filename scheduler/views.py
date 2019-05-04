@@ -57,8 +57,10 @@ def schedule(request):
             for key in request.POST:
                 if key == "csrfmiddlewaretoken":
                     data_in[key] = request.POST[key]
+                elif key == "reschedule":
+                    data_in["schedule"] = request.POST[key]
                 else:
-                    pos = key.find("_") 
+                    pos = key.find("_")
                     if pos != -1:
                         course_name = key[:pos]
                         if course_name in data_in:
@@ -66,8 +68,10 @@ def schedule(request):
                         else:
                             data_in[course_name] = 1
         else:
-            data_in = request.POST
-        
+            for key in request.POST:
+                data_in[key] = request.POST[key][0]
+            data_in["schedule"] = "Sort"
+
         data = organize(data_in)
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
