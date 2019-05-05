@@ -10,9 +10,10 @@ def sched(data):
     sched = make_sched(consumers, resourses)
     unsched = get_unsched(consumers, sched)
 
-    ret_val = {}
-    ret_val['scheduled'] = sched
-    ret_val['unscheduled'] = unsched
+    ret_val = {
+        'scheduled': sched,
+        'unscheduled': unsched
+    }
     return json.dumps(ret_val)
 
 
@@ -67,7 +68,6 @@ def make_sched(consumers, resources):
 
 
 def get_unsched(all_consumers, scheduled_consumers):
-    unscheduled_consumers = []
     sched_consumer_names = [d['cname'] for d in scheduled_consumers]
     all_consumer_names = [d for d in all_consumers.keys()]
 
@@ -80,8 +80,8 @@ def get_unsched(all_consumers, scheduled_consumers):
     return all_consumer_names
 
 
+# Update the resource data after a consumer used it
 def update(consumer, resource):
-
     re_consumer = {}
     re_resource = {}
 
@@ -109,7 +109,7 @@ def update(consumer, resource):
     return re_consumer, re_resource
 
 
-
+# Deal with the attribution matching function
 def get_operation_function(op_type):
     # Customer Design Function
     def time_slot_in(rvalue, cvalue):
@@ -129,6 +129,7 @@ def get_operation_function(op_type):
         raise RuntimeError("Operation Type Wrong!")
 
 
+# Deal with the attribution updating function
 def update_attribution(op_type):
     # Customer Design Function
     def update_time_slots(rvalue, cvalue):

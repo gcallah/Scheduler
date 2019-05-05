@@ -52,16 +52,21 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 
 def schedule(request):
     if request.method == "POST":
+        # Organize the input data into required format
         data_in = organize_request(request)
         data = organize(data_in)
+
+        # Schedule the courses
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)
 
         scheduled = ret_dict['scheduled']
         unscheduled = ret_dict['unscheduled']
 
+        # Change the data into front-end required format
         ret_scheduled = organize_output(scheduled)
 
+        # Store the historical data into db and local file system
         new_request = Request()
         now = datetime.now()
         dt = now.strftime("%m/%d/%Y, %H:%M:%S")

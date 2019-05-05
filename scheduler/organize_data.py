@@ -178,7 +178,6 @@ def organize_output(scheduled):
             'room_capacity': item['rattributes']['capacity'],
             'times': timeslots
         }
-        # print(item['rattributes']['time'])
         ret_scheduled.append(new_item)
 
     return ret_scheduled
