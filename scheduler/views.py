@@ -4,7 +4,7 @@ from scheduler.forms import FeedbackForm
 from datetime import datetime
 from .schedalgo.schedule import sched
 from .models import Course, Request
-from .organize_data import organize, organize_output
+from .organize_data import organize, organize_output, organize_request
 import json
 import pickle
 
@@ -52,26 +52,7 @@ def add_filter(request, kwargs, get_name, kwarg_name):
 
 def schedule(request):
     if request.method == "POST":
-        data_in = dict()
-        if 'reschedule' in request.POST:
-            for key in request.POST:
-                if key == "csrfmiddlewaretoken":
-                    data_in[key] = request.POST[key]
-                elif key == "reschedule":
-                    data_in["schedule"] = request.POST[key]
-                else:
-                    pos = key.find("_")
-                    if pos != -1:
-                        course_name = key[:pos]
-                        if course_name in data_in:
-                            data_in[course_name] += 1
-                        else:
-                            data_in[course_name] = 1
-        else:
-            for key in request.POST:
-                data_in[key] = request.POST[key][0]
-            data_in["schedule"] = "Sort"
-
+        data_in = organize_request(request)
         data = organize(data_in)
         ret_data = sched(json.dumps(data))
         ret_dict = json.loads(ret_data)

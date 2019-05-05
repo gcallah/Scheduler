@@ -12,6 +12,7 @@
       "DevOps_1": 70,
       "DevOps_2": 120
     },
+    "strategy": "Sort",
     "expected": {
       "DevOps_1_1": {
         "type": [
@@ -61,6 +62,7 @@
       "DevOps_1": 70,
       "DevOps_2": 120
     },
+    "strategy": "Sort",
     "expected": {
       "DevOps_1_1": {
         "type": [
@@ -110,6 +112,7 @@
       "DevOps_1": 70,
       "DevOps_2": 120
     },
+    "strategy": "Sort",
     "expected": {
       "Algorithms_2_1": {
         "type": [

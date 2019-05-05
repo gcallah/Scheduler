@@ -15,9 +15,9 @@ class OrganizeDataTest(TestCase):
             Course.objects.create(cname=key, capacity=courses[key])
     
     @file_data(os.path.join(ROOT_DIR, "test_data/test_org_course_data.json"))
-    def test_organize_courses(self, courses_from, all_courses, expected):
+    def test_organize_courses(self, courses_from, all_courses, strategy, expected):
         self.setup_courses(all_courses)
-        organized_courses = organize_courses(courses_from, Course.objects.all())
+        organized_courses = organize_courses(courses_from, Course.objects.all(), strategy)
         self.assertEqual(organized_courses, expected)
 
     def setup_rooms(self, rooms):

@@ -28,7 +28,7 @@ def create_list_of_all_courses(form_data):
     return all_courses, strategy
 
 
-def organize_courses(courses_from_form, all_courses, strategy):
+def organize_courses(courses_from_form, all_courses, strategy="Sort"):
     course_info = {}
 
     for course in all_courses:
@@ -142,7 +142,7 @@ def organize_timeslots(times):
         date = arr[0]
         time = int(arr[1])
 
-        if prev_date == None:
+        if not prev_date:
             timeslots.append(date + str(time))
             prev_date = date
             prev_time = time
@@ -160,10 +160,9 @@ def organize_timeslots(times):
                 prev_time = time
                 timeslots.append(date + str(time))
 
-    if prev_date != None:
+    if prev_date:
         timeslots[-1] = timeslots[-1] + " - {}{}".format(prev_date, str(prev_time + 1))
 
-    # print(timeslots)
     return timeslots
 
 
@@ -183,3 +182,26 @@ def organize_output(scheduled):
         ret_scheduled.append(new_item)
 
     return ret_scheduled
+
+
+def organize_request(request):
+    data_in = dict()
+    if 'reschedule' in request.POST:
+        for key in request.POST:
+            if key == "csrfmiddlewaretoken":
+                data_in[key] = request.POST[key]
+            elif key == "reschedule":
+                data_in["schedule"] = request.POST[key]
+            else:
+                pos = key.find("_")
+                if pos != -1:
+                    course_name = key[:pos]
+                    if course_name in data_in:
+                        data_in[course_name] += 1
+                    else:
+                        data_in[course_name] = 1
+    else:
+        for key in request.POST:
+            data_in[key] = request.POST[key][0]
+        data_in["schedule"] = "Sort"
+    return data_in

@@ -39,9 +39,9 @@ class ViewsTest(TestCase):
     @patch('scheduler.views.sched', mock_sched)
     def test_schedule_with_reschedule_req(self): 
         with patch('scheduler.views.organize', return_value={}) as mock_org:
-            response = self.client.post('/scheduler/schedule', {'reschedule':'reschedule', 'devops_1':1, 'devops_2':1})
+            response = self.client.post('/scheduler/schedule', {'reschedule': 'Sort', 'devops_1': 1, 'devops_2': 1})
             self.assertEqual(response.status_code, 200)
-            mock_org.assert_called_with({'devops':2})
+            mock_org.assert_called_with({'schedule': 'Sort', 'devops':2})
 
 
 
