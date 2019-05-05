@@ -17,7 +17,6 @@ class TestScheduler(unittest.TestCase):
         sched_dict = json.loads(sched_result)
         unsched = sched_dict['unscheduled']
         scheded = sched_dict['scheduled']
-
         self.assertEqual(len(unsched), expect_unsched)
         self.assertEqual(len(scheded), expect_sched)
 

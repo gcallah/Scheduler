@@ -492,5 +492,134 @@
         },
         "expect_sched": 1,
         "expect_unsched": 1
+    },
+    "two_large_courses_only_one_room": {
+        "data": {
+            "consumers": {
+                "Algorithms_1": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 450
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Fri10",
+                                "Fri11"
+                            ]
+                        ]
+                    }
+                },
+                "Algorithms_2": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 500
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Fri11",
+                                "Fri12"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "resources": {
+                "rooms": {
+                    "Large Room": {
+                        "capacity": {
+                            "value": 505,
+                            "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Fri10": 1,
+                                "Fri11": 1,
+                                "Fri12": 1,
+                                "Fri13": 1
+                            },
+                            "op_type": "IN"
+                        }
+                    }
+                }
+            }
+        },
+        "expect_sched": 1,
+        "expect_unsched": 1
+    },
+    "two_sections_one_avail_room": {
+        "data": {
+            "consumers": {
+                "OOP_1": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 100
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Fri10",
+                                "Fri11"
+                            ],
+                            [
+                                "Fri14",
+                                "Fri15"
+                            ]
+                        ]
+                    }
+                },
+                "OOP_2": {
+                    "type": [
+                        "rooms"
+                    ],
+                    "capacity": {
+                        "value": 100
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Fri10",
+                                "Fri11"
+                            ],
+                            [
+                                "Fri14",
+                                "Fri15"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "resources": {
+                "rooms": {
+                    "Large Room": {
+                        "capacity": {
+                            "value": 150,
+                            "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Fri10": 1,
+                                "Fri11": 1,
+                                "Fri12": 1,
+                                "Fri13": 1,
+                                "Fri14": 1,
+                                "Fri15": 1,
+                                "Fri16": 1
+                            },
+                            "op_type": "IN"
+                        }
+                    }
+                }
+            }
+        },
+        "expect_sched": 2,
+        "expect_unsched": 0
     }
 }
