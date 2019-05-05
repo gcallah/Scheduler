@@ -8,6 +8,14 @@
                     ],
                     "capacity": {
                         "value": 60
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ]
+                        ]
                     }
                 },
                 "Algorithms_2": {
@@ -16,6 +24,14 @@
                     ],
                     "capacity": {
                         "value": 60
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ]
+                        ]
                     }
                 },
                 "Algorithms_3": {
@@ -24,6 +40,14 @@
                     ],
                     "capacity": {
                         "value": 60
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ]
+                        ]
                     }
                 },
                 "DevOps_1": {
@@ -32,6 +56,14 @@
                     ],
                     "capacity": {
                         "value": 70
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ]
+                        ]
                     }
                 },
                 "DevOps_2": {
@@ -40,6 +72,14 @@
                     ],
                     "capacity": {
                         "value": 120
+                    },
+                    "time": {
+                        "value": [
+                            [
+                                "Mon18",
+                                "Mon19"
+                            ]
+                        ]
                     }
                 }
             },
@@ -49,18 +89,39 @@
                         "capacity": {
                             "value": 30,
                             "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "IN"
                         }
                     },
                     "Medium Room": {
                         "capacity": {
                             "value": 70,
                             "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "IN"
                         }
                     },
                     "Big Room": {
                         "capacity": {
                             "value": 150,
                             "op_type": "GE"
+                        },
+                        "time": {
+                            "value": {
+                                "Mon18": 1,
+                                "Mon19": 1
+                            },
+                            "op_type": "IN"
                         }
                     }
                 }

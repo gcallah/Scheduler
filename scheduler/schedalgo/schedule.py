@@ -35,8 +35,7 @@ def make_sched(consumers, resources):
                 tot_consumer_cnt = counter_cnt[consumer_name]
                 sched_consumer_cnt = scheduled_cnames.count(consumer_name)
 
-                if (resource_name not in scheduled_rnames
-                        and tot_consumer_cnt != sched_consumer_cnt):
+                if tot_consumer_cnt != sched_consumer_cnt:
 
                     flag = True
 
