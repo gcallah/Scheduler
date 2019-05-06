@@ -1,8 +1,21 @@
 from django.test import TestCase 
 from unittest.mock import patch
-import json
+from scheduler import views
+import json, shutil, os
 
 class ViewsTest(TestCase):
+
+    history_data_path_for_test = 'scheduler/history_data_for_test/'
+    history_data_path_original = 'scheduler/history_schedule_data/'
+    
+    if not os.path.exists(history_data_path_for_test): 
+        os.mkdir(history_data_path_for_test)
+
+    def setUp(self): 
+        views.history_data_path = self.history_data_path_for_test
+
+    def tearDown(self): 
+        views.history_data_path = self.history_data_path_original
 
     def test_index(self):
         response = self.client.get('/scheduler/index', follow=True)
