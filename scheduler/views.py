@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.core.cache import cache
+from django.utils import timezone
 from scheduler.forms import FeedbackForm
-from datetime import datetime
+from datetime import datetime, timedelta
 from .schedalgo.schedule import sched
 from .models import Course, Request
 from .organize_data import organize, organize_output, organize_request
 import json
 import pickle
+import os
 
 site_hdr = "Course Scheduler"
 max_sections = 5
@@ -67,17 +69,7 @@ def schedule(request):
         ret_scheduled = organize_output(scheduled)
 
         # Store the historical data into db and local file system
-        new_request = Request()
-        now = datetime.now()
-        dt = now.strftime("%m/%d/%Y, %H:%M:%S")
-
-        path = history_data_path + str(hash(dt))+".pkl"
-        f = open(path, 'wb')
-        pickle.dump((ret_scheduled, unscheduled), f)
-
-        new_request.date_time = dt
-        new_request.path = path
-        new_request.save()
+        record_history(ret_scheduled, unscheduled)
 
         return render(
             request, 'schedule.html', {
@@ -85,6 +77,39 @@ def schedule(request):
                 'unscheduled': unscheduled,
                 'header': site_hdr
             })
+
+
+def record_history(ret_scheduled, unscheduled):
+    # Record the new schedule results
+    new_request = Request()
+    now = timezone.now()
+
+    path = history_data_path + str(hash(now)) + '.pkl'
+    f = open(path, 'wb')
+    pickle.dump((ret_scheduled, unscheduled), f)
+
+    new_request.date_time = now
+    new_request.path = path
+    new_request.save()
+
+    if int(now.day) % 7 == 0:
+        # Remove the outdated records
+        delta = timedelta(days=7)
+        outdated = now - delta
+        outdated_requests = Request.objects.filter(date_time__lte=outdated)
+        for request in outdated_requests:
+            if os.path.isfile(request.path):
+                os.remove(request.path)
+            request.delete()
+
+        # Remove unrecorded files
+        all_requests = Request.objects.all().order_by('-date_time')
+        all_requests = list(map(lambda req: str(req.path), all_requests))
+        file_list = os.listdir(history_data_path)
+        for file_name in file_list:
+            file_path = history_data_path+file_name
+            if file_path not in all_requests:
+                os.remove(history_data_path+file_name)
 
 
 def request_history(request):

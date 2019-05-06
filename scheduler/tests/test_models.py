@@ -59,8 +59,8 @@ class DayTest(TestCase):
         self.assertTrue(isinstance(day, Day))
         self.assertEqual(day.__str__(), "Monday")
 
+
 class RequestTest(TestCase):
-    
     def test_req_default_creation(self):
         req = Request.objects.create()
         self.assertTrue(isinstance(req, Request))

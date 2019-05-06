@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from datetime import datetime
 
 DAYS_OF_WEEK = (
@@ -51,7 +52,7 @@ class Time(models.Model):
 
 
 class Request(models.Model):
-    date_time = models.CharField(max_length=128, default="", unique=True)
+    date_time = models.DateTimeField(unique=True, default=timezone.now)
     path = models.CharField(max_length=128, default="", blank=False)
 
     def __str__(self):
