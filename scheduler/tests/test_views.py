@@ -7,15 +7,25 @@ class ViewsTest(TestCase):
 
     history_data_path_for_test = 'scheduler/history_data_for_test/'
     history_data_path_original = 'scheduler/history_schedule_data/'
-    
-    if not os.path.exists(history_data_path_for_test): 
-        os.mkdir(history_data_path_for_test)
 
-    def setUp(self): 
+    @classmethod
+    def setUpClass(self): 
+        if not os.path.exists(self.history_data_path_for_test):
+            os.mkdir(self.history_data_path_for_test)
         views.history_data_path = self.history_data_path_for_test
 
-    def tearDown(self): 
+    @classmethod
+    def tearDownClass(self):
+        # clear the temporary dir when it's not empty
+        if os.path.exists(self.history_data_path_for_test) and os.listdir(self.history_data_path_for_test): 
+            shutil.rmtree(self.history_data_path_for_test)
         views.history_data_path = self.history_data_path_original
+
+    # def setUp(self): 
+    #     views.history_data_path = self.history_data_path_for_test
+
+    # def tearDown(self): 
+    #     views.history_data_path = self.history_data_path_original
 
     def test_index(self):
         response = self.client.get('/scheduler/index', follow=True)
