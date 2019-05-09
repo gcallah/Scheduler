@@ -9,6 +9,7 @@ from .organize_data import organize, organize_output, organize_request
 import json
 import pickle
 import os
+import hashlib
 
 site_hdr = "Course Scheduler"
 max_sections = 5
@@ -84,7 +85,7 @@ def record_history(ret_scheduled, unscheduled):
     new_request = Request()
     now = timezone.now()
 
-    path = history_data_path + str(hash(now)) + '.pkl'
+    path = history_data_path + hashlib.sha256(repr(now).encode('utf-8')).hexdigest() + '.pkl'
     f = open(path, 'wb')
     pickle.dump((ret_scheduled, unscheduled), f)
 
