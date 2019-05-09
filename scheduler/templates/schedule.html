@@ -5,6 +5,8 @@
 <div class="schedule">
 	<form role="form" action="{% url 'scheduler:schedule' %}" method="post" id="schedule">
 		{% csrf_token %}
+		
+		{% if scheduled %}
 		<h4>Proposed Schedule</h4>
 
 		<table>
@@ -27,6 +29,7 @@
 			</tr>
 			{% endfor %}
 		</table>
+		{% endif %}
 
 		{% if unscheduled %}
 		<h4> Failed to Schedule </h4>
