@@ -1,7 +1,7 @@
 from .models import Course
 from .models import Room
 import re
-from random import shuffle
+from random import shuffle, random
 
 
 def organize(form_data):
@@ -61,7 +61,7 @@ def organize_courses(courses_from_form, all_courses, strategy="Sort"):
     if strategy == 'Sort':
         return dict(sorted(ret_courses.items(), key=lambda k: k[1]['capacity']['value'], reverse=True))
     else:
-        return dict(shuffle(list(ret_courses.items())))
+        return dict(sorted(ret_courses.items(), key=lambda k: random()))
 
 
 def organize_rooms(all_rooms):
