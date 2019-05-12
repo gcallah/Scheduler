@@ -21,12 +21,6 @@ class ViewsTest(TestCase):
             shutil.rmtree(self.history_data_path_for_test)
         views.history_data_path = self.history_data_path_original
 
-    # def setUp(self): 
-    #     views.history_data_path = self.history_data_path_for_test
-
-    # def tearDown(self): 
-    #     views.history_data_path = self.history_data_path_original
-
     def test_index(self):
         response = self.client.get('/scheduler/index', follow=True)
         self.assertEqual(response.status_code, 200)
