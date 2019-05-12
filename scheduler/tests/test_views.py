@@ -60,6 +60,10 @@ class ViewsTest(TestCase):
             self.assertEqual(response.status_code, 200)
             mock_org.assert_called_with({'schedule': 'Sort', 'devops':2})
 
+    def test_request_history(self): 
+        response = self.client.get('/scheduler/request_history', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'request_history.html')
 
 
 
