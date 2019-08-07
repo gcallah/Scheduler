@@ -6,8 +6,6 @@ python:
 services:
     - docker
 
-install:
-
 env:
     - PYTHONPATH=/home/travis/build/gcallah/Scheduler
 
