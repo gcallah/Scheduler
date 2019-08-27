@@ -4,7 +4,7 @@ import json
 import random
 
 #takes in the data file and outputs class schedules for each weekday
-def assigner():       
+def assigner(user_data):       
         def add_nodes():
                 #nodes have format (c,p)
                 for c in courses:
@@ -26,7 +26,7 @@ def assigner():
                         for p in professors:
                                 their_courses = prof_info[p]['courses']
                                 if c in their_courses: hits.append(p)
-                        profs_chosen[c] = random.choice(hits)
+                        if hits !=[]: profs_chosen[c] = random.choice(hits)
                 return profs_chosen
         
         #Soft constraint. Assigns courses randomly weighted to preferred days
@@ -128,20 +128,9 @@ def assigner():
                                                 return bool(False)
                                         return bool(True)                         
                                 csp.add_binary_constraint(n,m,no_time_clash)
-                                
-        #JSON loading for room, professor and course data             
-        with open('sample_data.txt','r') as outfile:
-                data = json.load(outfile)
-        professors = data['professors']
-        prof_info = data['prof_info']
-        rooms = data['rooms']
-        room_capacities = data['room_capacities']
-        courses = data['courses']
-        course_no_students = data['course_no_students']
-        global course_mins      #need this for time ranges outside this function 
-        course_mins = data['course_mins']
-        course_days_weekly = data['course_days_weekly']
-        
+
+        #get the professor-course-room data from the function argument                        
+        professors,prof_info,rooms,room_capacities,courses,course_no_students,course_mins,course_days_weekly = user_data
 
         full_prof_assignment = profs_for_courses(courses)       #enforce professor-course consistency among different days
         rooms_chosen = {}       #rooms are consistent
@@ -149,7 +138,7 @@ def assigner():
         solution = {d:None for d in weekdays}    
         retries = 0     #will retry max 3 times to get a solution
         while retries<3:
-                daily_courses = courses_per_day()
+                daily_courses = courses_per_day()	
                 max_iters = 100*(retries+1)     #upon retry increase maximum iterations
                 for d in weekdays:
                         csp = CSP()
