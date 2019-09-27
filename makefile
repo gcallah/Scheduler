@@ -12,7 +12,6 @@ PYTHONFILES = $(shell ls $(DJANGO_DIR)/*.py)
 FORCE:
 
 tests: FORCE
-	python3 manage.py test scheduler/tests/test_schedule.py scheduler/tests
 
 lint: $(patsubst %.py,%.pylint,$(PYTHONFILES))
 
@@ -36,16 +35,7 @@ prod_container:
 deploy_container:
 	docker push gcallah/nyusched
 
-dblocal:
-	python3 manage.py makemigrations
-	python3 manage.py migrate
-
-db: dblocal
-	git add $(DJANGO_DIR)/migrations/*.py
-	-git commit $(DJANGO_DIR)/migrations/*.py
-	git push origin master
-
-prod: $(SRCS) $(OBJ) tests
+prod: $(SRCS) $(OBJ) local lint tests
 	-git commit -a 
 	git push origin master
 	# now Travis should take over and deploy!
