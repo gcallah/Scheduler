@@ -1,0 +1,5 @@
+setuptools
+xlrd
+pandas
+tabulate
+ipython
