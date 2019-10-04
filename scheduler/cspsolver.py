@@ -23,8 +23,7 @@ class CSP(object):
         def add_unary_constraint(self,node,constraintFunc):
                 #make sure node has previously been added
                 if node not in self.nodes:
-                        raise KeyError
-                        return
+                        return False
                 domain  = self.nodeDomains[node]
                 factor = {val : constraintFunc(val) for val in domain}
                 #case where no constraints existed  
@@ -37,7 +36,6 @@ class CSP(object):
         def add_binary_constraint(self,node1,node2,constaintFunc):
                 #make sure both nodes have been added
                 if node1 not in self.nodes or node2 not in self.nodes:
-                        raise KeyError
                         return False
                 domain1 = self.nodeDomains[node1]
                 domain2 = self.nodeDomains[node2]
