@@ -4,7 +4,7 @@ Create a JSON holding sample data
 
 import json
 
-#More detailed info for rooms
+# More detailed info for rooms
 rooms = ['655', '666', '745a', '745b', '433','201','115a','115b']        
 room_capacities = {
                 '655' : 30,
@@ -17,7 +17,7 @@ room_capacities = {
                 '115b' : 40
         }
 
-#Course details
+# Course details
 courses = ['physics','chemistry','biochemistry','biology 1','biology 2','molecular biology','calculus 1', 'calculus 4','astrophysics']
 course_no_students = {
         'physics' : 35,
@@ -66,7 +66,7 @@ course_days_weekly = {
         'astrophysics' : 1
         }
 
-#Info about professors
+# Info about professors
 professors = ['John Smith', 'Lisa Jones', 'Mike Williams',
               'Tim Simpson', 'Rachel Smith','Gregg Woods',
               'Simon Valinski','Chu Yen','Peter Parker',
