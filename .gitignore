@@ -126,3 +126,5 @@ dmypy.json
 
 # macOS
 .DS_Store
+*.xml
+*.iml

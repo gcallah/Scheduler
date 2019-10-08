@@ -7,7 +7,13 @@ from unittest import TestCase, main, skip
 from cspsolver import CSP, minConflicts
 
 
-def create_csp():
+def create_csp1():
+    csp = CSP()
+    csp.add_node("class1", ["domain1"])
+    return csp
+
+
+def create_csp2():
     csp = CSP()
     csp.add_node("class1", ["domain1"])
     csp.add_node("class2", ["domain2", "domain3", "domain4"])
@@ -22,21 +28,31 @@ class CSP_TestCase(TestCase):
     def tearDown(self):
         self.csp = None
 
+    def test_nodes(self):
+        self.csp = create_csp1()
+        self.assertEqual(self.csp.nodes[0], "class1")
+        self.assertEqual(self.csp.nodeDomains["class1"][0], "domain1")
+
     def test_add(self):
         """
         Test if add node to CSP work.
         """
-        self.csp.add_node("class1", "domain1")
-        self.assertTrue(len(self.csp.nodes) == 1)
-        old_len = len(self.csp.nodes)
-        self.assertFalse(self.csp.add_node("class1", "domain1"))
-        self.assertTrue(old_len == len(self.csp.nodes))
-        self.assertTrue(self.csp.nodeDomains["class1"] == "domain1")
+        self.assertFalse(self.csp.add_node("class1", ["domain1"]))
+        self.assertFalse(self.csp.add_node("class1", ["domain2"]))
+        self.assertEqual(len(self.csp.nodes), 1)
+        self.csp.add_node("class2", ["domain2"])
+        self.assertEqual(len(self.csp.nodes), 2)
+
+    def test_add_unary_constraint(self):
+        """
+        Test if add unary constraint work.
+        """
+        self.assertFalse(self.csp.add_unary_constraint("class2",constraintFunc=1))
 
 
 class MinConflicts_TestCase(TestCase):
     def setUp(self):
-        csp = create_csp()
+        csp = create_csp2()
         self.minC = minConflicts(csp)
 
     def tearDown(self):
