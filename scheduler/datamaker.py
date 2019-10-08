@@ -5,7 +5,7 @@ Create a JSON holding sample data
 import json
 
 # More detailed info for rooms
-rooms = ['655', '666', '745a', '745b', '433','201','115a','115b']       
+rooms = ['655', '666', '745a', '745b', '433', '201', '115a', '115b']    
 room_capacities = {
                 '655': 30,
                 '666': 30,
@@ -18,7 +18,8 @@ room_capacities = {
         }
 
 # Course details
-courses = ['physics','chemistry','biochemistry','biology 1','biology 2','molecular biology','calculus 1', 'calculus 4','astrophysics']
+courses = ['physics', 'chemistry', 'biochemistry', 'biology 1', 'biology 2',
+'molecular biology', 'calculus 1', 'calculus 4', 'astrophysics']
 course_no_students = {
         'physics': 35,
         'chemistry': 26,
@@ -68,9 +69,9 @@ course_days_weekly = {
 
 # Info about professors
 professors = ['John Smith', 'Lisa Jones', 'Mike Williams',
-              'Tim Simpson', 'Rachel Smith','Gregg Woods',
-              'Simon Valinski','Chu Yen','Peter Parker',
-              'Lisa Mullen','Elizabeth Walker','Brian K. Dickson',
+              'Tim Simpson', 'Rachel Smith', 'Gregg Woods',
+              'Simon Valinski', 'Chu Yen', 'Peter Parker',
+              'Lisa Mullen', 'Elizabeth Walker', 'Brian K. Dickson',
               'Jamir Abdullah']
 prof_info = {
                 'John Smith': {
@@ -94,7 +95,7 @@ prof_info = {
                         'end_time': 18
                 },
                 'Rachel Smith': {
-                        'courses': ['calculus 4','biology 2'], 
+                        'courses': ['calculus 4', 'biology 2'],
                         'start_time': 9,
                         'end_time': 18
                 },
@@ -104,17 +105,19 @@ prof_info = {
                         'end_time': 17
                 },
                 'Simon Valinski': {
-                        'courses': ['calculus 1', 'physics','astrophysics'],
+                        'courses': ['calculus 1', 'physics', 'astrophysics'],
                         'start_time': 8,
                         'end_time': 17
                 },
                 'Chu Yen': {
-                        'courses': ['calculus 1', 'calculus 4','physics','astrophysics'],
+                        'courses': ['calculus 1', 'calculus 4',
+                        'physics', 'astrophysics'],
                         'start_time': 10,
                         'end_time': 18
                 },
                 'Peter Parker': {
-                        'courses': ['biology 1', 'biology 2','biochemistry','chemistry','molecular biology'],
+                        'courses': ['biology 1', 'biology 2', 'biochemistry',
+                        'chemistry', 'molecular biology'],
                         'start_time': 8,
                         'end_time': 14
                 },
@@ -142,9 +145,11 @@ prof_info = {
 
 
 def make_data():
-    data = {'courses':courses,'professors':professors,'rooms':rooms,
+    data = {'courses':courses, 'professors':professors, 'rooms':rooms,
         'room_capacities': room_capacities, 'prof_info': prof_info,
-        'course_no_students': course_no_students, 'course_mins': course_mins,'course_no_sections':course_no_sections,
+        'course_no_students': course_no_students,
+        'course_mins': course_mins,
+        'course_no_sections':course_no_sections,
         'course_days_weekly':course_days_weekly}
     with open('sample_data.txt','w') as outfile:
         json.dump(data,outfile)
