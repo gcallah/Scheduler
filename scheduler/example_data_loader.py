@@ -1,12 +1,11 @@
-'''Handling to make class scheduler notebook more user friendly'''
-
 'Part I: Define some example data'
 from IPython.display import HTML, display
 import pandas as pd
-import json
 import tabulate
 
-#More detailed info for rooms
+'''Handling to make class scheduler notebook more user friendly'''
+
+# More detailed info for rooms
 rooms = ['655', '666', '745a', '745b', '433','201','115a','115b']        
 room_capacities = {
                 '655' : 30,
@@ -19,7 +18,7 @@ room_capacities = {
                 '115b' : 40
         }
 
-#Course details
+# Course details
 courses = ['physics','chemistry','biochemistry','biology 1','biology 2','molecular biology','calculus 1', 'calculus 4','astrophysics']
 course_no_students = {
         'physics' : 35,
@@ -68,7 +67,7 @@ course_days_weekly = {
         'astrophysics' : 1
         }
 
-#Info about professors
+# Info about professors
 professors = ['John Smith', 'Lisa Jones', 'Mike Williams',
               'Tim Simpson', 'Rachel Smith','Gregg Woods',
               'Simon Valinski','Chu Yen','Peter Parker',
@@ -142,28 +141,28 @@ prof_info = {
                 }
         }
 
-#def make_data():
-#    data = {'courses':courses,'professors':professors,'rooms':rooms,
-#        'room_capacities' : room_capacities, 'prof_info' : prof_info,
-#        'course_no_students' : course_no_students, 'course_mins' : course_mins,'course_no_sections':course_no_sections,
-#        'course_days_weekly':course_days_weekly}
-#    with open('sample_data.txt','w') as outfile:
-#        json.dump(data,outfile)
+'''def make_data():
+    data = {'courses':courses,'professors':professors,'rooms':rooms,
+        'room_capacities' : room_capacities, 'prof_info' : prof_info,
+        'course_no_students' : course_no_students, 'course_mins' : course_mins,'course_no_sections':course_no_sections,
+        'course_days_weekly':course_days_weekly}
+    with open('sample_data.txt','w') as outfile:
+        json.dump(data,outfile)
 
-#input_file = "sample_data.txt"
-#with open(input_file,'r') as f:
-#    data = json.load(f)
+input_file = "sample_data.txt"
+with open(input_file,'r') as f:
+    data = json.load(f)
     
-#professors = data['professors']
-#prof_info = data['prof_info']
-#rooms = data['rooms']
-#room_capacities = data['room_capacities']
-#courses = data['courses']
-#course_no_students = data['course_no_students']
-#course_mins = data['course_mins']
-#course_days_weekly = data['course_days_weekly']
+professors = data['professors']
+prof_info = data['prof_info']
+rooms = data['rooms']
+room_capacities = data['room_capacities']
+courses = data['courses']
+course_no_students = data['course_no_students']
+course_mins = data['course_mins']
+course_days_weekly = data['course_days_weekly']'''
 
-#User feedback
+# User feedback
 print("Data loaded successfully")
 
 ''' Part II: Print out the data for the user to check'''
