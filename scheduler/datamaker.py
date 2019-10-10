@@ -5,7 +5,7 @@ Create a JSON holding sample data
 import json
 
 # More detailed info for rooms
-rooms = ['655', '666', '745a', '745b', '433', '201', '115a', '115b']    
+rooms = ['655', '666', '745a', '745b', '433', '201', '115a', '115b']
 room_capacities = {
                 '655': 30,
                 '666': 30,
@@ -19,7 +19,7 @@ room_capacities = {
 
 # Course details
 courses = ['physics', 'chemistry', 'biochemistry', 'biology 1', 'biology 2',
-'molecular biology', 'calculus 1', 'calculus 4', 'astrophysics']
+           'molecular biology', 'calculus 1', 'calculus 4', 'astrophysics']
 course_no_students = {
         'physics': 35,
         'chemistry': 26,
@@ -111,13 +111,13 @@ prof_info = {
                 },
                 'Chu Yen': {
                         'courses': ['calculus 1', 'calculus 4',
-                        'physics', 'astrophysics'],
+                                    'physics', 'astrophysics'],
                         'start_time': 10,
                         'end_time': 18
                 },
                 'Peter Parker': {
                         'courses': ['biology 1', 'biology 2', 'biochemistry',
-                        'chemistry', 'molecular biology'],
+                                    'chemistry', 'molecular biology'],
                         'start_time': 8,
                         'end_time': 14
                 },
@@ -145,11 +145,11 @@ prof_info = {
 
 
 def make_data():
-    data = {'courses':courses, 'professors':professors, 'rooms':rooms,
-        'room_capacities': room_capacities, 'prof_info': prof_info,
-        'course_no_students': course_no_students,
-        'course_mins': course_mins,
-        'course_no_sections':course_no_sections,
-        'course_days_weekly':course_days_weekly}
-    with open('sample_data.txt','w') as outfile:
-        json.dump(data,outfile)
+    data = {'courses': courses, 'professors': professors, 'rooms': rooms,
+            'room_capacities': room_capacities, 'prof_info': prof_info,
+            'course_no_students': course_no_students,
+            'course_mins': course_mins,
+            'course_no_sections': course_no_sections,
+            'course_days_weekly': course_days_weekly}
+    with open('sample_data.txt', 'w') as outfile:
+        json.dump(data, outfile)
