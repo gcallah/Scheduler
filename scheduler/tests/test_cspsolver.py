@@ -1,9 +1,10 @@
 """
 This is the test suite for cspsolver.py.
 """
+import sys 
+sys.path.append('..')
 
 from unittest import TestCase, main, skip
-
 from cspsolver import CSP, minConflicts
 
 
