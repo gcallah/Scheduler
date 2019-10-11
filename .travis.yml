@@ -7,7 +7,7 @@ services:
     - docker
 # command to install dependencies
 install:
-    - pip install -r /scheduler/docker/requirement-dev.txt
+    - pip install -r scheduler/docker/requirement-dev.txt
 
 script: pytest
 
