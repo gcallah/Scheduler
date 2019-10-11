@@ -1,8 +1,10 @@
-import json
 import copy
 import random
 
-''' classes CSP and minConflicts below define & solve a constraint satisfaction problem'''
+"""
+classes CSP and minConflicts below define &
+ solve a constraint satisfaction problem
+"""
 
 
 class CSP(object):
@@ -10,9 +12,11 @@ class CSP(object):
         self.nodes = []
         # describes the domain of values assignable to the node
         self.nodeDomains = {}
-        # constraints depending only on asingular node 0,1 depending on node value
+        # constraints depending only on a singular node,
+        # 0,1 depending on node value
         self.unary_constraints = {}
-        # binary constraints depending on node pair, 0,1 or 2 depending on node values
+        # binary constraints depending on node pair,
+        # 0,1 or 2 depending on node values
         self.binary_constraints = {}
 
     def add_node(self, node_name, domain):
@@ -41,8 +45,10 @@ class CSP(object):
             return False
         domain1 = self.nodeDomains[node1]
         domain2 = self.nodeDomains[node2]
-        tableFactor1 = {val1: {val2: constaintFunc(val1, val2) for val2 in domain2} for val1 in domain1}
-        tableFactor2 = {val2: {val1: constaintFunc(val1, val2) for val1 in domain1} for val2 in domain2}
+        tableFactor1 = {val1: {val2: constaintFunc(val1, val2)
+                               for val2 in domain2} for val1 in domain1}
+        tableFactor2 = {val2: {val1: constaintFunc(val1, val2)
+                               for val1 in domain1} for val2 in domain2}
         self.update_binary_constraint_table(node1, node2, tableFactor1)
         self.update_binary_constraint_table(node2, node1, tableFactor2)
 
@@ -80,7 +86,8 @@ class minConflicts(object):
         conflicted = []
         csp = self.csp
         for n in assignments:
-            if n in conflicted: continue
+            if n in conflicted:
+                continue
             val = assignments[n]
             # make sure no KeyError on unary and binary constraints
             try:
@@ -129,7 +136,8 @@ class minConflicts(object):
         csp = self.csp
         for _ in range(max_iters):
             conflicted = self.conflicted(assignments)
-            if len(conflicted) == 0: return assignments
+            if len(conflicted) == 0:
+                return assignments
             # choose a random conflicted variable
             node = random.choice(list(conflicted))
             val = assignments[node]
@@ -138,7 +146,8 @@ class minConflicts(object):
             D = csp.nodeDomains[node]
             random.shuffle(D)
             for u in D:
-                if u == val: continue
+                if u == val:
+                    continue
                 assignments_cpy = copy.deepcopy(assignments)
                 assignments_cpy[node] = u
                 c, w = self.conflicted_neighbors(assignments_cpy, node)
@@ -147,7 +156,8 @@ class minConflicts(object):
                     min_conflicted = len(c)
                     w0 = w
                 elif len(c) == min_conflicted:
-                    # chooose equally conflicted node by random weighted on soft-constraint
+                    # choose equally conflicted node by
+                    # random weighted on soft-constraint
                     r = random.random()
                     if r < w / (w + w0):
                         w0 = w
