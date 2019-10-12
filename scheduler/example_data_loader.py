@@ -8,7 +8,7 @@ from teachercourse_csp import assigner
 
 # More detailed info for rooms
 rooms = ['655', '666', '745a', '745b', '433', '201', '115a', '115b']
-room_capacities = {
+room_cap = {
                 '655': 30,
                 '666': 30,
                 '745a': 22,
@@ -57,7 +57,7 @@ course_no_sections = {
         'astrophysics': 1
         }
 
-course_days_weekly = {
+course_days = {
         'physics': 3,
         'chemistry': 2,
         'biochemistry': 2,
@@ -70,11 +70,11 @@ course_days_weekly = {
         }
 
 # Info about professors
-professors = ['John Smith', 'Lisa Jones', 'Mike Williams',
-              'Tim Simpson', 'Rachel Smith', 'Gregg Woods',
-              'Simon Valinski', 'Chu Yen', 'Peter Parker',
-              'Lisa Mullen', 'Elizabeth Walker', 'Brian K. Dickson',
-              'Jamir Abdullah']
+profs = ['John Smith', 'Lisa Jones', 'Mike Williams',
+         'Tim Simpson', 'Rachel Smith', 'Gregg Woods',
+         'Simon Valinski', 'Chu Yen', 'Peter Parker',
+         'Lisa Mullen', 'Elizabeth Walker', 'Brian K. Dickson',
+         'Jamir Abdullah']
 prof_info = {
                 'John Smith': {
                         'courses': ['physics', 'chemistry'],
@@ -174,10 +174,13 @@ print("Data loaded successfully")
 
 
 def user_data_printer():
-    table = {'PROFS': professors,
+    table = {'PROFS': profs,
              'ROOMS': rooms,
              'COURSES': courses}
-    my_data = tabulate.tabulate(table, headers=['profs', 'rooms', 'courses'], tablefmt='html', colalign=("center", "center", "center"))
+    headers = ['profs', 'rooms', 'courses']
+    tablefmt = 'html'
+    colalign = ("center", "center", "center")
+    my_data = tabulate.tabulate(table, headers, tablefmt, colalign)
     return HTML(my_data)
 
 
@@ -192,11 +195,13 @@ def time_formatter(course, start_time):
     end = hs*6 + ms//10 + course_mins[course]//10
     end_time = (end//6, (end - (end//6)*6)*10)
     he, me = end_time
-    output = '{:0>2}'.format(hs) + ':'+'{:0>2}'.format(ms) + ' to ' + '{:0>2}'.format(he) + ':' + '{:0>2}'.format(me)
+    output = '{:0>2}'.format(hs) + ':'+'{:0>2}'.format(ms)
+    output = output + ' to ' + '{:0>2}'.format(he) + ':' + '{:0>2}'.format(me)
     return output
 
 
-user_data = (professors, prof_info, rooms, room_capacities, courses, course_no_students, course_mins, course_days_weekly)
+user_data = (profs, prof_info, rooms, room_cap, courses,
+             course_no_students, course_mins, course_days)
 full_schedule = assigner(user_data)
 weekdays = ['mon', 'tues', 'wed', 'thur', 'fri']
 
@@ -207,7 +212,11 @@ for day in weekdays:
     for var, val in schedule.items():
         course, professor = var
         room, start_time = val
-        df_inc = {'Day': day.upper(), 'Course': [course], 'Professor': [professor], 'Room': [room], 'Period': [time_formatter(course, start_time)]}
+        df_inc = {'Day': day.upper(),
+                  'Course': [course],
+                  'Professor': [professor],
+                  'Room': [room],
+                  'Period': [time_formatter(course, start_time)]}
         df_inc = pd.DataFrame.from_dict(df_inc)
         df_out = pd.concat([df_out, df_inc], ignore_index=True)
 
