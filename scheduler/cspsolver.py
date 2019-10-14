@@ -2,16 +2,14 @@ import copy
 import random
 
 """
-classes CSP and minConflicts below define &
- solve a constraint satisfaction problem
+classes CSP and minConflicts below define 
+& solve a constraint satisfaction problem
 """
-
-
 class CSP(object):
     def __init__(self):
         self.nodes = []
         # describes the domain of values assignable to the node
-        self.nodeDomains = {}
+        self.node_domains = {}
         # constraints depending only on a singular node,
         # 0,1 depending on node value
         self.unary_constraints = {}
@@ -24,14 +22,14 @@ class CSP(object):
         if node_name in self.nodes:
             return False
         self.nodes.append(node_name)
-        self.nodeDomains[node_name] = domain
+        self.node_domains[node_name] = domain
 
-    def add_unary_constraint(self, node, constraintFunc):
+    def add_unary_constraint(self, node, constraint_func):
         # make sure node has previously been added
         if node not in self.nodes:
             return False
-        domain = self.nodeDomains[node]
-        factor = {val: constraintFunc(val) for val in domain}
+        domain = self.node_domains[node]
+        factor = {val: constraint_func(val) for val in domain}
         # case where no constraints existed
         if node not in self.unary_constraints.keys():
             self.unary_constraints[node] = factor
@@ -44,28 +42,28 @@ class CSP(object):
         # make sure both nodes have been added
         if node1 not in self.nodes or node2 not in self.nodes:
             return False
-        domain1 = self.nodeDomains[node1]
-        domain2 = self.nodeDomains[node2]
-        tableFactor1 = {val1: {val2: constaintFunc(val1, val2)
+        domain1 = self.node_domains[node1]
+        domain2 = self.node_domains[node2]
+        table_factor1 = {val1: {val2: constaintFunc(val1, val2)
                                for val2 in domain2} for val1 in domain1}
-        tableFactor2 = {val2: {val1: constaintFunc(val1, val2)
+        table_factor2 = {val2: {val1: constaintFunc(val1, val2)
                                for val1 in domain1} for val2 in domain2}
-        self.update_binary_constraint_table(node1, node2, tableFactor1)
-        self.update_binary_constraint_table(node2, node1, tableFactor2)
+        self.update_binary_constraint_table(node1, node2, table_factor1)
+        self.update_binary_constraint_table(node2, node1, table_factor2)
 
-    def update_binary_constraint_table(self, nodeA, nodeB, tableFactor):
-        if nodeA not in self.binary_constraints.keys():
-            self.binary_constraints[nodeA] = {}
-            self.binary_constraints[nodeA][nodeB] = tableFactor
+    def update_binary_constraint_table(self, node_a, node_b, tableFactor):
+        if node_a not in self.binary_constraints.keys():
+            self.binary_constraints[node_a] = {}
+            self.binary_constraints[node_a][node_b] = tableFactor
             return
-        if nodeB not in self.binary_constraints[nodeA].keys():
-            self.binary_constraints[nodeA][nodeB] = tableFactor
+        if node_b not in self.binary_constraints[node_a].keys():
+            self.binary_constraints[node_a][node_b] = tableFactor
             return
-        currentTable = self.binary_constraints[nodeA][nodeB]
+        current_table = self.binary_constraints[node_a][node_b]
         for i in tableFactor:
             for j in tableFactor[i]:
-                assert i in currentTable and j in currentTable[i]
-                currentTable[i][j] *= tableFactor[i][j]
+                assert i in current_table and j in current_table[i]
+                current_table[i][j] *= tableFactor[i][j]
 
 
 class minConflicts(object):
@@ -76,7 +74,7 @@ class minConflicts(object):
     def initial_var_assignment(self):
         assignments = {}
         nodes = self.csp.nodes
-        domains = self.csp.nodeDomains
+        domains = self.csp.node_domains
         for n in nodes:
             val_rand = random.choice(domains[n])
             assignments[n] = val_rand
@@ -136,7 +134,7 @@ class minConflicts(object):
     def rand_conflicted_var(self, conflicted, assignments):
         node = random.choice(list(conflicted))
         val = assignments[node]
-        domain = self.csp.nodeDomains[node]
+        domain = self.csp.node_domains[node]
         random.shuffle(domain)
         return domain, val, node
 
@@ -145,7 +143,7 @@ class minConflicts(object):
         csp = self.csp
         for _ in range(max_iters):
             conflicted = self.conflicted(assignments)
-            if len(conflicted) == 0:
+            if not conflicted:
                 return assignments
             domain, val, node = self.rand_conflicted_var(conflicted, assignments)
             c0, w0 = self.conflicted_neighbors(assignments, node)
