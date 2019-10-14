@@ -131,6 +131,14 @@ class minConflicts(object):
                 soft_weight *= w
         return (set(conflicted), soft_weight)
 
+    # choose a random conflicted variable
+    def rand_conflicted_var(self, conflicted, assignments):
+        node = random.choice(list(conflicted))
+        val = assignments[node]
+        D = self.csp.nodeDomains[node]
+        random.shuffle(D)
+        return D, val, node
+
     def solve(self, max_iters=100):
         assignments = self.initial_var_assignment()
         csp = self.csp
@@ -138,13 +146,9 @@ class minConflicts(object):
             conflicted = self.conflicted(assignments)
             if len(conflicted) == 0:
                 return assignments
-            # choose a random conflicted variable
-            node = random.choice(list(conflicted))
-            val = assignments[node]
+            D, val, node = self.rand_conflicted_var(conflicted, assignments)
             c0, w0 = self.conflicted_neighbors(assignments, node)
             min_conflicted = len(c0)
-            D = csp.nodeDomains[node]
-            random.shuffle(D)
             for u in D:
                 if u == val:
                     continue

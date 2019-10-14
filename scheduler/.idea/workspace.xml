@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="18282140-1eab-43a1-a177-02b8c657a000" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teachercourse_csp.py" beforeDir="false" afterPath="$PROJECT_DIR$/teachercourse_csp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cspsolver.py" beforeDir="false" afterPath="$PROJECT_DIR$/cspsolver.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
