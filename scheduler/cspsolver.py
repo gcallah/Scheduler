@@ -37,7 +37,8 @@ class CSP(object):
             self.unary_constraints[node] = factor
             return
         # case where constraints did exist
-        self.unary_constraints[node] = {val: self.unary_constraints[node][val] * factor[val] for val in domain}
+        self.unary_constraints[node] = ({val: self.unary_constraints[node][val] *
+                                         factor[val] for val in domain})
 
     def add_binary_constraint(self, node1, node2, constaintFunc):
         # make sure both nodes have been added
@@ -115,12 +116,12 @@ class minConflicts(object):
         try:
             if csp.unary_constraints[n][val] == 0:
                 conflicted.append(n)
-        except:
+        except BaseException:
             pass
         # checks on binary constraints
         try:
             neighbors = set(csp.binary_constraints[n].keys())
-        except:
+        except BaseException:
             return (set(conflicted), soft_weight)
         for m in neighbors:
             val_neigh = assignments[m]
@@ -135,9 +136,9 @@ class minConflicts(object):
     def rand_conflicted_var(self, conflicted, assignments):
         node = random.choice(list(conflicted))
         val = assignments[node]
-        D = self.csp.nodeDomains[node]
-        random.shuffle(D)
-        return D, val, node
+        domain = self.csp.nodeDomains[node]
+        random.shuffle(domain)
+        return domain, val, node
 
     def solve(self, max_iters=100):
         assignments = self.initial_var_assignment()
@@ -146,20 +147,20 @@ class minConflicts(object):
             conflicted = self.conflicted(assignments)
             if len(conflicted) == 0:
                 return assignments
-            D, val, node = self.rand_conflicted_var(conflicted, assignments)
+            domain, val, node = self.rand_conflicted_var(conflicted, assignments)
             c0, w0 = self.conflicted_neighbors(assignments, node)
             min_conflicted = len(c0)
-            for u in D:
-                if u == val:
+            for each_domain in domain:
+                if each_domain == val:
                     continue
                 assignments_cpy = copy.deepcopy(assignments)
-                assignments_cpy[node] = u
-                c, w = self.conflicted_neighbors(assignments_cpy, node)
-                if len(c) < min_conflicted:
+                assignments_cpy[node] = each_domain
+                conflict, w = self.conflicted_neighbors(assignments_cpy, node)
+                if len(conflict) < min_conflicted:
                     assignments = assignments_cpy
-                    min_conflicted = len(c)
+                    min_conflicted = len(conflict)
                     w0 = w
-                elif len(c) == min_conflicted:
+                elif len(conflict) == min_conflicted:
                     # choose equally conflicted node by
                     # random weighted on soft-constraint
                     r = random.random()
