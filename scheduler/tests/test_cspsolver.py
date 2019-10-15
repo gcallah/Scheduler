@@ -32,7 +32,7 @@ class CSP_TestCase(TestCase):
     def test_nodes(self):
         self.csp = create_csp1()
         self.assertEqual(self.csp.nodes[0], "class1")
-        self.assertEqual(self.csp.nodeDomains["class1"][0], "domain1")
+        self.assertEqual(self.csp.node_domains["class1"][0], "domain1")
 
     def test_add(self):
         """
@@ -48,7 +48,7 @@ class CSP_TestCase(TestCase):
         """
         Test if add unary constraint work.
         """
-        self.assertFalse(self.csp.add_unary_constraint("class2",constraintFunc=1))
+        self.assertFalse(self.csp.add_unary_constraint("class2", constraint_func="1"))
 
 
 class MinConflicts_TestCase(TestCase):
@@ -61,10 +61,16 @@ class MinConflicts_TestCase(TestCase):
         self.minC = None
 
     def test_assigner(self):
-        self.assertTrue(self.minC.initial_var_assignment()["class1"] == "domain1")
-        self.assertTrue(self.minC.initial_var_assignment()["class2"] in ["domain2", "domain3", "domain4"])
-        self.assertFalse(self.minC.initial_var_assignment()["class3"] == "domain10")
+        assignment = self.minC.initial_var_assignment()
+        self.assertTrue(assignment["class1"] == "domain1")
+        self.assertTrue(assignment["class2"] in ["domain2", "domain3", "domain4"])
+        self.assertFalse(assignment["class3"] == "domain10")
 
+    def test_solve(self):
+        result = self.minC.solve(100)
+        self.assertEqual(result["class1"], "domain1")
+        self.assertTrue(result["class2"] in ["domain2", "domain3", "domain4"])
+        self.assertNotEqual(result["class3"], "domin5")
 
 if __name__ == '__main__':
     main()

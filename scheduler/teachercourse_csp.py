@@ -49,7 +49,7 @@ def assigner(user_data):
         n = min(course_days_weekly[c], 5)
         days_chosen = []
         # Pairs Mon-Wed and Thurs-Fri preferred if course runs 2 - 4 days
-        if 2 <= n and n <= 4:
+        if 2 <= n <= 4:
             workdays = ['mon', 'wed', 'thur', 'fri'] * 2 + ['tues']
         elif n == 1:
             workdays = ['mon', 'tues', 'wed', 'thur', 'fri']
