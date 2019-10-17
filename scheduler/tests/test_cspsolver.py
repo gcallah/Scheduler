@@ -66,6 +66,11 @@ class MinConflicts_TestCase(TestCase):
         self.assertTrue(assignment["class2"] in ["domain2", "domain3", "domain4"])
         self.assertFalse(assignment["class3"] == "domain10")
 
+    def test_conflicted(self):
+        assignment = self.minC.initial_var_assignment()
+        conflict = self.minC.conflicted(assignment)
+        self.assertEqual(conflict, set())
+
     def test_solve(self):
         result = self.minC.solve(100)
         self.assertEqual(result["class1"], "domain1")
