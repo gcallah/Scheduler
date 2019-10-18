@@ -1,8 +1,8 @@
 """
 This is the test suite for cspsolver.py.
 """
-import sys 
-sys.path.append('..')
+import os, sys 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from unittest import TestCase, main, skip
 from cspsolver import CSP, minConflicts
