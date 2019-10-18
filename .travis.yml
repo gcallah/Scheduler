@@ -1,3 +1,4 @@
+---
 # Our YAML file for running Travis CI.
 language: python
 python:
@@ -10,4 +11,3 @@ install:
     - pip install -r scheduler/docker/requirement-dev.txt
 
 script: python scheduler/tests/test_cspsolver.py
-
