@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="18282140-1eab-43a1-a177-02b8c657a000" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/tests/test_teachercourse_csp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cspsolver.py" beforeDir="false" afterPath="$PROJECT_DIR$/cspsolver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_cspsolver.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_cspsolver.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +42,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests in test_cspsolver.py">
+  <component name="RunManager" selected="Python tests.Unittests in test_teachercourse_csp.py">
     <configuration name="Unittests in test_cspsolver.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="scheduler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -72,8 +71,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests in test_teachercourse_csp.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="scheduler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_teachercourse_csp.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Unittests in test_teachercourse_csp.py" />
         <item itemvalue="Python tests.Unittests in test_cspsolver.py" />
         <item itemvalue="Python tests.Unittests in test_cspsovler.py" />
       </list>
