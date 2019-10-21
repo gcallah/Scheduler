@@ -101,14 +101,17 @@ def TeacherCourseClassCSP():
                 end_time = prof_info[p]['end_time']
                 return {(i, j*30) for i in range(start_time, end_time) for j in range(2)}
 
-        def add_unary():                                
-                for n in csp.nodes:   
-                        c, p = n
-                        def room_has_capacity(val, course=c, prof=p):
-                                room, hour_and_min = val
-                                no_students = course_no_students[course]
-                                return bool(room_capacities[room]>= no_students)
-                        csp.add_unary_constraint((c,p),room_has_capacity)
+        def add_unary():                       
+            for n in csp.nodes:
+                c, p = n
+
+                def room_has_capacity(val, course=c, prof=p):
+                    room, hour_and_min = val
+                    # students = number of students
+                    students = course_no_students[course]
+                    return bool(room_capacities[rofom] >= students)
+            csp.add_unary_constraint((c, p), room_has_capacity)
+
         def add_binary():
                 nodes = csp.nodes
                 for i, n in enumerate(nodes):
@@ -116,42 +119,46 @@ def TeacherCourseClassCSP():
                         for m in nodes[i:]:
                                 course_m, prof_m = m
                                 if prof_n == prof_m:
-                                        if course_n==course_m: continue
+                                        if course_n == course_m:
+                                            continue
                                         '''first binary constraint'''
-                                        def no_class_overlap(val1, val2, course1=course_n, course2=course_m):
-                                                # makes the math easy: calculate course times in 10min intervals e.g. 120min is 12 intervals
-                                                hours1, mins1 = val1[1]
-                                                hours2, mins2 = val2[1]
-                                                course_start1 = hours1*6 + mins1//10
-                                                course_end1 = course_start1 + course_mins[course1]//10
-                                                course_start2 = hours2*6 + mins2//10
-                                                course_end2 = course_start2 + course_mins[course2]//10
-                                                # conditions to check if one class starts during other
-                                                if course_start1 <= course_start2 and course_start2 < course_end1:
-                                                        return bool(False)
-                                                if course_start2 <= course_start1 and course_start1 < course_end2:
-                                                        return bool(False)
-                                                #soft constraint part
-                                                if course_start1==course_end2 or course_start2==course_end1:
-                                                        return 2
-                                                return bool(True)
-                                        csp.add_binary_constraint(n, m, no_class_overlap)
-                                '''second binary constraint'''
-                                def no_time_clash(val1,val2,course1=course_n):
-                                        room1, time1 = val1
-                                        room2, time2 = val2
-                                        if room1!=room2: return bool(True)
-                                        hours1,mins1 = time1
-                                        hours2,mins2 = time2
-                                        start_time1 = hours1*6 + mins1//10
-                                        end_time1 = start_time1 + course_mins[course1]//10
-                                        start_time2 = hours2*6 + mins2//10
-                                        if start_time1 <= start_time2 and start_time2 < end_time1:
+                                        # no class ol = no class overlap
+                                        def no_class_ol(val1, val2, course1=course_n, course2=course_m):
+                                            # makes the math easy: calculate course times in 10min intervals e.g. 120min is 12 intervals
+                                            hours1, mins1 = val1[1]
+                                            hours2, mins2 = val2[1]
+                                            course_start1 = hours1*6 + mins1//10
+                                            course_end1 = course_start1 + course_mins[course1]//10
+                                            course_start2 = hours2*6 + mins2//10
+                                            course_end2 = course_start2 + course_mins[course2]//10
+                                            # conditions to check if one class starts during other
+                                            if course_start1 <= course_start2 and course_start2 < course_end1:
                                                 return bool(False)
-                                        return bool(True)                         
-                                csp.add_binary_constraint(n,m,no_time_clash)       
+                                            if course_start2 <= course_start1 and course_start1 < course_end2:
+                                                return bool(False)
+                                            # soft constraint part
+                                            if course_start1 == course_end2
+                                            or course_start2 == course_end1:
+                                                return 2
+                                            return bool(True)
+                                    csp.add_binary_constraint(n, m, no_class_ol)
+                                '''second binary constraint'''
+                                def no_time_clash(val1, val2, course1=course_n):
+                                    room1, time1 = val1
+                                    room2, time2 = val2
+                                    if room1 != room2:
+                                        return bool(True)
+                                    hours1, mins1 = time1
+                                    hours2, mins2 = time2
+                                    start_time1 = hours1*6 + mins1//10
+                                    end_time1 = start_time1 + course_mins[course1]//10
+                                    start_time2 = hours2*6 + mins2//10
+                                    if start_time1 <= start_time2 and start_time2 < end_time1:
+                                        return bool(False)
+                                    return bool(True)
+                            csp.add_binary_constraint(n, m, no_time_clash)
         # function body
-        with open('sample_json_data.txt','r') as outfile:
+        with open('sample_json_data.txt', 'r') as outfile:
             data = json.load(outfile)
             courses = data['courses']
             professors = data['professors']
@@ -162,32 +169,39 @@ def TeacherCourseClassCSP():
             course_mins = data['course_mins']
             course_days_weekly = data['course_days_weekly']
 
-        full_prof_assignment = profs_for_courses(courses)       # enforce professor-course consistency among different days
+        # enforce professor-course consistency among different days
+        full_prof_assignment = profs_for_courses(courses)
+
         weekdays = ['mon', 'tues', 'wed', 'thur', 'fri']
-        solution = {d:None for d in weekdays}    
+        solution = {d: None for d in weekdays}
         daily_courses = courses_per_day()
         for d in weekdays:
-                # add some kind of retry functionality (3 strikes rule?)
-                csp = CSP_Solver.CSP()
-                courses = daily_courses[d]
-                # can define |professors| and other variables
-                add_nodes()
-                add_unary()
-                add_binary()
-                minconf = CSP_Solver.minConflicts(csp)
-                solution[d] = minconf.solve()
-        return solution
+            # add some kind of retry functionality (3 strikes rule?)
+            csp = CSP_Solver.CSP()
+            courses = daily_courses[d]
+            # can define |professors| and other variables
+            add_nodes()
+            add_unary()
+            add_binary()
+            minconf = CSP_Solver.minConflicts(csp)
+            solution[d] = minconf.solve()
+    return solution
 
-# code to test functionality 
+
+# code to test functionality
+
+
 teachercourse = TeacherCourseClassCSP()
 justdays = ['mon', 'tues', 'wed', 'thur', 'fri']
 for d in justdays:
-        solution = teachercourse[d]
-        print()
-        print(d, ':')
-        for k, a in solution.items():
-                course, prof = k
-                r, hour = a
-                h, m = hour
-                if m < 10: m = '0' + str(m)
-                print(prof, ' //', course, '// room ', r, ('// %i:%s' %(h, m)))
+    solution = teachercourse[d]
+    print()
+    print(d, ':')
+    for k, a in solution.items():
+        # c= course, p=prof
+        c, p = k
+        r, hour = a
+        h, m = hour
+        if m < 10:
+            m = '0' + str(m)
+        print(p, ' //', c, '// room ', r, ('// % i:% s' % (h, m)))
