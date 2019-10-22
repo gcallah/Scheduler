@@ -19,36 +19,58 @@ class CSP(object):
         # 0,1 or 2 depending on node values
         self.binary_constraints = {}
 
-    def add_node(self, node_name, domain):
-        # check that node doesn't already exist
-        if node_name in self.nodes:
-            return False
-        self.nodes.append(node_name)
-        self.node_domains[node_name] = domain
+    def add_node(self, node, domain):
+        """Adds a node and its list of domains (rooms, hours) to the node domains.
+
+        Arguments:
+            node {tuple} -- A tuple of (course, professor).
+            domain {list} -- A list of domains (rooms, hours) for the node.
+        """
+        if node in self.nodes:
+            return
+        self.nodes.append(node)
+        self.node_domains[node] = domain
 
     def add_unary_constraint(self, node, constraint_func):
-        # make sure node has previously been added
+        """Adds an unary constraint to an existing node.
+
+        Arguments:
+            node {tuple} -- A tuple of (course, professor).
+            constraint_func {function} -- A constraint function.
+
+        Raises:
+            ValueError: Raises ValueError if node has not been added yet.
+        """
         if node not in self.nodes:
-            return False
+            raise ValueError(node, "was not added.")
         domain = self.node_domains[node]
         factor = {val: constraint_func(val) for val in domain}
         # case where no constraints existed
         if node not in self.unary_constraints.keys():
             self.unary_constraints[node] = factor
-            return
-        # case where constraints did exist
-        self.unary_constraints[node] = ({val: self.unary_constraints[node][val]
-                                        * factor[val] for val in domain})
+        else:
+            self.unary_constraints[node] = ({val: self.unary_constraints[node][val]
+                                            * factor[val] for val in domain})
 
-    def add_binary_constraint(self, node1, node2, constaint_func):
+    def add_binary_constraint(self, node1, node2, constraint_func):
+        """Adds a binary constraint to two existing nodes.
+
+        Arguments:
+            node1 {tuple} -- A tuple of (course, professor).
+            node2 {tuple} -- A tuple of (course, professor).
+            constraint_func {function} -- A constraint function.
+
+        Raises:
+            ValueError: Raises ValueError if either node has not been added yet.
+        """
         # make sure both nodes have been added
         if node1 not in self.nodes or node2 not in self.nodes:
-            return False
+            raise ValueError("{} or {} were not added.".format(node1, node2))
         domain1 = self.node_domains[node1]
         domain2 = self.node_domains[node2]
-        table_factor1 = {val1: {val2: constaint_func(val1, val2)
+        table_factor1 = {val1: {val2: constraint_func(val1, val2)
                                 for val2 in domain2} for val1 in domain1}
-        table_factor2 = {val2: {val1: constaint_func(val1, val2)
+        table_factor2 = {val2: {val1: constraint_func(val1, val2)
                                 for val1 in domain1} for val2 in domain2}
         self.update_binary_constraint_table(node1, node2, table_factor1)
         self.update_binary_constraint_table(node2, node1, table_factor2)
