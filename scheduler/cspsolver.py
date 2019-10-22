@@ -63,7 +63,6 @@ class CSP(object):
         Raises:
             ValueError: Raises ValueError if either node has not been added yet.
         """
-        # make sure both nodes have been added
         if node1 not in self.nodes or node2 not in self.nodes:
             raise ValueError("{} or {} were not added.".format(node1, node2))
         domain1 = self.node_domains[node1]
@@ -94,38 +93,47 @@ class minConflicts(object):
     def __init__(self, csp):
         self.csp = csp
 
-    # assigns each variable a random domain value
     def initial_var_assignment(self):
+        """Assigns each node a random domain value.
+
+        Returns:
+            dict -- Random domain assignment of each node.
+        """
         assignments = {}
-        nodes = self.csp.nodes
-        domains = self.csp.node_domains
-        for n in nodes:
-            val_rand = random.choice(domains[n])
-            assignments[n] = val_rand
+        for node in self.csp.nodes:
+            rand_domain = random.choice(self.csp.node_domains[node])
+            assignments[node] = rand_domain
         return assignments
 
-    # returns list of conflicted node assignments i.e. which evaluate to zero
     def conflicted(self, assignments):
+        """Finds a set of conflicted nodes (which evaluate to zero).
+
+        Arguments:
+            assignments {dict} -- Random domain assignment of each node.
+
+        Returns:
+            set -- A set of conflicted nodes.
+        """
         conflicted = []
         csp = self.csp
-        for n in assignments:
-            if n in conflicted:
+        for node in assignments:
+            if node in conflicted:
                 continue
-            val = assignments[n]
+            assigned_domain = assignments[node]
             # make sure no KeyError on unary and binary constraints
             try:
-                if csp.unary_constraints[n][val] == 0:
-                    conflicted.append(n)
+                if csp.unary_constraints[node][assigned_domain] == 0:
+                    conflicted.append(node)
             except KeyError:
                 pass
             try:
-                neighbors = set(csp.binary_constraints[n].keys())
+                neighbors = set(csp.binary_constraints[node].keys())
             except KeyError:
                 continue
-            for m in neighbors:
-                val_neigh = assignments[m]
-                if csp.binary_constraints[n][m][val][val_neigh] == 0:
-                    conflicted += [n, m]
+            for neighbor in neighbors:
+                val_neigh = assignments[neighbor]
+                if csp.binary_constraints[node][neighbor][assigned_domain][val_neigh] == 0:
+                    conflicted += [node, neighbor]
         return set(conflicted)
 
     # returns list of node neighbors that conflict with it
@@ -164,6 +172,14 @@ class minConflicts(object):
         return domain, val, node
 
     def solve(self, max_iters=100):
+        """Attempts to map node to its domain in a manner that satisfies the constraints.
+
+        Keyword Arguments:
+            max_iters {int} -- Max number of trials allowed (default: {100}).
+
+        Returns:
+             dict -- Final domain assignment of each node.
+        """
         assignments = self.initial_var_assignment()
         for _ in range(max_iters):
             conflicted = self.conflicted(assignments)
