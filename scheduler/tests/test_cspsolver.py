@@ -1,7 +1,8 @@
 """
 This is the test suite for cspsolver.py.
 """
-import os, sys 
+import os, sys
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from unittest import TestCase, main, skip
@@ -22,15 +23,14 @@ def create_csp2():
     return csp
 
 
-class CSP_TestCase(TestCase):
+class CspTestCase(TestCase):
     def setUp(self):
-        self.csp = CSP()
+        self.csp = create_csp1()
 
     def tearDown(self):
         self.csp = None
 
     def test_nodes(self):
-        self.csp = create_csp1()
         self.assertEqual(self.csp.nodes[0], "class1")
         self.assertEqual(self.csp.node_domains["class1"][0], "domain1")
 
@@ -48,10 +48,18 @@ class CSP_TestCase(TestCase):
         """
         Test if add unary constraint work.
         """
-        self.assertFalse(self.csp.add_unary_constraint("class2", constraint_func="1"))
+        self.assertRaises(ValueError, lambda: self.csp.add_unary_constraint
+            ("class2", constraint_func=1))
+
+    def test_add_binary_constraint(self):
+        """
+        Test if add binary constraint work.
+        """
+        self.assertRaises(ValueError, lambda: self.csp.add_binary_constraint
+            ("class2", "class1", constraint_func=1))
 
 
-class MinConflicts_TestCase(TestCase):
+class MinConflictsTestCase(TestCase):
     def setUp(self):
         csp = create_csp2()
         self.minC = minConflicts(csp)
@@ -76,6 +84,7 @@ class MinConflicts_TestCase(TestCase):
         self.assertEqual(result["class1"], "domain1")
         self.assertTrue(result["class2"] in ["domain2", "domain3", "domain4"])
         self.assertNotEqual(result["class3"], "domin5")
+
 
 if __name__ == '__main__':
     main()
