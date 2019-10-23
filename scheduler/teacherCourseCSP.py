@@ -36,45 +36,47 @@ def TeacherCourseClassCSP():
                 # nodes have format (c,p)
                 for c in courses:
                     p = full_prof_assignment[c]
-                    if p==None: continue
+                    if p is None:
+                        continue
                     domain = [(r, h) for r in rooms for h in hours_for_prof(p)]
                     node_name = (c, p)
                     csp.add_node(node_name, domain)
-                    
+
         def profs_for_courses(courses):
                 profs_chosen = {c: None for c in courses}
                 for c in courses:
                         hits = []
                         for p in professors:
                                 their_courses = prof_info[p]['courses']
-                                if c in their_courses: hits.append(p)
+                                if c in their_courses:
+                                    hits.append(p)
                         profs_chosen[c] = random.choice(hits)
                 return profs_chosen
-        
+
         # Soft constraint. Returns courses assigned to days
         def courses_per_day():
                 course_days_choice = dict([(c, days_for_course(c)) for c in courses])
                 weekdays = ['mon', 'tues', 'wed', 'thur', 'fri']
-                courses_on_days = dict([(d,[]) for d in weekdays])
+                courses_on_days = dict([(d, []) for d in weekdays])
                 for c, days in course_days_choice.items():
                         for d in days:
                                 courses_on_days[d].append(c)
                 return courses_on_days
-        
+
         def days_for_course(c):
                 m = course_mins[c]
-                n = min(course_days_weekly[c],5)
+                n = min(course_days_weekly[c], 5)
                 days_chosen = []
                 # Pairs Mon-Wed and Thurs-Fri preferred for 2-4 days per week
-                if 2<=n and n<=4:
+                if 2 <= n and n <= 4:
                         workdays = ['mon', 'wed', 'thur', 'fri']*2 + ['tues']
-                elif n==1:
+                elif n == 1:
                         workdays = ['mon', 'tues', 'wed', 'thur', 'fri']
                 else:
                         return ['mon', 'tues', 'wed', 'thur', 'fri']
                 for i in range(n):
                         d = random.choice(workdays)
-                        if i==0:
+                        if i == 0:
                                 if d in ['mon', 'wed']:
                                         pref = ['mon', 'wed']
                                         pref.remove(d)
@@ -94,14 +96,13 @@ def TeacherCourseClassCSP():
                                 workdays.remove(d)
                         days_chosen.append(d)
                 return days_chosen
-                                
-                
+
         def hours_for_prof(p):
                 start_time = prof_info[p]['start_time']
                 end_time = prof_info[p]['end_time']
                 return {(i, j*30) for i in range(start_time, end_time) for j in range(2)}
 
-        def add_unary():                       
+        def add_unary():
             for n in csp.nodes:
                 c, p = n
 
