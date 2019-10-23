@@ -55,10 +55,10 @@ def TeacherCourseClassCSP():
 
         # Soft constraint. Returns courses assigned to days
         def courses_per_day():
-                course_days_choice = dict([(c, days_for_course(c)) for c in courses])
+                course_days = dict([(c, days_for_course(c)) for c in courses])
                 weekdays = ['mon', 'tues', 'wed', 'thur', 'fri']
                 courses_on_days = dict([(d, []) for d in weekdays])
-                for c, days in course_days_choice.items():
+                for c, days in course_days.items():
                         for d in days:
                                 courses_on_days[d].append(c)
                 return courses_on_days
@@ -80,17 +80,20 @@ def TeacherCourseClassCSP():
                                 if d in ['mon', 'wed']:
                                         pref = ['mon', 'wed']
                                         pref.remove(d)
-                                        days = ['mon', 'tues', 'wed', 'thur', 'fri']
+                                        days = ['mon', 'tues', 'wed',
+                                                'thur', 'fri']
                                         days.remove(d)
                                         workdays = days + pref
                                 elif d in ['thur', 'fri']:
                                         pref = ['thur', 'fri']
                                         pref.remove(d)
-                                        days = ['mon', 'tues', 'wed', 'thur', 'fri']
+                                        days = ['mon', 'tues', 'wed',
+                                                'thur', 'fri']
                                         days.remove(d)
                                         workdays = days + pref
                                 else:
-                                        workdays = ['mon', 'wed', 'thur', 'fri']
+                                        workdays = ['mon', 'wed',
+                                                    'thur', 'fri']
                         else:
                                 workdays = list(set(workdays))
                                 workdays.remove(d)
@@ -100,7 +103,8 @@ def TeacherCourseClassCSP():
         def hours_for_prof(p):
                 start_time = prof_info[p]['start_time']
                 end_time = prof_info[p]['end_time']
-                return {(i, j*30) for i in range(start_time, end_time) for j in range(2)}
+                return {(i, j*30) for i in range(start_time, end_time)
+                        for j in range(2)}
 
         def add_unary():
             for n in csp.nodes:
@@ -124,22 +128,33 @@ def TeacherCourseClassCSP():
                                             continue
                                         '''first binary constraint'''
                                         # no class ol = no class overlap
-                                        def no_class_ol(val1, val2, course1=course_n, course2=course_m):
-                                            # makes the math easy: calculate course times in 10min intervals e.g. 120min is 12 intervals
-                                            hours1, mins1 = val1[1]
-                                            hours2, mins2 = val2[1]
-                                            course_start1 = hours1*6 + mins1//10
-                                            course_end1 = course_start1 + course_mins[course1]//10
-                                            course_start2 = hours2*6 + mins2//10
-                                            course_end2 = course_start2 + course_mins[course2]//10
-                                            # conditions to check if one class starts during other
-                                            if course_start1 <= course_start2 and course_start2 < course_end1:
-                                                return bool(False)
-                                            if course_start2 <= course_start1 and course_start1 < course_end2:
-                                                return bool(False)
+                                        # c1 = course_1
+                                        # c2 = course_2
+                                        def no_class_ol(val1, val2,
+                                                        c1=course_n,
+                                                        c2=course_m):
+                                            # makes the math easy: calculate
+                                            # course times in 10min intervals
+                                            # e.g. 120min is 12 intervals
+                                            hrs1, mins1 = val1[1]
+                                            hrs2, mins2 = val2[1]
+                                            # start1 = course_start1
+                                            # end1 = course_end1
+                                            start1 = hrs1*6 + mins1//10
+                                            end1 = start1 + course_mins[c1]//10
+                                            start2 = hrs2*6 + mins2//10
+                                            end2 = start2 + course_mins[c2]//10
+                                            # conditions to check if
+                                            # one class starts during other
+                                            if start1 <= start2:
+                                                if start2 < end1:
+                                                    return bool(False)
+                                            if start2 <= start1:
+                                                if start1 < end2:
+                                                    return bool(False)
                                             # soft constraint part
-                                            if course_start1 == course_end2
-                                            or course_start2 == course_end1:
+                                            if start1 == end2
+                                            or start2 == end1:
                                                 return 2
                                             return bool(True)
                                     csp.add_binary_constraint(n, m, no_class_ol)
@@ -149,11 +164,11 @@ def TeacherCourseClassCSP():
                                     room2, time2 = val2
                                     if room1 != room2:
                                         return bool(True)
-                                    hours1, mins1 = time1
-                                    hours2, mins2 = time2
-                                    start_time1 = hours1*6 + mins1//10
+                                    hrs1, mins1 = time1
+                                    hrs2, mins2 = time2
+                                    start_time1 = hrs1*6 + mins1//10
                                     end_time1 = start_time1 + course_mins[course1]//10
-                                    start_time2 = hours2*6 + mins2//10
+                                    start_time2 = hrs2*6 + mins2//10
                                     if start_time1 <= start_time2 and start_time2 < end_time1:
                                         return bool(False)
                                     return bool(True)
