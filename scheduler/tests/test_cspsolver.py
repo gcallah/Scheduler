@@ -23,9 +23,25 @@ def create_csp2():
     return csp
 
 
+def create_user_data():
+    courses = ["physics"]
+    professors = ['John Smith']
+    rooms = ["648"]
+    room_capacities = {'648': 30, '649': 40}
+    course_no_students = {'physics': 35}
+    course_mins = {'physics': 60}
+    course_no_sections = {'physics': 2}
+    course_days_weekly = {'physics': 3}
+    prof_info = {'John Smith': {'courses': ['physics', 'chemistry'], 'start_time': 8, 'end_time': 17}}
+    user_data = professors, prof_info, rooms, room_capacities, courses, \
+                course_no_students, course_no_sections, course_mins, course_days_weekly
+    return user_data
+
+
 class CspTestCase(TestCase):
     def setUp(self):
         self.csp = create_csp1()
+        self.data = create_user_data()
 
     def tearDown(self):
         self.csp = None
@@ -44,19 +60,29 @@ class CspTestCase(TestCase):
         self.csp.add_node("class2", ["domain2"])
         self.assertEqual(len(self.csp.nodes), 2)
 
+    def room_has_capacity(self, room, course):
+        no_students = self.data[5][course]
+        return bool(self.data[3][room] >= no_students)
+
+    def test_unary_constraint(self):
+        result = self.room_has_capacity("648", "physics")
+        self.assertFalse(result)
+        result = self.room_has_capacity("649", "physics")
+        self.assertTrue(result)
+
     def test_add_unary_constraint(self):
         """
         Test if add unary constraint work.
         """
         self.assertRaises(ValueError, lambda: self.csp.add_unary_constraint
-            ("class2", constraint_func=1))
+        ("class2", constraint_func=1))
 
     def test_add_binary_constraint(self):
         """
         Test if add binary constraint work.
         """
         self.assertRaises(ValueError, lambda: self.csp.add_binary_constraint
-            ("class2", "class1", constraint_func=1))
+        ("class2", "class1", constraint_func=1))
 
 
 class MinConflictsTestCase(TestCase):
