@@ -9,14 +9,17 @@ classes CSP and minConflicts below define
 
 class CSP(object):
     def __init__(self):
+        """Constraint Satisfaction Problem class.
+
+        Attributes:
+            nodes {list} -- A list of nodes (course, professor).
+            node_domains {dict} -- Maps each node to its domain (rooms, hours). 
+            unary_constraints {dict} -- Maps each node to its unary constraints.
+            binary_constraints {dict} -- Maps each node to its binary constraints.
+        """
         self.nodes = []
-        # describes the domain of values assignable to the node
         self.node_domains = {}
-        # constraints depending only on a singular node,
-        # 0,1 depending on node value
         self.unary_constraints = {}
-        # binary constraints depending on node pair,
-        # 0,1 or 2 depending on node values
         self.binary_constraints = {}
 
     def add_node(self, node, domain):
@@ -136,29 +139,37 @@ class minConflicts(object):
                     conflicted += [node, neighbor]
         return set(conflicted)
 
-    # returns list of node neighbors that conflict with it
-    def conflicted_neighbors(self, assignments, n):
+    def conflicted_neighbors(self, assignments, node):
+        """Returns a list of neighbors taht conflict with it.
+
+        Arguments:
+            assignments {dict} -- Random domain assignment of each node.
+            node {tuple} -- A tuple of (course, professor).
+
+        Returns:
+            list -- A list of neighbors that conflict with the node.
+        """
         conflicted = []
-        val = assignments[n]
+        val = assignments[node]
         csp = self.csp
         soft_weight = 1
         # proportional to number of soft-constraints satisfied
         # checks for missing keys on unary constraints
         try:
-            if csp.unary_constraints[n][val] == 0:
-                conflicted.append(n)
+            if csp.unary_constraints[node][val] == 0:
+                conflicted.append(node)
         except BaseException:
             pass
         # checks on binary constraints
         try:
-            neighbors = set(csp.binary_constraints[n].keys())
+            neighbors = set(csp.binary_constraints[node].keys())
         except BaseException:
             return (set(conflicted), soft_weight)
         for m in neighbors:
             val_neigh = assignments[m]
-            w = csp.binary_constraints[n][m][val][val_neigh]
+            w = csp.binary_constraints[node][m][val][val_neigh]
             if w == 0:
-                conflicted += [n, m]
+                conflicted += [node, m]
             else:
                 soft_weight *= w
         return (set(conflicted), soft_weight)
