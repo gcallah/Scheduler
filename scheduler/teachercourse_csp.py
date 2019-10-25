@@ -13,13 +13,14 @@ def assigner(user_data):
         for c in courses:
             # enforce room consistency
             if rooms_chosen.get(c) is None:
-                rooms_for_course = rooms
+                # rooms_course = rooms for course
+                rooms_course = rooms
             else:
-                rooms_for_course = rooms_chosen[c]
+                rooms_course = rooms_chosen[c]
             p = full_prof_assignment[c]
             if p is None:
                 continue
-            domain = [(r, h) for r in rooms_for_course for h in hours_for_prof(p)]
+            domain = [(r, h) for r in rooms_course for h in hours_for_prof(p)]
             node_name = (c, p)
             csp.add_node(node_name, domain)
 
@@ -80,9 +81,11 @@ def assigner(user_data):
 
     def hours_for_prof(p):
         # in format (hours,minutes) in 30min intervals
-        start_time = prof_info[p]['start_time']
-        end_time = prof_info[p]['end_time']
-        return {(i, j * 30) for i in range(start_time, end_time) for j in range(2)}
+        # start = start_time
+        # end = end_time
+        start = prof_info[p]['start_time']
+        end = prof_info[p]['end_time']
+        return {(i, j * 30) for i in range(start, end) for j in range(2)}
 
     def add_unary():
         for n in csp.nodes:
@@ -102,20 +105,22 @@ def assigner(user_data):
             for m in nodes[i:]:
                 course_m, prof_m = m
                 if prof_n == prof_m:
-                    if course_n == course_m: continue
+                    if course_n == course_m:
+                        continue
                     '''first binary constraint'''
 
-                    def no_class_overlap(val1, val2, course1=course_n, course2=course_m):
+                    # c1 = course_1, c2 = course_2
+                    def no_class_overlap(val1, val2, c1=course_n, c2=course_m):
                         # makes the math easy: calculate course times in
                         # 10min intervals e.g. 120min is 12 intervals
                         hours1, mins1 = val1[1]
                         hours2, mins2 = val2[1]
                         course_start1 = hours1 * 6 + mins1 // 10
                         course_end1 = course_start1 + \
-                                      course_mins[course1] // 10
+                            course_mins[c1] // 10
                         course_start2 = hours2 * 6 + mins2 // 10
                         course_end2 = course_start2 + \
-                                      course_mins[course2] // 10
+                            course_mins[c2] // 10
                         # conditions to check if one class starts during other
                         if course_start1 <= course_start2 < course_end1:
                             return bool(False)
@@ -149,7 +154,7 @@ def assigner(user_data):
 
     # get the professor-course-room data from the function argument
     professors, prof_info, rooms, room_capacities, courses, \
-    course_no_students, course_mins, course_days_weekly = user_data
+        course_no_students, course_mins, course_days_weekly = user_data
 
     # enforce professor-course consistency among different days
     full_prof_assignment = profs_for_courses(courses)
