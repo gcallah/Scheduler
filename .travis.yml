@@ -10,4 +10,8 @@ services:
 install:
     - pip install -r scheduler/docker/requirement-dev.txt
 
-script: python scheduler/tests/test_cspsolver.py
+script: 
+    - python scheduler/tests/test_cspsolver.py
+    - coverage run scheduler/cspsolver.py
+    - coverage run scheduler/teachercourse_csp.py
+    - coverage report
