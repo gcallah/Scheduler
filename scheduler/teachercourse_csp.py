@@ -3,51 +3,51 @@ from cspsolver import CSP, minConflicts
 import random
 
 """
-takes in the data file and outputs class schedules for each weekday
+Takes in the data file and outputs class schedules for each weekday.
 """
 
 
 def assigner(user_data):
     def add_nodes():
         # nodes have format (c,p)
-        for c in courses:
+        for course in courses:
             # enforce room consistency
-            if rooms_chosen.get(c) is None:
+            if rooms_chosen.get(course) is None:
                 # rooms_course = rooms for course
                 rooms_course = rooms
             else:
-                rooms_course = rooms_chosen[c]
-            p = full_prof_assignment[c]
-            if p is None:
+                rooms_course = rooms_chosen[course]
+            professor = full_prof_assignment[course]
+            if professor is None:
                 continue
-            domain = [(r, h) for r in rooms_course for h in hours_for_prof(p)]
-            node_name = (c, p)
+            domain = [(room, hour) for room in rooms_course for hour in hours_for_prof(professor)]
+            node_name = (course, professor)
             csp.add_node(node_name, domain)
 
     def profs_for_courses(courses):
-        profs_chosen = {c: None for c in courses}
-        for c in courses:
+        profs_chosen = {course: None for course in courses}
+        for course in courses:
             hits = []
-            for p in professors:
-                their_courses = prof_info[p]['courses']
-                if c in their_courses:
-                    hits.append(p)
+            for professor in professors:
+                their_courses = prof_info[professor]['courses']
+                if course in their_courses:
+                    hits.append(professor)
             if hits:
-                profs_chosen[c] = random.choice(hits)
+                profs_chosen[course] = random.choice(hits)
         return profs_chosen
 
     # Soft constraint. Assigns courses randomly weighted to preferred days
     def courses_per_day():
-        course_days_choice = dict([(c, days_for_course(c)) for c in courses])
+        course_days_choice = dict([(course, days_for_course(course)) for course in courses])
         weekdays = ['mon', 'tues', 'wed', 'thur', 'fri']
-        courses_on_days = dict([(d, []) for d in weekdays])
-        for c, days in course_days_choice.items():
-            for d in days:
-                courses_on_days[d].append(c)
+        courses_on_days = dict([(day, []) for day in weekdays])
+        for course, days in course_days_choice.items():
+            for day in days:
+                courses_on_days[day].append(course)
         return courses_on_days
 
-    def days_for_course(c):
-        n = min(course_days_weekly[c], 5)
+    def days_for_course(course):
+        n = min(course_days_weekly[course], 5)
         days_chosen = []
         # Pairs Mon-Wed and Thurs-Fri preferred if course runs 2 - 4 days
         if 2 <= n <= 4:
@@ -79,24 +79,24 @@ def assigner(user_data):
             days_chosen.append(d)
         return days_chosen
 
-    def hours_for_prof(p):
+    def hours_for_prof(professor):
         # in format (hours,minutes) in 30min intervals
         # start = start_time
         # end = end_time
-        start = prof_info[p]['start_time']
-        end = prof_info[p]['end_time']
+        start = prof_info[professor]['start_time']
+        end = prof_info[professor]['end_time']
         return {(i, j * 30) for i in range(start, end) for j in range(2)}
 
     def add_unary():
-        for n in csp.nodes:
-            c, p = n
+        for node in csp.nodes:
+            course, professor = node
 
-            def room_has_capacity(val, course=c, prof=p):
+            def room_has_capacity(val, course=course, prof=professor):
                 room, hour_and_min = val
                 no_students = course_no_students[course]
                 return bool(room_capacities[room] >= no_students)
 
-            csp.add_unary_constraint((c, p), room_has_capacity)
+            csp.add_unary_constraint((course, professor), room_has_capacity)
 
     def add_binary():
         nodes = csp.nodes
