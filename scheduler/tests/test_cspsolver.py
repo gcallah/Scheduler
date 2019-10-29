@@ -87,7 +87,7 @@ class CspTestCase(TestCase):
 
     def no_class_overlap(self, val1, val2, course1, course2):
         """
-            Constraint function for binary
+            Time constraint function for binary
         """
         course_min = self.data[5]
         hours1, mins1 = val1[1]
@@ -105,10 +105,55 @@ class CspTestCase(TestCase):
             return bool(False)
         # soft constraint: non-sequential classes
         # get higher weight
-        if course_start1 == course_end2 \
-                or course_start2 == course_end1:
+        if course_start1 == course_end2 or course_start2 == course_end1:
             return 2
         return bool(True)
+
+    def test_binary_time(self):
+        """
+        Test if add unary constraint of time work.
+        """
+        val1 = ["648",(5,60)]
+        val2 = ["648", (5,60)]
+        self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
+        val1 = ["648",(6,10)]
+        self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
+        val1 = ["648", (6, 60)]
+        self.assertTrue(self.no_class_overlap(val1, val2, "physics", "chemistry"))
+        val1 = ["648", (6, 20)]
+        self.assertEqual(2, self.no_class_overlap(val1, val2, "physics", "chemistry"))
+
+    def no_time_clash(self, val1, val2, course):
+        """
+            Class constraint function for binary
+        """
+        course_min = self.data[5]
+        room1, time1 = val1
+        room2, time2 = val2
+        if room1 != room2:
+            return bool(True)
+        hours1, mins1 = time1
+        hours2, mins2 = time2
+        start_time1 = hours1 * 6 + mins1 // 10
+        end_time1 = start_time1 + course_min[course] // 10
+        start_time2 = hours2 * 6 + mins2 // 10
+        if start_time1 <= start_time2 < end_time1:
+            return bool(False)
+        return bool(True)
+
+    def test_binary_time(self):
+        """
+        Test if add unary constraint work.
+        """
+        val1 = ["648",(5,60)]
+        val2 = ["648", (5,60)]
+        self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
+        val1 = ["648",(6,10)]
+        self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
+        val1 = ["648", (6, 60)]
+        self.assertTrue(self.no_class_overlap(val1, val2, "physics", "chemistry"))
+        val1 = ["648", (6, 20)]
+        self.assertEqual(2, self.no_class_overlap(val1, val2, "physics", "chemistry"))
 
     def test_add_binary_constraint(self):
         """
