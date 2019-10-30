@@ -13,9 +13,11 @@ class CSP(object):
 
         Attributes:
             nodes {list} -- A list of nodes (course, professor).
-            node_domains {dict} -- Maps each node to its domain (rooms, hours). 
-            unary_constraints {dict} -- Maps each node to its unary constraints.
-            binary_constraints {dict} -- Maps each node to its binary constraints.
+            node_domains {dict} -- Maps each node to its domain (rooms, hours).
+            unary_constraints {dict} -- Maps each node to its
+                                        unary constraints
+            binary_constraints {dict} -- Maps each node to its
+                                         binary constraints
         """
         self.nodes = []
         self.node_domains = {}
@@ -64,7 +66,7 @@ class CSP(object):
             constraint_func {function} -- A constraint function.
 
         Raises:
-            ValueError: Raises ValueError if either node has not been added yet.
+            ValueError: Raises ValueError if either node has not been added yet
         """
         if node1 not in self.nodes or node2 not in self.nodes:
             raise ValueError("{} or {} were not added.".format(node1, node2))
@@ -183,7 +185,8 @@ class minConflicts(object):
         return domain, val, node
 
     def solve(self, max_iters=100):
-        """Attempts to map node to its domain in a manner that satisfies the constraints.
+        """Attempts to map node to its domain
+        in a manner that satisfies the constraints.
 
         Keyword Arguments:
             max_iters {int} -- Max number of trials allowed (default: {100}).
