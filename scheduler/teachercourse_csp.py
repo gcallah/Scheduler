@@ -59,25 +59,25 @@ def assigner(user_data):
         for i in range(n):
             d = random.choice(workdays)
             if i == 0:
-                if d in ['mon', 'wed']:
-                    pref = ['mon', 'wed']
-                    pref.remove(d)
-                    days = ['mon', 'tues', 'wed', 'thur', 'fri']
-                    days.remove(d)
-                    workdays = days + pref
-                elif d in ['thur', 'fri']:
-                    pref = ['thur', 'fri']
-                    pref.remove(d)
-                    days = ['mon', 'tues', 'wed', 'thur', 'fri']
-                    days.remove(d)
-                    workdays = days + pref
-                else:
-                    workdays = ['mon', 'wed', 'thur', 'fri']
+                workdays = pref_handler(d)
             else:
                 workdays = list(set(workdays))
                 workdays.remove(d)
             days_chosen.append(d)
         return days_chosen
+
+    def pref_handler(rand_day):
+        days = ['mon', 'tues', 'wed', 'thur', 'fri']
+        if rand_day in ['mon', 'wed']:
+            pref = ['mon', 'wed']
+        elif rand_day in ['thur', 'fri']:
+            pref = ['thur', 'fri']
+        else:
+            return ['mon', 'wed', 'thur', 'fri']
+        pref.remove(rand_day)
+        days.remove(rand_day)
+        workdays = days + pref
+        return workdays
 
     def hours_for_prof(professor):
         # in format (hours,minutes) in 30min intervals
