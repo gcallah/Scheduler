@@ -87,7 +87,7 @@ class CspTestCase(TestCase):
 
     def no_class_overlap(self, val1, val2, course1, course2):
         """
-            Time constraint function for binary
+            Class constraint function for binary
         """
         course_min = self.data[5]
         hours1, mins1 = val1[1]
@@ -109,19 +109,20 @@ class CspTestCase(TestCase):
             return 2
         return bool(True)
 
-    def test_binary_time(self):
+    def test_binary_class(self):
         """
-        Test if add unary constraint of time work.
+        Test if binary constraint of class work.
         """
         val1 = ["648",(5,60)]
         val2 = ["648", (5,60)]
         self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
-        val1 = ["648",(6,10)]
+        val1[1] = (6,10)
         self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
-        val1 = ["648", (6, 60)]
+        val1[1] = (6, 60)
         self.assertTrue(self.no_class_overlap(val1, val2, "physics", "chemistry"))
-        val1 = ["648", (6, 20)]
+        val1[1] = (6, 20)
         self.assertEqual(2, self.no_class_overlap(val1, val2, "physics", "chemistry"))
+
 
     def no_time_clash(self, val1, val2, course):
         """
@@ -143,17 +144,16 @@ class CspTestCase(TestCase):
 
     def test_binary_time(self):
         """
-        Test if add unary constraint work.
+        Test if binary constraint of time work.
         """
         val1 = ["648",(5,60)]
-        val2 = ["648", (5,60)]
-        self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
-        val1 = ["648",(6,10)]
-        self.assertFalse(self.no_class_overlap(val1, val2, "physics", "chemistry"))
-        val1 = ["648", (6, 60)]
-        self.assertTrue(self.no_class_overlap(val1, val2, "physics", "chemistry"))
-        val1 = ["648", (6, 20)]
-        self.assertEqual(2, self.no_class_overlap(val1, val2, "physics", "chemistry"))
+        val2 = ["649", (5,60)]
+        self.assertTrue(self.no_time_clash(val1, val2, "physics"))
+        val1[0] = "649"
+        self.assertFalse(self.no_time_clash(val1, val2, "physics"))
+        val2[1] = (3,60)
+        self.assertTrue(self.no_time_clash(val1, val2, "physics"))
+
 
     def test_add_binary_constraint(self):
         """
