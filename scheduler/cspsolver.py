@@ -124,7 +124,6 @@ class minConflicts(object):
             if node in conflicted:
                 continue
             assigned_domain = assignments[node]
-            # make sure no KeyError on unary and binary constraints
             try:
                 if self.csp.unary_constraints[node][assigned_domain] == 0:
                     conflicted.add(node)
@@ -135,12 +134,12 @@ class minConflicts(object):
                 for neighbor in neighbors:
                     val_neigh = assignments[neighbor]
                     if self.csp.binary_constraints[node][neighbor][assigned_domain][val_neigh] == 0:
-                        conflicted.add(node) 
+                        conflicted.add(node)
                         conflicted.add(neighbor)
         return conflicted
 
     def conflicted_neighbors(self, assignments, node):
-        """Returns a list of neighbors taht conflict with it.
+        """Returns a list of neighbors that conflict with the node.
 
         Arguments:
             assignments {dict} -- Random domain assignment of each node.
@@ -151,31 +150,35 @@ class minConflicts(object):
         """
         conflicted = []
         val = assignments[node]
-        csp = self.csp
         soft_weight = 1
         # proportional to number of soft-constraints satisfied
         # checks for missing keys on unary constraints
         try:
-            if csp.unary_constraints[node][val] == 0:
+            if self.csp.unary_constraints[node][val] == 0:
                 conflicted.append(node)
-        except BaseException:
+        except KeyError:
             pass
-        # checks on binary constraints
-        try:
-            neighbors = set(csp.binary_constraints[node].keys())
-        except BaseException:
-            return (set(conflicted), soft_weight)
-        for m in neighbors:
-            val_neigh = assignments[m]
-            w = csp.binary_constraints[node][m][val][val_neigh]
-            if w == 0:
-                conflicted += [node, m]
-            else:
-                soft_weight *= w
+        if node in self.csp.binary_constraints: 
+            neighbors = set(self.csp.binary_constraints[node].keys())
+            for neigh in neighbors:
+                val_neigh = assignments[neigh]
+                w = self.csp.binary_constraints[node][neigh][val][val_neigh]
+                if w == 0:
+                    conflicted += [node, neigh]
+                else:
+                    soft_weight *= w
         return (set(conflicted), soft_weight)
 
-    # choose a random conflicted variable
     def rand_conflict_var(self, conflicted, assignments):
+        """Chooses a random conflicted variable.
+
+        Arguments:
+            conflicted {set} -- A set of conflicted nodes.
+            assignments {dict} -- Random domain assignment of each node.
+
+        Returns:
+            tuple -- A tuple of (rooms, hours), assigned values, and node.
+        """
         node = random.choice(list(conflicted))
         val = assignments[node]
         domain = self.csp.node_domains[node]
