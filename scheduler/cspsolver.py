@@ -119,27 +119,25 @@ class minConflicts(object):
         Returns:
             set -- A set of conflicted nodes.
         """
-        conflicted = []
-        csp = self.csp
+        conflicted = set()
         for node in assignments:
             if node in conflicted:
                 continue
             assigned_domain = assignments[node]
             # make sure no KeyError on unary and binary constraints
             try:
-                if csp.unary_constraints[node][assigned_domain] == 0:
-                    conflicted.append(node)
+                if self.csp.unary_constraints[node][assigned_domain] == 0:
+                    conflicted.add(node)
             except KeyError:
                 pass
-            try:
-                neighbors = set(csp.binary_constraints[node].keys())
-            except KeyError:
-                continue
-            for neighbor in neighbors:
-                val_neigh = assignments[neighbor]
-                if csp.binary_constraints[node][neighbor][assigned_domain][val_neigh] == 0:
-                    conflicted += [node, neighbor]
-        return set(conflicted)
+            if node in self.csp.binary_constraints: 
+                neighbors = set(self.csp.binary_constraints[node].keys())
+                for neighbor in neighbors:
+                    val_neigh = assignments[neighbor]
+                    if self.csp.binary_constraints[node][neighbor][assigned_domain][val_neigh] == 0:
+                        conflicted.add(node) 
+                        conflicted.add(neighbor)
+        return conflicted
 
     def conflicted_neighbors(self, assignments, node):
         """Returns a list of neighbors taht conflict with it.
