@@ -116,8 +116,11 @@ class minConflicts(object):
             if node in conflicted:
                 continue
             assigned_domain = assignments[node]
-            if self.csp.unary_constraints[node][assigned_domain] == 0:
-                conflicted.add(node)
+            try: 
+                if self.csp.unary_constraints[node][assigned_domain] == 0:
+                    conflicted.add(node)
+            except KeyError: 
+                pass
             if node in self.csp.binary_constraints: 
                 neighbors = set(self.csp.binary_constraints[node].keys())
                 for neighbor in neighbors:
