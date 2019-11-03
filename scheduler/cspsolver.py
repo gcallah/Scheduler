@@ -31,10 +31,9 @@ class CSP(object):
             node {tuple} -- A tuple of (course, professor).
             domain {list} -- A list of domains (rooms, hours) for the node.
         """
-        if node in self.nodes:
-            return
-        self.nodes.append(node)
-        self.node_domains[node] = domain
+        if node not in self.nodes: 
+            self.nodes.append(node)
+            self.node_domains[node] = domain
 
     def add_unary_constraint(self, node, constraint_func):
         """Adds an unary constraint to an existing node.
@@ -48,14 +47,13 @@ class CSP(object):
         """
         if node not in self.nodes:
             raise ValueError(node, "was not added.")
-        domain = self.node_domains[node]
-        factor = {val: constraint_func(val) for val in domain}
-        # case where no constraints existed
-        if node not in self.unary_constraints.keys():
+        node_domain = self.node_domains[node]
+        factor = {domain: constraint_func(domain) for domain in node_domain}
+        if node not in self.unary_constraints:
             self.unary_constraints[node] = factor
         else:
             self.unary_constraints[node] = ({val: self.unary_constraints[node][val]
-                                            * factor[val] for val in domain})
+                                            * factor[val] for val in node_domain})
 
     def add_binary_constraint(self, node1, node2, constraint_func):
         """Adds a binary constraint to two existing nodes.
@@ -81,17 +79,15 @@ class CSP(object):
 
     def update_binary_constraint_table(self, node_a, node_b, table_factor):
         if node_a not in self.binary_constraints.keys():
-            self.binary_constraints[node_a] = {}
+            self.binary_constraints[node_a] = {node_b:table_factor}
+        elif node_b not in self.binary_constraints[node_a].keys():
             self.binary_constraints[node_a][node_b] = table_factor
-            return
-        if node_b not in self.binary_constraints[node_a].keys():
-            self.binary_constraints[node_a][node_b] = table_factor
-            return
-        current_table = self.binary_constraints[node_a][node_b]
-        for i in table_factor:
-            for j in table_factor[i]:
-                assert i in current_table and j in current_table[i]
-                current_table[i][j] *= table_factor[i][j]
+        else:
+            current_table = self.binary_constraints[node_a][node_b]
+            for i in table_factor:
+                for j in table_factor[i]:
+                    assert i in current_table and j in current_table[i]
+                    current_table[i][j] *= table_factor[i][j]
 
 
 class minConflicts(object):
@@ -104,11 +100,7 @@ class minConflicts(object):
         Returns:
             dict -- Random domain assignment of each node.
         """
-        assignments = {}
-        for node in self.csp.nodes:
-            rand_domain = random.choice(self.csp.node_domains[node])
-            assignments[node] = rand_domain
-        return assignments
+        return {node:random.choice(self.csp.node_domains[node]) for node in self.csp.nodes}
 
     def conflicted(self, assignments):
         """Finds a set of conflicted nodes (which evaluate to zero).
@@ -124,11 +116,8 @@ class minConflicts(object):
             if node in conflicted:
                 continue
             assigned_domain = assignments[node]
-            try:
-                if self.csp.unary_constraints[node][assigned_domain] == 0:
-                    conflicted.add(node)
-            except KeyError:
-                pass
+            if self.csp.unary_constraints[node][assigned_domain] == 0:
+                conflicted.add(node)
             if node in self.csp.binary_constraints: 
                 neighbors = set(self.csp.binary_constraints[node].keys())
                 for neighbor in neighbors:
@@ -148,26 +137,24 @@ class minConflicts(object):
         Returns:
             list -- A list of neighbors that conflict with the node.
         """
-        conflicted = []
-        val = assignments[node]
+        conflicted = set()
+        domain = assignments[node]
         soft_weight = 1
         # proportional to number of soft-constraints satisfied
         # checks for missing keys on unary constraints
-        try:
-            if self.csp.unary_constraints[node][val] == 0:
-                conflicted.append(node)
-        except KeyError:
-            pass
+        if self.csp.unary_constraints[node][domain] == 0:
+            conflicted.add(node)
         if node in self.csp.binary_constraints: 
-            neighbors = set(self.csp.binary_constraints[node].keys())
+            neighbors = self.csp.binary_constraints[node].keys()
             for neigh in neighbors:
-                val_neigh = assignments[neigh]
-                w = self.csp.binary_constraints[node][neigh][val][val_neigh]
-                if w == 0:
-                    conflicted += [node, neigh]
+                neigh_domain = assignments[neigh]
+                weight = self.csp.binary_constraints[node][neigh][domain][neigh_domain]
+                if weight == 0:
+                    conflicted.add(node) 
+                    conflicted.add(neigh)
                 else:
-                    soft_weight *= w
-        return (set(conflicted), soft_weight)
+                    soft_weight *= weight
+        return (conflicted, soft_weight)
 
     def rand_conflict_var(self, conflicted, assignments):
         """Chooses a random conflicted variable.
@@ -179,7 +166,7 @@ class minConflicts(object):
         Returns:
             tuple -- A tuple of (rooms, hours), assigned values, and node.
         """
-        node = random.choice(list(conflicted))
+        node = random.choice(tuple(conflicted))
         val = assignments[node]
         domain = self.csp.node_domains[node]
         random.shuffle(domain)
@@ -220,5 +207,4 @@ class minConflicts(object):
                     if r < w / (w + w0):
                         w0 = w
                         assignments = assignments_cpy
-
         return False  # process failed

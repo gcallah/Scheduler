@@ -1,11 +1,80 @@
 from cspsolver import CSP, minConflicts
 
 import random
+import collections
 
 """
 Takes in the data file and outputs class schedules for each weekday.
 """
 
+MONDAY = 'mon' 
+TUESDAY = 'tues' 
+WEDNEWSDAY = 'wed' 
+THURSDAY = 'thur' 
+FRIDAY = 'fri'
+WEEKDAYS = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+
+def pref_handler(rand_day):
+    """Given a random day, return a list of days weighted by preference.
+
+    Arguments:
+        rand_day {string} -- A string representing a random day.
+
+    Returns:
+        [list] -- [A list of days weighted by preference]
+    """
+    days = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+    if rand_day == TUESDAY: 
+        return [MONDAY, WEDNEWSDAY, THURSDAY, FRIDAY] 
+    pref = [MONDAY, WEDNEWSDAY] if rand_day in (MONDAY, WEDNEWSDAY) else [THURSDAY, FRIDAY]
+    return [day for day in (pref+days) if day != rand_day]
+
+def assign_days_for_course(course_weekly_days):
+    """Assign randomly the meetings days for a class given how many time it is held weekly.
+
+    Arguments:
+        course_weekly_days {int} -- how many days the class is held per week.
+
+    Returns:
+        [list] -- A list of days chosen for the class.
+    """
+    course_weekly_days = min(course_weekly_days, 5) 
+    days_chosen = []
+    if course_weekly_days == 1:
+        workdays = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+    elif 2 <= course_weekly_days <= 4:
+        # Pairs Mon-Wed and Thurs-Fri preferred if course is held 2 - 4 days per week.
+        workdays = [MONDAY, WEDNEWSDAY, THURSDAY, FRIDAY] * 2 + [TUESDAY]
+    else:
+        return [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+    for i in range(course_weekly_days):
+        rand_day = random.choice(workdays)
+        if i == 0:
+            workdays = pref_handler(rand_day)
+        else:
+            workdays = list(set(workdays))
+            workdays.remove(rand_day)
+        days_chosen.append(rand_day)
+    return days_chosen
+
+#Soft constraint. Assigns courses randomly weighted to preferred days
+def maps_day_to_class(course_days_weekly, courses):
+    """Maps days to classes.
+
+    Arguments:
+        course_days_weekly {dict} -- A map {class: how many days it's held per week}.
+        courses {list} -- A list of classes.
+
+    Returns:
+        [dict] -- Returns a map {day: a list of classes on that day}.
+    """
+    weekdays = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+    courses_on_days = collections.defaultdict(list)
+    for course in courses: 
+        course_days = assign_days_for_course(course_days_weekly[course])
+        for day in course_days:
+            courses_on_days[day].append(course)
+    return courses_on_days
 
 def assigner(user_data):
     def add_nodes():
@@ -35,49 +104,6 @@ def assigner(user_data):
             if hits:
                 profs_chosen[course] = random.choice(hits)
         return profs_chosen
-
-    # Soft constraint. Assigns courses randomly weighted to preferred days
-    def courses_per_day():
-        course_days_choice = dict([(course, days_for_course(course)) for course in courses])
-        weekdays = ['mon', 'tues', 'wed', 'thur', 'fri']
-        courses_on_days = dict([(day, []) for day in weekdays])
-        for course, days in course_days_choice.items():
-            for day in days:
-                courses_on_days[day].append(course)
-        return courses_on_days
-
-    def days_for_course(course):
-        n = min(course_days_weekly[course], 5)
-        days_chosen = []
-        # Pairs Mon-Wed and Thurs-Fri preferred if course runs 2 - 4 days
-        if 2 <= n <= 4:
-            workdays = ['mon', 'wed', 'thur', 'fri'] * 2 + ['tues']
-        elif n == 1:
-            workdays = ['mon', 'tues', 'wed', 'thur', 'fri']
-        else:
-            return ['mon', 'tues', 'wed', 'thur', 'fri']
-        for i in range(n):
-            d = random.choice(workdays)
-            if i == 0:
-                workdays = pref_handler(d)
-            else:
-                workdays = list(set(workdays))
-                workdays.remove(d)
-            days_chosen.append(d)
-        return days_chosen
-
-    def pref_handler(rand_day):
-        days = ['mon', 'tues', 'wed', 'thur', 'fri']
-        if rand_day in ['mon', 'wed']:
-            pref = ['mon', 'wed']
-        elif rand_day in ['thur', 'fri']:
-            pref = ['thur', 'fri']
-        else:
-            return ['mon', 'wed', 'thur', 'fri']
-        pref.remove(rand_day)
-        days.remove(rand_day)
-        workdays = days + pref
-        return workdays
 
     def hours_for_prof(professor):
         # in format (hours,minutes) in 30min intervals
@@ -159,15 +185,14 @@ def assigner(user_data):
     # enforce professor-course consistency among different days
     full_prof_assignment = profs_for_courses(courses)
     rooms_chosen = {}  # rooms are consistent
-    weekdays = ['mon', 'tues', 'wed', 'thur', 'fri']
-    solution = {d: None for d in weekdays}
+    solution = {d: None for d in WEEKDAYS}
     retries = 0
     # will retry max 3 times to get a solution
     while retries < 3:
-        daily_courses = courses_per_day()
+        daily_courses = maps_day_to_class(course_days_weekly, courses)
         # upon retry increase maximum iterations
         max_iters = 100 * (retries + 1)
-        for d in weekdays:
+        for d in WEEKDAYS:
             csp = CSP()
             courses = daily_courses[d]
             add_nodes()
