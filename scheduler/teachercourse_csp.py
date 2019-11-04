@@ -78,9 +78,10 @@ def maps_day_to_class(course_days_weekly, courses):
 
 def assigner(user_data):
     def add_nodes():
-        # nodes have format (c,p)
+    	"""Adds nodes (course, professor) and its list of domains (rooms, hours) to node domains
+    	"""
         for course in courses:
-            # enforce room consistency
+            # This enforces room consistency
             if rooms_chosen.get(course) is None:
                 # rooms_course = rooms for course
                 rooms_course = rooms
