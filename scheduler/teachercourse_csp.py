@@ -138,10 +138,22 @@ def assigner(user_data):
         return {(i, j * 30) for i in range(start, end) for j in range(2)}
 
     def add_unary():
+        """Adds an unary constraint to list of nodes
+        """
         for node in csp.nodes:
             course, professor = node
 
             def room_has_capacity(val, course=course, prof=professor):
+                """Checks to see if given room has room for all students in course.
+
+                Arguments:
+                    val {tuple} -- Contains values for room and time of class.
+                    Course {string} -- Name of course.
+                    Professor {string} -- Name of professor.
+
+                Returns:
+                    [bool] -- Whether or not the room has capacity for all students in course.
+                """
                 room, hour_and_min = val
                 no_students = course_no_students[course]
                 return bool(room_capacities[room] >= no_students)
