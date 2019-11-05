@@ -87,7 +87,7 @@ def assigner(user_data):
     """
 
     def add_nodes():
-        """Adds nodes (course, professor) and its list of domains (rooms, hours) to node domains
+        """Adds nodes (course, professor) and its list of domains (rooms, hours) to node domains.
         """
         for course in courses:
             # This enforces room consistency
@@ -104,13 +104,13 @@ def assigner(user_data):
             csp.add_node(node_name, domain)
 
     def profs_for_courses(courses):
-        """Assign professors to given list of courses
+        """Assign professors to given list of courses.
 
     	Arguments:
-    	    courses {list} -- A list of classes
+    	    courses {list} -- A list of classes.
 
     	Returns:
-    	    [dict] -- Returns a map {course : professor}
+    	    [dict] -- Returns a map {course : professor}.
     	"""
         profs_chosen = {course: None for course in courses}
         for course in courses:
@@ -124,8 +124,14 @@ def assigner(user_data):
         return profs_chosen
 
     def hours_for_prof(professor):
-        # start = start_time
-        # end = end_time
+        """Assigns a professor time for their class based on their preferences
+
+        Arguments:
+            professor {string} -- A professor's name.
+
+        Returns:
+            [dict] -- A tuple of times for the professor's courses.
+        """
         start = prof_info[professor]['start_time']
         end = prof_info[professor]['end_time']
         # in format (hours,minutes) in 30min intervals
