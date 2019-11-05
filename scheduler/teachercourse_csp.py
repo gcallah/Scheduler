@@ -209,7 +209,16 @@ def assigner(user_data):
 
                 '''second binary constraint'''
                 def no_time_clash(val1, val2, course1=course_n):
+                    """Checks to see if there is a time clash for a course given two rooms and times.
 
+                    Arguments:
+                        val1 {tuple} -- Contains first set of room and time.
+                        val2 {tuple} -- Contains second set of room and time.
+                        course1 {string} -- Name of course to check for time clash.
+
+                    Returns:
+                        [bool] -- True if no time clash between rooms and times for course, false if there is time clash.
+                    """
                     room1, time1 = val1
                     room2, time2 = val2
                     if room1 != room2:
