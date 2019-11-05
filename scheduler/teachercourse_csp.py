@@ -57,9 +57,9 @@ def assign_days_for_course(course_weekly_days):
         days_chosen.append(rand_day)
     return days_chosen
 
-#Soft constraint. Assigns courses randomly weighted to preferred days
+#Soft constraint
 def maps_day_to_class(course_days_weekly, courses):
-    """Maps days to classes.
+    """Maps preferred days to classes.
 
     Arguments:
         course_days_weekly {dict} -- A map {class: how many days it's held per week}.
@@ -77,9 +77,17 @@ def maps_day_to_class(course_days_weekly, courses):
     return courses_on_days
 
 def assigner(user_data):
+    """Takes in data provided by the user and creates class schedule.
+
+    Arguments:
+        user_data {tuple} -- A tuple of lists containing the user's data information.
+
+    Returns:
+        [dict] -- Returns a map {day: a list of classes taught by professors with room numbers and times}.
+    """
     def add_nodes():
-    	"""Adds nodes (course, professor) and its list of domains (rooms, hours) to node domains
-    	"""
+        """Adds nodes (course, professor) and its list of domains (rooms, hours) to node domains
+        """
         for course in courses:
             # This enforces room consistency
             if rooms_chosen.get(course) is None:
