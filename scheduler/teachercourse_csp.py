@@ -85,6 +85,7 @@ def assigner(user_data):
     Returns:
         [dict] -- Returns a map {day: a list of classes taught by professors with room numbers and times}.
     """
+
     def add_nodes():
         """Adds nodes (course, professor) and its list of domains (rooms, hours) to node domains
         """
@@ -103,6 +104,14 @@ def assigner(user_data):
             csp.add_node(node_name, domain)
 
     def profs_for_courses(courses):
+        """Assign professors to given list of courses
+
+    	Arguments:
+    	    courses {list} -- A list of classes
+
+    	Returns:
+    	    [dict] -- Returns a map {course : professor}
+    	"""
         profs_chosen = {course: None for course in courses}
         for course in courses:
             hits = []
@@ -115,11 +124,11 @@ def assigner(user_data):
         return profs_chosen
 
     def hours_for_prof(professor):
-        # in format (hours,minutes) in 30min intervals
         # start = start_time
         # end = end_time
         start = prof_info[professor]['start_time']
         end = prof_info[professor]['end_time']
+        # in format (hours,minutes) in 30min intervals
         return {(i, j * 30) for i in range(start, end) for j in range(2)}
 
     def add_unary():
