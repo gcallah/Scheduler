@@ -161,6 +161,8 @@ def assigner(user_data):
             csp.add_unary_constraint((course, professor), room_has_capacity)
 
     def add_binary():
+        """Adds binary constraints to list of nodes.
+        """
         nodes = csp.nodes
         for i, n in enumerate(nodes):
             course_n, prof_n = n
@@ -169,12 +171,20 @@ def assigner(user_data):
                 if prof_n == prof_m:
                     if course_n == course_m:
                         continue
-                    '''first binary constraint'''
 
                     # c1 = course_1, c2 = course_2
                     def no_class_overlap(val1, val2, c1=course_n, c2=course_m):
-                        # makes the math easy: calculate course times in
-                        # 10min intervals e.g. 120min is 12 intervals
+                        """Checks to see if there is overlap in times between two courses.
+
+                        Arguments:
+                            val1 {tuple} -- Contains time of first course.
+                            val2 {tuple} -- Contains time of second course.
+                            c1 {string} -- Name of first course to check for overlap.
+                            c2 {string} -- Name of second course to check for overlap.
+
+                        Returns:
+                           [bool] -- True if no overlap exists between two classes, false if there is overlap.
+                        """
                         hours1, mins1 = val1[1]
                         hours2, mins2 = val2[1]
                         course_start1 = hours1 * 6 + mins1 // 10
@@ -196,9 +206,10 @@ def assigner(user_data):
                         return bool(True)
 
                     csp.add_binary_constraint(n, m, no_class_overlap)
-                '''second binary constraint'''
 
+                '''second binary constraint'''
                 def no_time_clash(val1, val2, course1=course_n):
+
                     room1, time1 = val1
                     room2, time2 = val2
                     if room1 != room2:
