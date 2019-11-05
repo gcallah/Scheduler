@@ -78,6 +78,13 @@ class CSP(object):
         self.update_binary_constraint_table(node2, node1, table_factor2)
 
     def update_binary_constraint_table(self, node_a, node_b, table_factor):
+        """Updates the binary constraint table given two nodes and a table factor.
+
+        Arguments:
+            node_a {tuple} -- A tuple of (course, professor).
+            node_b {tuple} -- A tuple of (course, professor).
+            table_factor {dict} -- A dictionary {True/False : (room, times)} based on nodes and constraint functions. 
+        """
         if node_a not in self.binary_constraints.keys():
             self.binary_constraints[node_a] = {node_b:table_factor}
         elif node_b not in self.binary_constraints[node_a].keys():
