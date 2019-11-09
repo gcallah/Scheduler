@@ -173,10 +173,18 @@ class CspTestCase(TestCase):
         self.csp.add_node(("chemistry", "John Smith"), [("649", (5, 60), "chemistry")])
         node1 = ("physics", "John Smith")
         node2 = ("chemistry", "John Smith")
-        domain1 = self.csp.node_domains[node1]
-        domain2 = self.csp.node_domains[node2]
-        factor1 = {val1: {val2: self.no_time_clash(val1, val2) for val2 in domain2} for val1 in domain1}
-        factor2 = {val2: {val1: self.no_time_clash(val1, val2) for val1 in domain1} for val2 in domain2}
+        node3 = ("physics", "Lisa Jones")
+        factor1 = {"factor1": {"factor2": True}}
+        factor2 = {"factor3": {"factor4": True}}
+        binary_constraint = self.csp.binary_constraints
+        self.assertEqual(binary_constraint, {})
+        self.csp.update_binary_constraint_table(node1, node2, factor1)
+        self.assertEqual(binary_constraint[node1], {node2: factor1})
+        self.csp.update_binary_constraint_table(node1, node3, factor2)
+        self.assertEqual(binary_constraint[node1], {node2: factor1, node3: factor2})
+        self.csp.update_binary_constraint_table(node1, node2, factor1)
+        self.assertEqual(binary_constraint[node1][node2], {"factor1": {"factor2": 1}})
+        self.assertEqual(binary_constraint[node1][node3], factor2)
 
     def test_add_binary_constraint(self):
         """
@@ -189,14 +197,12 @@ class CspTestCase(TestCase):
         node2 = ("chemistry", "John Smith")
         domain1 = self.csp.node_domains[node1]
         domain2 = self.csp.node_domains[node2]
-        #print("domain1: ", domain1)
-        #print("domain2: ", domain2)
         factor1 = {val1: {val2: self.no_time_clash(val1, val2) for val2 in domain2} for val1 in domain1}
-        #print("factor1: ", factor1)
         factor2 = {val2: {val1: self.no_time_clash(val1, val2) for val1 in domain1} for val2 in domain2}
-        #print("factor2: ", factor2)
         self.csp.add_binary_constraint(node1, node2, self.no_time_clash)
-        #print(self.csp.binary_constraints)
+        binary_constraint = self.csp.binary_constraints
+        self.assertEqual(binary_constraint[node1][node2], factor1)
+        self.assertEqual(binary_constraint[node2][node1], factor2)
 
 
 class MinConflictsTestCase(TestCase):
