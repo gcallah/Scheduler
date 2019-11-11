@@ -96,7 +96,7 @@ def profs_for_courses(courses, professors, prof_info):
     Arguments:
         courses {list} -- A list of classes.
         professors {list} -- A list of professors.
-        prof_info {dict} -- A dictionary mapping professor to his class info.
+        prof_info {dict} -- A dictionary mapping professor to his class info (courses taught, start_time, end_time).
 
     Returns:
         [dict] -- Returns a map {course : professor}.
@@ -108,6 +108,25 @@ def profs_for_courses(courses, professors, prof_info):
             profs_chosen[course] = random.choice(intersection)
     return profs_chosen
 
+def add_nodes(courses, rooms, rooms_chosen, full_prof_assignment, prof_info, csp):
+    """Adds nodes (course, professor) and its list of domains (rooms, hours) to csp.
+
+    Arguments:
+        courses {list} -- A list of classes.
+        rooms {list} -- A list of rooms.
+        rooms_chosen {dict} -- A dictionary mapping course to rooms.
+        full_prof_assignment {dict} -- A dictionary mapping course to professor.
+        prof_info {dict} -- A dictionary mapping professor to his class info (courses taught, start_time, end_time).
+        csp {cspsolver.CSP} -- A instance of the Constraint Satisfaction Problem class.
+    """
+    for course in courses:
+        rooms_for_course = rooms_chosen[course] if course in rooms_chosen else rooms
+        professor = full_prof_assignment[course]
+        if professor:
+            domain = [(room, hour) for room in rooms_for_course for hour in hours_for_prof(prof_info, professor)]
+            node_name = (course, professor)
+            csp.add_node(node_name, domain)
+
 def assigner(user_data):
     """Takes in data provided by the user and creates class schedule.
 
@@ -117,24 +136,6 @@ def assigner(user_data):
     Returns:
         [dict] -- Returns a map {day: a list of classes taught by professors with room numbers and times}.
     """
-
-    def add_nodes():
-        """Adds nodes (course, professor) and its list of domains (rooms, hours) to node domains.
-        """
-        for course in courses:
-            # This enforces room consistency
-            if rooms_chosen.get(course) is None:
-                # rooms_course = rooms for course
-                rooms_course = rooms
-            else:
-                rooms_course = rooms_chosen[course]
-            professor = full_prof_assignment[course]
-            if professor is None:
-                continue
-            domain = [(room, hour) for room in rooms_course for hour in hours_for_prof(prof_info, professor)]
-            node_name = (course, professor)
-            csp.add_node(node_name, domain)
-
     def add_unary():
         """Adds an unary constraint to list of nodes
         """
@@ -249,7 +250,7 @@ def assigner(user_data):
         for d in WEEKDAYS:
             csp = CSP()
             courses = daily_courses[d]
-            add_nodes()
+            add_nodes(courses, rooms, rooms_chosen, full_prof_assignment, prof_info, csp)
             add_unary()
             add_binary()
             minconf = minConflicts(csp)
