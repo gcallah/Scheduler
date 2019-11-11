@@ -90,6 +90,24 @@ def hours_for_prof(prof_info, professor_name):
     hours_set = {(i, j * 30) for i in range(start, end) for j in range(2)}
     return hours_set
 
+def profs_for_courses(courses, professors, prof_info):
+    """Assign professors to given list of courses.
+
+    Arguments:
+        courses {list} -- A list of classes.
+        professors {list} -- A list of professors.
+        prof_info {dict} -- A dictionary mapping professor to his class info.
+
+    Returns:
+        [dict] -- Returns a map {course : professor}.
+    """
+    profs_chosen = {}
+    for course in courses:
+        intersection = [professor for professor in professors if course in prof_info[professor]['courses']]
+        if intersection:
+            profs_chosen[course] = random.choice(intersection)
+    return profs_chosen
+
 def assigner(user_data):
     """Takes in data provided by the user and creates class schedule.
 
@@ -116,26 +134,6 @@ def assigner(user_data):
             domain = [(room, hour) for room in rooms_course for hour in hours_for_prof(prof_info, professor)]
             node_name = (course, professor)
             csp.add_node(node_name, domain)
-
-    def profs_for_courses(courses):
-        """Assign professors to given list of courses.
-
-    	Arguments:
-    	    courses {list} -- A list of classes.
-
-    	Returns:
-    	    [dict] -- Returns a map {course : professor}.
-    	"""
-        profs_chosen = {course: None for course in courses}
-        for course in courses:
-            hits = []
-            for professor in professors:
-                their_courses = prof_info[professor]['courses']
-                if course in their_courses:
-                    hits.append(professor)
-            if hits:
-                profs_chosen[course] = random.choice(hits)
-        return profs_chosen
 
     def add_unary():
         """Adds an unary constraint to list of nodes
@@ -239,7 +237,7 @@ def assigner(user_data):
         course_no_students, course_mins, course_days_weekly = user_data
 
     # enforce professor-course consistency among different days
-    full_prof_assignment = profs_for_courses(courses)
+    full_prof_assignment = profs_for_courses(courses, professors, prof_info)
     rooms_chosen = {}  # rooms are consistent
     solution = {d: None for d in WEEKDAYS}
     retries = 0
