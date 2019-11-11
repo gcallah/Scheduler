@@ -57,9 +57,8 @@ def assign_days_for_course(course_weekly_days):
         days_chosen.append(rand_day)
     return days_chosen
 
-#Soft constraint
 def maps_day_to_class(course_days_weekly, courses):
-    """Maps preferred days to classes.
+    """Maps preferred days to classes (soft constraint).
 
     Arguments:
         course_days_weekly {dict} -- A map {class: how many days it's held per week}.
@@ -75,6 +74,21 @@ def maps_day_to_class(course_days_weekly, courses):
         for day in course_days:
             courses_on_days[day].append(course)
     return courses_on_days
+
+def hours_for_prof(prof_info, professor_name):
+    """Assigns a professor time for their class based on their preferences
+
+    Arguments:
+        prof_info {dict} -- A dictionary mapping professor to his class info.
+        professor_name {string} -- A professor's name.
+
+    Returns:
+        [set] -- A set of (hours, minutes) interval for a professor.
+    """
+    start = prof_info[professor_name]['start_time']
+    end = prof_info[professor_name]['end_time']
+    hours_set = {(i, j * 30) for i in range(start, end) for j in range(2)}
+    return hours_set
 
 def assigner(user_data):
     """Takes in data provided by the user and creates class schedule.
@@ -99,7 +113,7 @@ def assigner(user_data):
             professor = full_prof_assignment[course]
             if professor is None:
                 continue
-            domain = [(room, hour) for room in rooms_course for hour in hours_for_prof(professor)]
+            domain = [(room, hour) for room in rooms_course for hour in hours_for_prof(prof_info, professor)]
             node_name = (course, professor)
             csp.add_node(node_name, domain)
 
@@ -122,20 +136,6 @@ def assigner(user_data):
             if hits:
                 profs_chosen[course] = random.choice(hits)
         return profs_chosen
-
-    def hours_for_prof(professor):
-        """Assigns a professor time for their class based on their preferences
-
-        Arguments:
-            professor {string} -- A professor's name.
-
-        Returns:
-            [dict] -- A tuple of times for the professor's courses.
-        """
-        start = prof_info[professor]['start_time']
-        end = prof_info[professor]['end_time']
-        # in format (hours,minutes) in 30min intervals
-        return {(i, j * 30) for i in range(start, end) for j in range(2)}
 
     def add_unary():
         """Adds an unary constraint to list of nodes
