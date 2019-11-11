@@ -9,10 +9,10 @@ Takes in the data file and outputs class schedules for each weekday.
 
 MONDAY = 'mon' 
 TUESDAY = 'tues' 
-WEDNEWSDAY = 'wed' 
+WEDNESDAY = 'wed' 
 THURSDAY = 'thur' 
 FRIDAY = 'fri'
-WEEKDAYS = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+WEEKDAYS = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
 
 def pref_handler(rand_day):
     """Given a random day, return a list of days weighted by preference.
@@ -23,10 +23,10 @@ def pref_handler(rand_day):
     Returns:
         [list] -- [A list of days weighted by preference]
     """
-    days = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+    days = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
     if rand_day == TUESDAY: 
-        return [MONDAY, WEDNEWSDAY, THURSDAY, FRIDAY] 
-    pref = [MONDAY, WEDNEWSDAY] if rand_day in (MONDAY, WEDNEWSDAY) else [THURSDAY, FRIDAY]
+        return [MONDAY, WEDNESDAY, THURSDAY, FRIDAY] 
+    pref = [MONDAY, WEDNESDAY] if rand_day in (MONDAY, WEDNESDAY) else [THURSDAY, FRIDAY]
     return [day for day in (pref+days) if day != rand_day]
 
 def assign_days_for_course(course_weekly_days):
@@ -41,12 +41,12 @@ def assign_days_for_course(course_weekly_days):
     course_weekly_days = min(course_weekly_days, 5) 
     days_chosen = []
     if course_weekly_days == 1:
-        workdays = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+        workdays = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
     elif 2 <= course_weekly_days <= 4:
         # Pairs Mon-Wed and Thurs-Fri preferred if course is held 2 - 4 days per week.
-        workdays = [MONDAY, WEDNEWSDAY, THURSDAY, FRIDAY] * 2 + [TUESDAY]
+        workdays = [MONDAY, WEDNESDAY, THURSDAY, FRIDAY] * 2 + [TUESDAY]
     else:
-        return [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+        return [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
     for i in range(course_weekly_days):
         rand_day = random.choice(workdays)
         if i == 0:
@@ -67,7 +67,7 @@ def maps_day_to_class(course_days_weekly, courses):
     Returns:
         [dict] -- Returns a map {day: a list of classes on that day}.
     """
-    weekdays = [MONDAY, TUESDAY, WEDNEWSDAY, THURSDAY, FRIDAY]
+    weekdays = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
     courses_on_days = collections.defaultdict(list)
     for course in courses: 
         course_days = assign_days_for_course(course_days_weekly[course])
