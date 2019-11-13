@@ -6,6 +6,7 @@ classes CSP and minConflicts below define
 & solve a constraint satisfaction problem
 """
 
+
 # Class definition for a constraint satisfaction problem
 class CSP(object):
     def __init__(self):
@@ -31,7 +32,7 @@ class CSP(object):
             node {tuple} -- A tuple of (course, professor).
             domain {list} -- A list of domains (rooms, hours) for the node.
         """
-        if node not in self.nodes: 
+        if node not in self.nodes:
             self.nodes.append(node)
             self.node_domains[node] = domain
 
@@ -83,10 +84,10 @@ class CSP(object):
         Arguments:
             node_a {tuple} -- A tuple of (course, professor).
             node_b {tuple} -- A tuple of (course, professor).
-            table_factor {dict} -- A dictionary {True/False : (room, times)} based on nodes and constraint functions. 
+            table_factor {dict} -- A dictionary {True/False : (room, times)} based on nodes and constraint functions.
         """
         if node_a not in self.binary_constraints.keys():
-            self.binary_constraints[node_a] = {node_b:table_factor}
+            self.binary_constraints[node_a] = {node_b: table_factor}
         elif node_b not in self.binary_constraints[node_a].keys():
             self.binary_constraints[node_a][node_b] = table_factor
         else:
@@ -108,7 +109,7 @@ class minConflicts(object):
         Returns:
             dict -- Random domain assignment of each node.
         """
-        return {node:random.choice(self.csp.node_domains[node]) for node in self.csp.nodes}
+        return {node: random.choice(self.csp.node_domains[node]) for node in self.csp.nodes}
 
     def conflicted(self, assignments):
         """Finds a set of conflicted nodes (which evaluate to zero).
@@ -124,12 +125,12 @@ class minConflicts(object):
             if node in conflicted:
                 continue
             assigned_domain = assignments[node]
-            try: 
+            try:
                 if self.csp.unary_constraints[node][assigned_domain] == 0:
                     conflicted.add(node)
-            except KeyError: 
+            except KeyError:
                 pass
-            if node in self.csp.binary_constraints: 
+            if node in self.csp.binary_constraints:
                 neighbors = set(self.csp.binary_constraints[node].keys())
                 for neighbor in neighbors:
                     val_neigh = assignments[neighbor]
@@ -155,13 +156,13 @@ class minConflicts(object):
         # checks for missing keys on unary constraints
         if self.csp.unary_constraints[node][domain] == 0:
             conflicted.add(node)
-        if node in self.csp.binary_constraints: 
+        if node in self.csp.binary_constraints:
             neighbors = self.csp.binary_constraints[node].keys()
             for neigh in neighbors:
                 neigh_domain = assignments[neigh]
                 weight = self.csp.binary_constraints[node][neigh][domain][neigh_domain]
                 if weight == 0:
-                    conflicted.add(node) 
+                    conflicted.add(node)
                     conflicted.add(neigh)
                 else:
                     soft_weight *= weight
