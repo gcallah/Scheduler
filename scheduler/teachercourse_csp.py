@@ -7,12 +7,13 @@ import collections
 Takes in the data file and outputs class schedules for each weekday.
 """
 
-MONDAY = 'mon' 
-TUESDAY = 'tues' 
-WEDNESDAY = 'wed' 
-THURSDAY = 'thur' 
+MONDAY = 'mon'
+TUESDAY = 'tues'
+WEDNESDAY = 'wed'
+THURSDAY = 'thur'
 FRIDAY = 'fri'
 WEEKDAYS = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
+
 
 def pref_handler(rand_day):
     """Given a random day, return a list of days weighted by preference.
@@ -26,10 +27,11 @@ def pref_handler(rand_day):
     days = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
     if rand_day not in days:
         raise ValueError("The random day is not in work day.")
-    if rand_day == TUESDAY: 
-        return [MONDAY, WEDNESDAY, THURSDAY, FRIDAY] 
+    if rand_day == TUESDAY:
+        return [MONDAY, WEDNESDAY, THURSDAY, FRIDAY]
     pref = [MONDAY, WEDNESDAY] if rand_day in (MONDAY, WEDNESDAY) else [THURSDAY, FRIDAY]
     return [day for day in (pref+days) if day != rand_day]
+
 
 def assign_days_for_course(course_weekly_days):
     """Assign randomly the meetings days for a class given how many time it is held weekly.
@@ -40,7 +42,7 @@ def assign_days_for_course(course_weekly_days):
     Returns:
         [list] -- A list of days chosen for the class.
     """
-    course_weekly_days = min(course_weekly_days, 5) 
+    course_weekly_days = min(course_weekly_days, 5)
     days_chosen = []
     if course_weekly_days == 1:
         workdays = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
@@ -59,6 +61,7 @@ def assign_days_for_course(course_weekly_days):
         days_chosen.append(rand_day)
     return days_chosen
 
+
 def maps_day_to_class(course_days_weekly, courses):
     """Maps preferred days to classes (soft constraint).
 
@@ -69,13 +72,13 @@ def maps_day_to_class(course_days_weekly, courses):
     Returns:
         [dict] -- Returns a map {day: a list of classes on that day}.
     """
-    weekdays = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
     courses_on_days = collections.defaultdict(list)
-    for course in courses: 
+    for course in courses:
         course_days = assign_days_for_course(course_days_weekly[course])
         for day in course_days:
             courses_on_days[day].append(course)
     return courses_on_days
+
 
 def hours_for_prof(prof_info, professor_name):
     """Assigns a professor time for their class based on their preferences
@@ -91,6 +94,7 @@ def hours_for_prof(prof_info, professor_name):
     end = prof_info[professor_name]['end_time']
     hours_set = {(i, j * 30) for i in range(start, end) for j in range(2)}
     return hours_set
+
 
 def profs_for_courses(courses, professors, prof_info):
     """Assign professors to given list of courses.
@@ -110,6 +114,7 @@ def profs_for_courses(courses, professors, prof_info):
             profs_chosen[course] = random.choice(intersection)
     return profs_chosen
 
+
 def add_nodes(courses, rooms, rooms_chosen, full_prof_assignment, prof_info, csp):
     """Adds nodes (course, professor) and its list of domains (rooms, hours) to csp.
 
@@ -128,6 +133,7 @@ def add_nodes(courses, rooms, rooms_chosen, full_prof_assignment, prof_info, csp
             domain = [(room, hour) for room in rooms_for_course for hour in hours_for_prof(prof_info, professor)]
             node_name = (course, professor)
             csp.add_node(node_name, domain)
+
 
 def assigner(user_data):
     """Takes in data provided by the user and creates class schedule.
