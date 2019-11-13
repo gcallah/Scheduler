@@ -24,6 +24,8 @@ def pref_handler(rand_day):
         [list] -- [A list of days weighted by preference]
     """
     days = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
+    if rand_day not in days:
+        raise ValueError("The random day is not in work day.")
     if rand_day == TUESDAY: 
         return [MONDAY, WEDNESDAY, THURSDAY, FRIDAY] 
     pref = [MONDAY, WEDNESDAY] if rand_day in (MONDAY, WEDNESDAY) else [THURSDAY, FRIDAY]

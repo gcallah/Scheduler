@@ -214,7 +214,7 @@ class MinConflictsTestCase(TestCase):
         self.minC.csp = None
         self.minC = None
 
-    def test_assigner(self):
+    def test_initial_var_assign(self):
         assignment = self.minC.initial_var_assignment()
         self.assertTrue(assignment["class1"] == "domain1")
         self.assertTrue(assignment["class2"] in ["domain2", "domain3", "domain4"])

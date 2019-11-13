@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from unittest import TestCase, main, skip
 
-from teachercourse_csp import assigner
+from teachercourse_csp import pref_handler, assign_days_for_course, maps_day_to_class, hours_for_prof, profs_for_courses, add_nodes, assigner
 from cspsolver import CSP, minConflicts
 
 def create_csp():
@@ -37,4 +37,13 @@ class Teachercourse_Csp_TestCase(TestCase):
     def tearDown(self):
         self.csp = None
 
-
+    def test_pref_handler(self):
+        self.assertRaises(ValueError, lambda: pref_handler("sun"))
+        result = pref_handler("tues")
+        self.assertEqual(result, ["mon", "wed", "thur", "fri"])
+        result = pref_handler("mon")
+        self.assertFalse("mon" in result)
+        self.assertEqual(result, ["wed"] + ["tues", "wed", "thur", "fri"])
+        result = pref_handler("fri")
+        self.assertFalse("fri" in result)
+        self.assertEqual(result, ["thur"] + ["mon", "tues", "wed", "thur"])
