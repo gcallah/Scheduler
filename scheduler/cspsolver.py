@@ -6,7 +6,7 @@ classes CSP and minConflicts below define
 & solve a constraint satisfaction problem
 """
 
-
+# Class definition for a constraint satisfaction problem
 class CSP(object):
     def __init__(self):
         """Constraint Satisfaction Problem class.
@@ -97,6 +97,7 @@ class CSP(object):
                     current_table[i][j] *= table_factor[i][j]
 
 
+# Class definition to minimize conflicts
 class minConflicts(object):
     def __init__(self, csp):
         self.csp = csp
