@@ -29,8 +29,9 @@ def pref_handler(rand_day):
         raise ValueError("The random day is not in work day.")
     if rand_day == TUESDAY:
         return [MONDAY, WEDNESDAY, THURSDAY, FRIDAY]
-    pref = [MONDAY, WEDNESDAY] if rand_day in (MONDAY, WEDNESDAY) else [THURSDAY, FRIDAY]
-    return [day for day in (pref+days) if day != rand_day]
+    pref = [MONDAY, WEDNESDAY] if rand_day in (
+        MONDAY, WEDNESDAY) else [THURSDAY, FRIDAY]
+    return [day for day in (pref + days) if day != rand_day]
 
 
 def assign_days_for_course(course_weekly_days):
@@ -47,7 +48,8 @@ def assign_days_for_course(course_weekly_days):
     if course_weekly_days == 1:
         workdays = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
     elif 2 <= course_weekly_days <= 4:
-        # Pairs Mon-Wed and Thurs-Fri preferred if course is held 2 - 4 days per week.
+        # Pairs Mon-Wed and Thurs-Fri preferred if course is held 2 - 4 days
+        # per week.
         workdays = [MONDAY, WEDNESDAY, THURSDAY, FRIDAY] * 2 + [TUESDAY]
     else:
         return [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY]
@@ -109,13 +111,20 @@ def profs_for_courses(courses, professors, prof_info):
     """
     profs_chosen = {}
     for course in courses:
-        intersection = [professor for professor in professors if course in prof_info[professor]['courses']]
+        intersection = [
+            professor for professor in professors if course in prof_info[professor]['courses']]
         if intersection:
             profs_chosen[course] = random.choice(intersection)
     return profs_chosen
 
 
-def add_nodes(courses, rooms, rooms_chosen, full_prof_assignment, prof_info, csp):
+def add_nodes(
+        courses,
+        rooms,
+        rooms_chosen,
+        full_prof_assignment,
+        prof_info,
+        csp):
     """Adds nodes (course, professor) and its list of domains (rooms, hours) to csp.
 
     Arguments:
@@ -130,9 +139,24 @@ def add_nodes(courses, rooms, rooms_chosen, full_prof_assignment, prof_info, csp
         rooms_for_course = rooms_chosen[course] if course in rooms_chosen else rooms
         professor = full_prof_assignment[course]
         if professor:
-            domain = [(room, hour) for room in rooms_for_course for hour in hours_for_prof(prof_info, professor)]
+            domain = [
+                (room,
+                 hour) for room in rooms_for_course for hour in hours_for_prof(
+                    prof_info,
+                    professor)]
             node_name = (course, professor)
             csp.add_node(node_name, domain)
+
+
+def add_unary(csp, room_has_capacity):
+    """Adds an unary constraint to list of nodes
+
+    Arguments:
+        csp {cspsolver.CSP} -- A instance of the Constraint Satisfaction Problem class.
+        room_has_capacity {<class 'function'>} -- An unary constraint function.
+    """
+    for node in csp.nodes:
+        csp.add_unary_constraint(node, room_has_capacity)
 
 
 def assigner(user_data):
@@ -144,28 +168,21 @@ def assigner(user_data):
     Returns:
         [dict] -- Returns a map {day: a list of classes taught by professors with room numbers and times}.
     """
-    def add_unary():
-        """Adds an unary constraint to list of nodes
+    def room_has_capacity(val, course, prof):
+        """Unary constraints function: checks to see if given room has
+        room for all students in course.
+
+        Arguments:
+            val {tuple} -- Contains values for room and time of class.
+            Course {string} -- Name of course.
+            Professor {string} -- Name of professor.
+
+        Returns:
+            [bool] -- Whether or not the room has capacity for all students in course.
         """
-        for node in csp.nodes:
-            course, professor = node
-
-            def room_has_capacity(val, course=course, prof=professor):
-                """Checks to see if given room has room for all students in course.
-
-                Arguments:
-                    val {tuple} -- Contains values for room and time of class.
-                    Course {string} -- Name of course.
-                    Professor {string} -- Name of professor.
-
-                Returns:
-                    [bool] -- Whether or not the room has capacity for all students in course.
-                """
-                room, hour_and_min = val
-                no_students = course_no_students[course]
-                return bool(room_capacities[room] >= no_students)
-
-            csp.add_unary_constraint((course, professor), room_has_capacity)
+        room, hour_and_min = val
+        no_students = course_no_students[course]
+        return bool(room_capacities[room] >= no_students)
 
     def add_binary():
         """Adds binary constraints to list of nodes.
@@ -258,8 +275,14 @@ def assigner(user_data):
         for d in WEEKDAYS:
             csp = CSP()
             courses = daily_courses[d]
-            add_nodes(courses, rooms, rooms_chosen, full_prof_assignment, prof_info, csp)
-            add_unary()
+            add_nodes(
+                courses,
+                rooms,
+                rooms_chosen,
+                full_prof_assignment,
+                prof_info,
+                csp)
+            add_unary(csp, room_has_capacity)
             add_binary()
             minconf = minConflicts(csp)
             solved = minconf.solve(max_iters)
