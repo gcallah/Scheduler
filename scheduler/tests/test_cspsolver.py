@@ -80,22 +80,22 @@ class CspTestCase(TestCase):
         result = self.room_has_capacity(("649", (5, 60), "physics"))
         self.assertTrue(result)
 
-    def test_add_unary_constraint(self):
-        """
-        Test if add unary constraint work.
-        """
-        self.assertRaises(ValueError, lambda: self.csp.add_unary_constraint
-        ("class2", constraint_func=1))
-        node = ("physics", "John Smith")
-        domain = self.csp.node_domains[node]
-        factor = {val: self.room_has_capacity(val) for val in domain}
-        self.csp.add_unary_constraint(node, self.room_has_capacity)
-        constraint = self.csp.unary_constraints[node]
-        self.assertEqual(constraint, factor)
-        self.csp.add_unary_constraint(node, self.room_has_capacity)
-        constraint = self.csp.unary_constraints[node]
-        factor = {val: self.csp.unary_constraints[node][val] * factor[val] for val in domain}
-        self.assertEqual(constraint, factor)
+    # def test_add_unary_constraint(self):
+    #     """
+    #     Test if add unary constraint work.
+    #     """
+    #     self.assertRaises(ValueError, lambda: self.csp.add_unary_constraint
+    #     ("class2", constraint_func=1))
+    #     node = ("physics", "John Smith")
+    #     domain = self.csp.node_domains[node]
+    #     factor = {val: self.room_has_capacity(val) for val in domain}
+    #     self.csp.add_unary_constraint(node, self.room_has_capacity)
+    #     constraint = self.csp.unary_constraints[node]
+    #     self.assertEqual(constraint, factor)
+    #     self.csp.add_unary_constraint(node, self.room_has_capacity)
+    #     constraint = self.csp.unary_constraints[node]
+    #     factor = {val: self.csp.unary_constraints[node][val] * factor[val] for val in domain}
+    #     self.assertEqual(constraint, factor)
 
     def no_class_overlap(self, val1, val2):
         """

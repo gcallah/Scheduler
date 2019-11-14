@@ -49,7 +49,8 @@ class CSP(object):
         if node not in self.nodes:
             raise ValueError(node, "was not added.")
         node_domain = self.node_domains[node]
-        factor = {domain: constraint_func(domain) for domain in node_domain}
+        course, professor = node
+        factor = {domain: constraint_func(domain, course, professor) for domain in node_domain}
         if node not in self.unary_constraints:
             self.unary_constraints[node] = factor
         else:
