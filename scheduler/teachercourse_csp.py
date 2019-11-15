@@ -168,14 +168,13 @@ def assigner(user_data):
     Returns:
         [dict] -- Returns a map {day: a list of classes taught by professors with room numbers and times}.
     """
-    def room_has_capacity(val, course, prof):
+    def room_has_capacity(val, course):
         """Unary constraints function: checks to see if given room has
         room for all students in course.
 
         Arguments:
             val {tuple} -- Contains values for room and time of class.
             Course {string} -- Name of course.
-            Professor {string} -- Name of professor.
 
         Returns:
             [bool] -- Whether or not the room has capacity for all students in course.
