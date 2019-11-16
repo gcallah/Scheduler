@@ -148,7 +148,7 @@ def add_nodes(
             csp.add_node(node_name, domain)
 
 
-def add_unary(csp, room_has_capacity):
+def add_unary_constraint(csp, room_has_capacity):
     """Adds an unary constraint to list of nodes
 
     Arguments:
@@ -181,7 +181,7 @@ def compute_course_start_end(
     return (course_start_time, course_end_time)
 
 
-def add_binary(csp, course_mins_map):
+def add_binary_constraint(csp, course_mins_map, no_class_overlap, no_time_clash):
     """Adds binary constraints to list of nodes.
     """
     for index, node_n in enumerate(csp.nodes):
@@ -192,68 +192,7 @@ def add_binary(csp, course_mins_map):
             if prof_n == prof_m:
                 if course_n == course_m:
                     continue
-
-                def no_class_overlap(
-                        node1,
-                        node2,
-                        course1=course_n,
-                        course2=course_m):
-                    """Checks to see if there is overlap in times between two courses.
-
-                    Arguments:
-                        node1 {tuple} -- (location, (hour, minute)) of the first class.
-                        node2 {tuple} -- (location, (hour, minute)) of the second class.
-                        course1 {string} -- Name of first course to check for overlap.
-                        course2 {string} -- Name of second course to check for overlap.
-
-                    Returns:
-                        [int] -- 1 if no overlap exists between two classes, 0 if there is overlap.
-                    """
-                    _, (hours1, mins1) = node1
-                    _, (hours2, mins2) = node2
-                    course_start1, course_end1 = compute_course_start_end(
-                        hours1, mins1, course_mins_map, course1)
-                    course_start2, course_end2 = compute_course_start_end(
-                        hours2, mins2, course_mins_map, course2)
-                    if course_start1 > course_end2 or course_start2 > course_end1:
-                        return 0
-                    elif course_start1 == course_end2 or course_start2 == course_end1:
-                        return 2
-                    else:
-                        return 1
-
                 csp.add_binary_constraint(node_n, node_m, no_class_overlap)
-
-            def no_time_clash(
-                    val1,
-                    val2,
-                    course1=course_n,
-                    course_dummy=course_m):
-                """Checks to see if there is a time clash for a course given two rooms and times.
-
-                Arguments:
-                    val1 {tuple} -- Contains first set of room and time.
-                    val2 {tuple} -- Contains second set of room and time.
-                    course1 {string} -- Name of course to check for time clash.
-                    course_dummy {string} -- Dummy parameter. Added to help with refactor.
-
-                Returns:
-                    [bool] -- True if no time clash between rooms and times for course, false if there is time clash.
-                """
-                (room1, time1) = val1
-                (room2, time2) = val2
-                if room1 != room2:
-                    return True
-                hours1, mins1 = time1
-                hours2, mins2 = time2
-                start_time1, end_time1 = compute_course_start_end(
-                    hours1, mins1, course_mins_map, course1)
-                start_time2, _ = compute_course_start_end(
-                    hours2, mins2, course_mins_map, course_dummy)
-                if start_time1 <= start_time2 < end_time1:
-                    return False
-                return True
-
             csp.add_binary_constraint(node_n, node_m, no_time_clash)
 
 
@@ -281,23 +220,71 @@ def assigner(user_data):
         no_students = course_no_students[course]
         return room_capacities[room] >= no_students
 
-    # get the professor-course-room data from the function argument
+    def no_class_overlap(node1, node2, course1, course2):
+        """Binary constraint function: checks to see if there is overlap in times between two courses.
+
+        Arguments:
+            node1 {tuple} -- (location, (hour, minute)) of the first class.
+            node2 {tuple} -- (location, (hour, minute)) of the second class.
+            course1 {string} -- Name of first course to check for overlap.
+            course2 {string} -- Name of second course to check for overlap.
+
+        Returns:
+            [int] -- 1 if no overlap exists between two classes, 0 if there is overlap.
+        """
+        _, (hours1, mins1) = node1
+        _, (hours2, mins2) = node2
+        course_start1, course_end1 = compute_course_start_end(
+            hours1, mins1, course_mins_map, course1)
+        course_start2, course_end2 = compute_course_start_end(
+            hours2, mins2, course_mins_map, course2)
+        if course_start1 > course_end2 or course_start2 > course_end1:
+            return 0
+        elif course_start1 == course_end2 or course_start2 == course_end1:
+            return 2
+        else:
+            return 1
+
+    def no_time_clash(val1, val2, course1, dummy):
+        """Binary constraint function: checks to see if there is a time clash for a course given two rooms and times.
+
+        Arguments:
+            val1 {tuple} -- Contains first set of room and time.
+            val2 {tuple} -- Contains second set of room and time.
+            course1 {string} -- Name of course to check for time clash.
+            dummy {string} -- Dummy parameter. Added to help with refactor.
+
+        Returns:
+            [int] -- 1 if no time clash between rooms and times for course, 0 if there is time clash.
+        """
+        (room1, time1) = val1
+        (room2, time2) = val2
+        if room1 != room2:
+            return 1
+        hours1, mins1 = time1
+        hours2, mins2 = time2
+        start_time1, end_time1 = compute_course_start_end(
+            hours1, mins1, course_mins_map, course1)
+        start_time2, _ = compute_course_start_end(
+            hours2, mins2, course_mins_map, dummy)
+        if start_time1 <= start_time2 < end_time1:
+            return 0
+        return 1
+
     professors, prof_info, rooms, room_capacities, courses, \
         course_no_students, course_mins_map, course_days_weekly = user_data
 
-    # enforce professor-course consistency among different days
     full_prof_assignment = profs_for_courses(courses, professors, prof_info)
-    rooms_chosen = {}  # rooms are consistent
-    solution = {d: None for d in WEEKDAYS}
-    retries = 0
-    # will retry max 3 times to get a solution
-    while retries < 3:
+    rooms_chosen = {} 
+    solution = collections.defaultdict(lambda: None)
+    retry = 0
+    solved = True
+    while retry < 3:
         daily_courses = maps_day_to_class(course_days_weekly, courses)
-        # upon retry increase maximum iterations
-        max_iters = 100 * (retries + 1)
-        for d in WEEKDAYS:
+        max_iters = 100 * (retry + 1)
+        for day in WEEKDAYS:
             csp = CSP()
-            courses = daily_courses[d]
+            courses = daily_courses[day]
             add_nodes(
                 courses,
                 rooms,
@@ -305,14 +292,16 @@ def assigner(user_data):
                 full_prof_assignment,
                 prof_info,
                 csp)
-            add_unary(csp, room_has_capacity)
-            add_binary(csp, course_mins_map)
-            minconf = minConflicts(csp)
-            solved = minconf.solve(max_iters)
-            if solved is None:
-                retries += 1
-                if retries < 3:
-                    break
-            solution[d] = solved
-        break
+            add_unary_constraint(csp, room_has_capacity)
+            add_binary_constraint(csp, course_mins_map, no_class_overlap, no_time_clash)
+            min_conflict = minConflicts(csp)
+            day_solution = min_conflict.solve(max_iters)
+            if not day_solution:
+                retry += 1
+                solved = False
+            else:
+                solution[day] = day_solution
+        if solved: 
+            break 
+        solved = True
     return solution

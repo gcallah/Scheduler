@@ -72,9 +72,9 @@ class CSP(object):
             raise ValueError("{} or {} were not added.".format(node1, node2))
         domain1 = self.node_domains[node1]
         domain2 = self.node_domains[node2]
-        table_factor1 = {val1: {val2: constraint_func(val1, val2)
+        table_factor1 = {val1: {val2: constraint_func(val1, val2, node1[0], node2[0])
                                 for val2 in domain2} for val1 in domain1}
-        table_factor2 = {val2: {val1: constraint_func(val1, val2)
+        table_factor2 = {val2: {val1: constraint_func(val1, val2, node1[0], node2[0])
                                 for val1 in domain1} for val2 in domain2}
         self.update_binary_constraint_table(node1, node2, table_factor1)
         self.update_binary_constraint_table(node2, node1, table_factor2)
@@ -220,4 +220,4 @@ class minConflicts(object):
                     if r < w / (w + w0):
                         w0 = w
                         assignments = assignments_cpy
-        return False  # process failed
+        return None  
