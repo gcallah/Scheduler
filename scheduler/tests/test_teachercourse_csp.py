@@ -47,3 +47,35 @@ class Teachercourse_Csp_TestCase(TestCase):
         result = pref_handler("fri")
         self.assertFalse("fri" in result)
         self.assertEqual(result, ["thur"] + ["mon", "tues", "wed", "thur"])
+
+    def test_assign_days_for_course(self):
+        result1 = assign_days_for_course(1)
+        self.assertEqual(len(result1), 1)
+        self.assertTrue(result1[0] in ["mon", "tues","wed", "thur", "fri"])
+        result2 = assign_days_for_course(2)
+        self.assertEqual(len(result2), 2)
+        result3 = assign_days_for_course(3)
+        self.assertEqual(len(result3), 3)
+        result4 = assign_days_for_course(4)
+        self.assertEqual(len(result4), 4)
+        result5 = assign_days_for_course(5)
+        self.assertEqual(len(result5), 5)
+        self.assertEqual(result5, ["mon", "tues", "wed", "thur", "fri"])
+
+    def test_maps_day_to_class(self):
+        course = ["physics", "chemistry", "japanese"]
+        course_days = {"physics": 3, "chemistry": 1, "japanese": 5}
+        result = maps_day_to_class(course_days, course)
+        count_physics = 0
+        count_chemistry = 0
+        count_japanese = 0
+        for key in result.keys():
+            if "physics" in result[key]:
+                count_physics += 1
+            if "chemistry" in result[key]:
+                count_chemistry += 1
+            if "japanese" in result[key]:
+                count_japanese += 1
+        self.assertEqual(count_japanese, 5)
+        self.assertEqual(count_chemistry, 1)
+        self.assertEqual(count_physics, 3)
