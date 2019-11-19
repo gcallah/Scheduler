@@ -26,14 +26,14 @@ def create_csp2():
 def create_user_data():
     courses = ["physics", "chemistry"]
     professors = ['John Smith', 'Lisa Jones', 'Mike Williams']
-    rooms = ["648","649"]
+    rooms = ["648", "649"]
     room_capacities = {'648': 30, '649': 40}
     course_no_students = {'physics': 35, 'chemistry': 26}
     course_mins = {'physics': 60, 'chemistry': 90}
     course_no_sections = {'physics': 2, 'chemistry': 2}
     course_days_weekly = {'physics': 3, 'chemistry': 2}
     prof_info = {'John Smith': {'courses': ['physics', 'chemistry'], 'start_time': 8, 'end_time': 17},
-                 'Lisa Jones': {'courses': ['physics'],'start_time': 9,'end_time': 18},
+                 'Lisa Jones': {'courses': ['physics'], 'start_time': 9, 'end_time': 18},
                  'Mike Williams': {'courses': ['biology 1'], 'start_time': 9, 'end_time': 15}}
     user_data = professors, prof_info, rooms, room_capacities, courses, \
                 course_no_students, course_no_sections, course_mins, course_days_weekly
@@ -97,12 +97,10 @@ class CspTestCase(TestCase):
         factor = {val: self.csp.unary_constraints[node][val] * factor[val] for val in domain}
         self.assertEqual(constraint, factor)
 
-    def no_class_overlap(self, val1, val2):
+    def no_class_overlap(self, val1, val2, course1, course2):
         """
             Class constraint function for binary
         """
-        course1 = val1[2]
-        course2 = val2[2]
         course_min = self.data[5]
         hours1, mins1 = val1[1]
         hours2, mins2 = val2[1]
@@ -127,22 +125,20 @@ class CspTestCase(TestCase):
         """
         Test if binary constraint of class work.
         """
-        val1 = ["648", (5,60), "physics"]
-        val2 = ["648", (5,60), "chemistry"]
-        self.assertFalse(self.no_class_overlap(val1, val2))
-        val1[1] = (6,10)
-        self.assertFalse(self.no_class_overlap(val1, val2))
+        val1 = ["648", (5, 60), "physics"]
+        val2 = ["648", (5, 60), "chemistry"]
+        self.assertFalse(self.no_class_overlap(val1, val2, val1[2], val2[2]))
+        val1[1] = (6, 10)
+        self.assertFalse(self.no_class_overlap(val1, val2, val1[2], val2[2]))
         val1[1] = (6, 60)
-        self.assertTrue(self.no_class_overlap(val1, val2))
+        self.assertTrue(self.no_class_overlap(val1, val2, val1[2], val2[2]))
         val1[1] = (6, 20)
-        self.assertEqual(2, self.no_class_overlap(val1, val2))
+        self.assertEqual(2, self.no_class_overlap(val1, val2, val1[2], val2[2]))
 
-
-    def no_time_clash(self, val1, val2):
+    def no_time_clash(self, val1, val2, course, dummy):
         """
             Class constraint function for binary
         """
-        course = val1[2]
         course_min = self.data[5]
         room1, time1 = val1[0], val1[1]
         room2, time2 = val2[0], val2[1]
@@ -161,13 +157,13 @@ class CspTestCase(TestCase):
         """
         Test if binary constraint of time work.
         """
-        val1 = ["648", (5,60), "physics"]
-        val2 = ["649", (5,60), "physics"]
-        self.assertTrue(self.no_time_clash(val1, val2))
+        val1 = ["648", (5, 60), "physics"]
+        val2 = ["649", (5, 60), "physics"]
+        self.assertTrue(self.no_time_clash(val1, val2, val1[2], val2[2]))
         val1[0] = "649"
-        self.assertFalse(self.no_time_clash(val1, val2))
-        val2[1] = (3,60)
-        self.assertTrue(self.no_time_clash(val1, val2))
+        self.assertFalse(self.no_time_clash(val1, val2, val1[2], val2[2]))
+        val2[1] = (3, 60)
+        self.assertTrue(self.no_time_clash(val1, val2, val1[2], val2[2]))
 
     def test_update_binary_constraint(self):
         self.csp.add_node(("chemistry", "John Smith"), [("649", (5, 60), "chemistry")])
@@ -194,11 +190,21 @@ class CspTestCase(TestCase):
         ("class2", "class1", constraint_func=1))
         self.csp.add_node(("chemistry", "John Smith"), [("649", (5, 60), "chemistry")])
         node1 = ("physics", "John Smith")
+<<<<<<< Updated upstream
         node2 = ("chemistry", "John Smith")
         domain1 = self.csp.node_domains[node1]
         domain2 = self.csp.node_domains[node2]
         factor1 = {val1: {val2: self.no_time_clash(val1, val2) for val2 in domain2} for val1 in domain1}
         factor2 = {val2: {val1: self.no_time_clash(val1, val2) for val1 in domain1} for val2 in domain2}
+=======
+        course1 = node1[0]
+        node2 = ("chemistry", "John Smith")
+        course2 = node2[0]
+        domain1 = self.csp.node_domains[node1]
+        domain2 = self.csp.node_domains[node2]
+        factor1 = {val1: {val2: self.no_time_clash(val1, val2, course1, course2) for val2 in domain2} for val1 in domain1}
+        factor2 = {val2: {val1: self.no_time_clash(val1, val2, course1, course2) for val1 in domain1} for val2 in domain2}
+>>>>>>> Stashed changes
         self.csp.add_binary_constraint(node1, node2, self.no_time_clash)
         binary_constraint = self.csp.binary_constraints
         self.assertEqual(binary_constraint[node1][node2], factor1)
