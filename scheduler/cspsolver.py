@@ -50,7 +50,7 @@ class CSP(object):
             raise ValueError(node, "was not added.")
         node_domain = self.node_domains[node]
         course = node[0]
-        factor = {domain: constraint_func(domain, course) for domain in node_domain}
+        factor = {d: constraint_func(d, course) for d in node_domain}
         if node not in self.unary_constraints:
             self.unary_constraints[node] = factor
         else:
@@ -220,4 +220,4 @@ class minConflicts(object):
                     if r < w / (w + w0):
                         w0 = w
                         assignments = assignments_cpy
-        return None  
+        return None
