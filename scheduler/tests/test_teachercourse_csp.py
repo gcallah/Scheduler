@@ -79,3 +79,40 @@ class Teachercourse_Csp_TestCase(TestCase):
         self.assertEqual(count_japanese, 5)
         self.assertEqual(count_chemistry, 1)
         self.assertEqual(count_physics, 3)
+
+    def test_hours_for_prof(self):
+        prof_info = {'John Smith': {'courses': ['physics', 'chemistry'], 'start_time': 17, 'end_time': 17}}
+        prof = "John Smith"
+        self.assertEqual(hours_for_prof(prof_info, prof), set())
+        prof_info[prof]["start_time"] = 16
+        self.assertFalse(len(hours_for_prof(prof_info, prof)) > 2)
+        self.assertEqual(len(hours_for_prof(prof_info, prof)), 2)
+        prof_info[prof]["start_time"] = 15
+        self.assertFalse(len(hours_for_prof(prof_info, prof)) > 4)
+        self.assertEqual(len(hours_for_prof(prof_info, prof)), 4)
+        prof_info[prof]["start_time"] = 8
+        self.assertFalse(len(hours_for_prof(prof_info, prof)) > 18)
+        self.assertEqual(len(hours_for_prof(prof_info, prof)), 18)
+
+    def test_profs_for_course(self):
+        prof_info = {'John Smith': {'courses': [], 'start_time': 15, 'end_time': 17}}
+        courses = ["physics", "chemistry"]
+        profs = ['John Smith']
+        self.assertEqual(profs_for_courses(courses, profs, prof_info), {})
+        prof_info["John Smith"]["courses"].append("physics")
+        self.assertFalse("chemistry" in profs_for_courses(courses, profs, prof_info).keys())
+        self.assertTrue("physics" in profs_for_courses(courses, profs, prof_info).keys())
+        self.assertEqual(profs_for_courses(courses, profs, prof_info)["physics"], "John Smith")
+        prof_info["John Smith"]["courses"].append("chemistry")
+        self.assertFalse("biology" in profs_for_courses(courses, profs, prof_info).keys())
+        self.assertTrue("physics" in profs_for_courses(courses, profs, prof_info).keys())
+        self.assertTrue("chemistry" in profs_for_courses(courses, profs, prof_info).keys())
+        self.assertEqual(profs_for_courses(courses, profs, prof_info)["physics"], "John Smith")
+        self.assertEqual(profs_for_courses(courses, profs, prof_info)["chemistry"], "John Smith")
+        prof_info = {'John Smith': {'courses': ["chemistry"], 'start_time': 15, 'end_time': 17},
+                     'Lisa Jones': {'courses': ['physics'], 'start_time': 9, 'end_time': 18}}
+        profs.append("Lisa Jones")
+        self.assertFalse(profs_for_courses(courses, profs, prof_info)["physics"] == "John Smith")
+        self.assertTrue(profs_for_courses(courses, profs, prof_info)["chemistry"] == "John Smith")
+        self.assertFalse(profs_for_courses(courses, profs, prof_info)["chemistry"] == "Lisa Jones")
+        self.assertTrue(profs_for_courses(courses, profs, prof_info)["physics"] == "Lisa Jones")
