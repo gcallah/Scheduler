@@ -178,7 +178,7 @@ def compute_course_start_end(
     course_start_time = start_hour * 6 + start_mins // 10
     duration = course_mins_map[course_name]
     course_end_time = course_start_time + duration
-    return (course_start_time, course_end_time)
+    return course_start_time, course_end_time
 
 
 def add_binary_constraint(csp, course_mins_map, no_class_overlap, no_time_clash):

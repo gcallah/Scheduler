@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from unittest import TestCase, main, skip
 
-from teachercourse_csp import pref_handler, assign_days_for_course, maps_day_to_class, hours_for_prof, profs_for_courses, add_nodes, assigner
+from teachercourse_csp import pref_handler, assign_days_for_course, maps_day_to_class, hours_for_prof, profs_for_courses, add_nodes, assigner, compute_course_start_end
 from cspsolver import CSP, minConflicts
 
 def create_csp():
@@ -116,3 +116,33 @@ class Teachercourse_Csp_TestCase(TestCase):
         self.assertTrue(profs_for_courses(courses, profs, prof_info)["chemistry"] == "John Smith")
         self.assertFalse(profs_for_courses(courses, profs, prof_info)["chemistry"] == "Lisa Jones")
         self.assertTrue(profs_for_courses(courses, profs, prof_info)["physics"] == "Lisa Jones")
+
+    def test_add_node(self):
+        courses = ["physics", "chemistry"]
+        profs = ['John Smith', "Lisa Jones"]
+        prof_info = {'John Smith': {'courses': ["chemistry"], 'start_time': 16, 'end_time': 17},
+                     'Lisa Jones': {'courses': ['physics'], 'start_time': 9, 'end_time': 10}}
+        prof_assign = profs_for_courses(courses, profs, prof_info)
+        room_chosen = {}
+        rooms = ["648"]
+        add_nodes(courses, rooms, room_chosen, prof_assign, prof_info, self.csp)
+        nodes = []
+        for i in range(len(courses)):
+            nodes.append((courses[i], prof_assign[courses[i]]))
+        self.assertFalse(("Bob") in self.csp.node_domains.keys())
+        self.assertTrue(nodes[0] in self.csp.node_domains.keys())
+        self.assertTrue(nodes[1] in self.csp.node_domains.keys())
+        self.assertEqual(rooms[0], self.csp.node_domains[nodes[0]][0][0])
+        self.assertEqual(rooms[0], self.csp.node_domains[nodes[1]][0][0])
+
+    def test_compute_course_start_end(self):
+        hour = 5
+        min = 0
+        duration = {"physics" : 30}
+        course = "physics"
+        result = compute_course_start_end(hour, min, duration, course)
+        self.assertTrue(len(result) == 2)
+        self.assertEqual(result, (5*6, 5*6+30))
+        min = 50
+        result = compute_course_start_end(hour, min, duration, course)
+        self.assertEqual(result, (5*6+5, 5*6+5+30))
