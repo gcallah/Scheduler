@@ -221,9 +221,32 @@ class MinConflictsTestCase(TestCase):
         self.assertFalse(assignment["class3"] == "domain10")
 
     def test_conflicted(self):
+        self.minC.csp.node_domains['class2'] = ['domain2']
+        self.minC.csp.node_domains['class3'] = ['domain3']
         assignment = self.minC.initial_var_assignment()
         conflict = self.minC.conflicted(assignment)
         self.assertEqual(conflict, set())
+        self.minC.csp.unary_constraints = {"class1": {"domain1": 0}, 'class2': {}, 'class3': {}}
+        conflict = self.minC.conflicted(assignment)
+        self.assertTrue('class1' in conflict)
+        self.minC.csp.unary_constraints['class2'] = {"domain2": 0}
+        conflict = self.minC.conflicted(assignment)
+        self.assertTrue('class2' in conflict)
+        self.assertFalse('class3' in conflict)
+        self.minC.csp.unary_constraints['class2'] = {"domain2": 1}
+        conflict = self.minC.conflicted(assignment)
+        self.assertFalse('class2' in conflict)
+        self.minC.csp.binary_constraints = {'class3': {'class2': {'domain3': {'domain2': 0}}}}
+        conflict = self.minC.conflicted(assignment)
+        self.assertTrue('class2' in conflict)
+        self.assertTrue('class3' in conflict)
+        self.minC.csp.binary_constraints['class3'] = {'class1': {'domain3': {'domain1': 0}}}
+        conflict = self.minC.conflicted(assignment)
+        self.assertFalse('class2' in conflict)
+        self.assertTrue('class3' in conflict)
+        self.minC.csp.binary_constraints['class3']['class1']['domain3']['domain1'] = 1
+        conflict = self.minC.conflicted(assignment)
+        self.assertFalse('class3' in conflict)
 
     def test_solve(self):
         result = self.minC.solve(100)

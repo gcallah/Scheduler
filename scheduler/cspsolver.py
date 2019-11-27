@@ -167,7 +167,7 @@ class minConflicts(object):
                     conflicted.add(neigh)
                 else:
                     soft_weight *= weight
-        return (conflicted, soft_weight)
+        return conflicted, soft_weight
 
     def rand_conflict_var(self, conflicted, assignments):
         """Chooses a random conflicted variable.
