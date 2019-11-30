@@ -248,6 +248,34 @@ class MinConflictsTestCase(TestCase):
         conflict = self.minC.conflicted(assignment)
         self.assertFalse('class3' in conflict)
 
+    def test_conflicted_neighbors(self):
+        self.minC.csp.node_domains['class2'] = ['domain2']
+        self.minC.csp.node_domains['class3'] = ['domain3']
+        assignment = self.minC.initial_var_assignment()
+        print(assignment)
+        self.assertRaises(KeyError, lambda: self.minC.conflicted_neighbors(assignment, "class1"))
+        self.minC.csp.unary_constraints = {"class1": {"domain1": 0}, 'class2': {'domain2': 1}, 'class3': {"domain3": 1}}
+        conflict = self.minC.conflicted_neighbors(assignment, "class1")
+        self.assertTrue('class1' in conflict[0])
+        self.assertEqual(conflict[1], 1)
+        conflict = self.minC.conflicted_neighbors(assignment, "class2")
+        print(conflict)
+        self.assertFalse('class2' in conflict[0])
+        self.assertEqual(conflict[0], set())
+        self.minC.csp.binary_constraints = {'class3': {'class2': {'domain1': {'domain2': 0}}}}
+        self.assertRaises(KeyError, lambda: self.minC.conflicted_neighbors(assignment, "class3"))
+        self.minC.csp.binary_constraints['class3']['class2'] = {'domain3': {'domain1': 0}}
+        self.assertRaises(KeyError, lambda: self.minC.conflicted_neighbors(assignment, "class3"))
+        self.minC.csp.binary_constraints['class3']['class2'] = {'domain3': {'domain2': 0}}
+        conflict = self.minC.conflicted_neighbors(assignment, "class3")
+        self.assertFalse('class1' in conflict[0])
+        self.assertTrue('class2' in conflict[0])
+        self.assertTrue('class3' in conflict[0])
+        self.assertEqual(conflict[1], 1)
+        self.minC.csp.binary_constraints['class3']['class2']['domain3']['domain2'] = 2
+        conflict = self.minC.conflicted_neighbors(assignment, "class3")
+        self.assertEqual(conflict[1], 2)
+
     def test_solve(self):
         result = self.minC.solve(100)
         self.assertEqual(result["class1"], "domain1")
