@@ -1,7 +1,7 @@
 """
 This is the test suite for cspsolver.py.
 """
-import os, sys
+import os, sys, random
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -252,14 +252,12 @@ class MinConflictsTestCase(TestCase):
         self.minC.csp.node_domains['class2'] = ['domain2']
         self.minC.csp.node_domains['class3'] = ['domain3']
         assignment = self.minC.initial_var_assignment()
-        print(assignment)
         self.assertRaises(KeyError, lambda: self.minC.conflicted_neighbors(assignment, "class1"))
         self.minC.csp.unary_constraints = {"class1": {"domain1": 0}, 'class2': {'domain2': 1}, 'class3': {"domain3": 1}}
         conflict = self.minC.conflicted_neighbors(assignment, "class1")
         self.assertTrue('class1' in conflict[0])
         self.assertEqual(conflict[1], 1)
         conflict = self.minC.conflicted_neighbors(assignment, "class2")
-        print(conflict)
         self.assertFalse('class2' in conflict[0])
         self.assertEqual(conflict[0], set())
         self.minC.csp.binary_constraints = {'class3': {'class2': {'domain1': {'domain2': 0}}}}
@@ -275,6 +273,24 @@ class MinConflictsTestCase(TestCase):
         self.minC.csp.binary_constraints['class3']['class2']['domain3']['domain2'] = 2
         conflict = self.minC.conflicted_neighbors(assignment, "class3")
         self.assertEqual(conflict[1], 2)
+
+    def test_rand_conflict_var(self):
+        self.minC.csp.node_domains['class2'] = ['domain2']
+        self.minC.csp.node_domains['class3'] = ['domain3']
+        self.minC.csp.unary_constraints = {"class1": {"domain1": 0}, 'class2': {'domain2': 1}, 'class3': {"domain3": 1}}
+        assignment = self.minC.initial_var_assignment()
+        conflict = self.minC.conflicted(assignment)
+        result = self.minC.rand_conflict_var(conflict, assignment)
+        self.assertFalse(result[2] == 'class3')
+        self.assertTrue(result[2] in conflict)
+        self.assertTrue(result[1] in result[0])
+        self.minC.csp.binary_constraints = {'class3': {'class2': {'domain3': {'domain2': 0}}}}
+        assignment = self.minC.initial_var_assignment()
+        conflict = self.minC.conflicted(assignment)
+        result = self.minC.rand_conflict_var(conflict, assignment)
+        self.assertTrue(result[2] in conflict)
+        self.assertTrue(result[1] in result[0])
+
 
     def test_solve(self):
         result = self.minC.solve(100)
