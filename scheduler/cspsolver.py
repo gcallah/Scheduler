@@ -50,12 +50,13 @@ class CSP(object):
             raise ValueError(node, "was not added.")
         node_domain = self.node_domains[node]
         course = node[0]
-        factor = {domain: constraint_func(domain, course) for domain in node_domain}
+        factor = {d: constraint_func(d, course) for d in node_domain}
         if node not in self.unary_constraints:
             self.unary_constraints[node] = factor
         else:
-            self.unary_constraints[node] = ({val: self.unary_constraints[node][val]
-                                            * factor[val] for val in node_domain})
+            temp = self.unary_constraints[node]
+            temp = ({val: temp[node][val]
+                    * factor[val] for val in node_domain})
 
     def add_binary_constraint(self, node1, node2, constraint_func):
         """Adds a binary constraint to two existing nodes.
@@ -72,12 +73,12 @@ class CSP(object):
             raise ValueError("{} or {} were not added.".format(node1, node2))
         domain1 = self.node_domains[node1]
         domain2 = self.node_domains[node2]
-        table_factor1 = {val1: {val2: constraint_func(val1, val2, node1[0], node2[0])
-                                for val2 in domain2} for val1 in domain1}
-        table_factor2 = {val2: {val1: constraint_func(val1, val2, node1[0], node2[0])
-                                for val1 in domain1} for val2 in domain2}
-        self.update_binary_constraint_table(node1, node2, table_factor1)
-        self.update_binary_constraint_table(node2, node1, table_factor2)
+        tf1 = {val1: {val2: constraint_func(val1, val2, node1[0], node2[0])
+                      for val2 in domain2} for val1 in domain1}
+        tf2 = {val2: {val1: constraint_func(val1, val2, node1[0], node2[0])
+                      for val1 in domain1} for val2 in domain2}
+        self.update_binary_constraint_table(node1, node2, tf1)
+        self.update_binary_constraint_table(node2, node1, tf2)
 
     def update_binary_constraint_table(self, node_a, node_b, table_factor):
         """Updates the binary constraint table given two nodes and a table factor.
@@ -220,4 +221,4 @@ class minConflicts(object):
                     if r < w / (w + w0):
                         w0 = w
                         assignments = assignments_cpy
-        return None  
+        return None

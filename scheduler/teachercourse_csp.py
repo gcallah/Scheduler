@@ -35,7 +35,8 @@ def pref_handler(rand_day):
 
 
 def assign_days_for_course(course_weekly_days):
-    """Assign randomly the meetings days for a class given how many time it is held weekly.
+    """Assign randomly the meetings days for a
+    class given how many time it is held weekly.
 
     Arguments:
         course_weekly_days {int} -- how many days the class is held per week.
@@ -68,7 +69,8 @@ def maps_day_to_class(course_days_weekly, courses):
     """Maps preferred days to classes (soft constraint).
 
     Arguments:
-        course_days_weekly {dict} -- A map {class: how many days it's held per week}.
+        course_days_weekly {dict} --
+        A map {class: how many days it's held per week}.
         courses {list} -- A list of classes.
 
     Returns:
@@ -104,7 +106,8 @@ def profs_for_courses(courses, professors, prof_info):
     Arguments:
         courses {list} -- A list of classes.
         professors {list} -- A list of professors.
-        prof_info {dict} -- A dictionary mapping professor to his class info (courses taught, start_time, end_time).
+        prof_info {dict} -- A dictionary mapping professor to
+        his class info (courses taught, start_time, end_time).
 
     Returns:
         [dict] -- Returns a map {course : professor}.
@@ -125,15 +128,19 @@ def add_nodes(
         full_prof_assignment,
         prof_info,
         csp):
-    """Adds nodes (course, professor) and its list of domains (rooms, hours) to csp.
+    """Adds nodes (course, professor) and its
+    list of domains (rooms, hours) to csp.
 
     Arguments:
         courses {list} -- A list of classes.
         rooms {list} -- A list of rooms.
         rooms_chosen {dict} -- A dictionary mapping course to rooms.
-        full_prof_assignment {dict} -- A dictionary mapping course to professor.
-        prof_info {dict} -- A dictionary mapping professor to his class info (courses taught, start_time, end_time).
-        csp {cspsolver.CSP} -- A instance of the Constraint Satisfaction Problem class.
+        full_prof_assignment {dict} --
+        A dictionary mapping course to professor.
+        prof_info {dict} -- A dictionary mapping professor
+        to his class info (courses taught, start_time, end_time).
+        csp {cspsolver.CSP} -- A instance of the
+        Constraint Satisfaction Problem class.
     """
     for course in courses:
         rooms_for_course = rooms_chosen[course] if course in rooms_chosen else rooms
@@ -152,8 +159,10 @@ def add_unary_constraint(csp, room_has_capacity):
     """Adds an unary constraint to list of nodes
 
     Arguments:
-        csp {cspsolver.CSP} -- A instance of the Constraint Satisfaction Problem class.
-        room_has_capacity {<class 'function'>} -- An unary constraint function.
+        csp {cspsolver.CSP} -- A instance of the
+        Constraint Satisfaction Problem class.
+        room_has_capacity {<class 'function'>} --
+        An unary constraint function.
     """
     for node in csp.nodes:
         csp.add_unary_constraint(node, room_has_capacity)
@@ -164,7 +173,8 @@ def compute_course_start_end(
         start_mins,
         course_mins_map,
         course_name):
-    """Given course name, start time, and its duration, computes and format end time.
+    """Given course name, start time, and its duration,
+    computes and format end time.
 
     Arguments:
         start_hour {int} -- Start hour of the course.
@@ -200,10 +210,12 @@ def assigner(user_data):
     """Takes in data provided by the user and creates class schedule.
 
     Arguments:
-        user_data {tuple} -- A tuple of lists containing the user's data information.
+        user_data {tuple} -- A tuple of lists containing
+        the user's data information.
 
     Returns:
-        [dict] -- Returns a map {day: a list of classes taught by professors with room numbers and times}.
+        [dict] -- Returns a map {day: a list of classes taught
+        by professors with room numbers and times}.
     """
     def room_has_capacity(val, course):
         """Unary constraints function: checks to see if given room has
@@ -214,14 +226,16 @@ def assigner(user_data):
             Course {string} -- Name of course.
 
         Returns:
-            [bool] -- Whether or not the room has capacity for all students in course.
+            [bool] -- Whether or not the room has
+            capacity for all students in course.
         """
         room, hour_and_min = val
         no_students = course_no_students[course]
         return room_capacities[room] >= no_students
 
     def no_class_overlap(node1, node2, course1, course2):
-        """Binary constraint function: checks to see if there is overlap in times between two courses.
+        """Binary constraint function: checks to see if
+        there is overlap in times between two courses.
 
         Arguments:
             node1 {tuple} -- (location, (hour, minute)) of the first class.
@@ -230,7 +244,8 @@ def assigner(user_data):
             course2 {string} -- Name of second course to check for overlap.
 
         Returns:
-            [int] -- 1 if no overlap exists between two classes, 0 if there is overlap.
+            [int] -- 1 if no overlap exists between two classes,
+            0 if there is overlap.
         """
         _, (hours1, mins1) = node1
         _, (hours2, mins2) = node2
@@ -246,7 +261,8 @@ def assigner(user_data):
             return 1
 
     def no_time_clash(val1, val2, course1, dummy):
-        """Binary constraint function: checks to see if there is a time clash for a course given two rooms and times.
+        """Binary constraint function: checks to see if there
+        is a time clash for a course given two rooms and times.
 
         Arguments:
             val1 {tuple} -- Contains first set of room and time.
@@ -255,7 +271,8 @@ def assigner(user_data):
             dummy {string} -- Dummy parameter. Added to help with refactor.
 
         Returns:
-            [int] -- 1 if no time clash between rooms and times for course, 0 if there is time clash.
+            [int] -- 1 if no time clash between rooms and times for course,
+            0 if there is time clash.
         """
         (room1, time1) = val1
         (room2, time2) = val2
@@ -275,7 +292,7 @@ def assigner(user_data):
         course_no_students, course_mins_map, course_days_weekly = user_data
 
     full_prof_assignment = profs_for_courses(courses, professors, prof_info)
-    rooms_chosen = {} 
+    rooms_chosen = {}
     solution = collections.defaultdict(lambda: None)
     retry = 0
     solved = True
@@ -301,7 +318,7 @@ def assigner(user_data):
                 solved = False
             else:
                 solution[day] = day_solution
-        if solved: 
-            break 
+        if solved:
+            break
         solved = True
     return solution
