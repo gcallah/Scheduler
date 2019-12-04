@@ -2,6 +2,7 @@
 This is the test suite for cspsolver.py.
 """
 import os, sys
+import collections
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from unittest import TestCase, main, skip
@@ -146,3 +147,8 @@ class Teachercourse_Csp_TestCase(TestCase):
         min = 50
         result = compute_course_start_end(hour, min, duration, course)
         self.assertEqual(result, (5*6+5, 5*6+5+30))
+
+    def test_assigner(self):
+        user_data = create_user_data()
+        solution = assigner(user_data)
+        self.assertEqual(type(solution), type(collections.defaultdict(lambda: None)))
