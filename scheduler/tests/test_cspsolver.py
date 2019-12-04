@@ -297,6 +297,15 @@ class MinConflictsTestCase(TestCase):
         self.assertEqual(result["class1"], "domain1")
         self.assertTrue(result["class2"] in ["domain2", "domain3", "domain4"])
         self.assertNotEqual(result["class3"], "domin5")
+        self.minC.csp.node_domains['class2'] = ['domain2']
+        self.minC.csp.node_domains['class3'] = ['domain3']
+        self.minC.csp.unary_constraints = {"class1": {"domain1": 0}, 'class2': {'domain2': 1}, 'class3': {"domain3": 1}}
+        result = self.minC.solve(100)
+        self.assertEqual(result, None)
+        self.minC.csp.binary_constraints = {'class3': {'class2': {'domain3': {'domain2': 0}}}}
+        result = self.minC.solve(100)
+        self.assertEqual(result, None)
+
 
 
 if __name__ == '__main__':
