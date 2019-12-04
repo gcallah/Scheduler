@@ -115,7 +115,7 @@ def profs_for_courses(courses, professors, prof_info):
     profs_chosen = {}
     for course in courses:
         intersection = [
-            professor for professor in professors if course in prof_info[professor]['courses']]
+            pro for pro in professors if course in prof_info[pro]['courses']]
         if intersection:
             profs_chosen[course] = random.choice(intersection)
     return profs_chosen
@@ -143,7 +143,10 @@ def add_nodes(
         Constraint Satisfaction Problem class.
     """
     for course in courses:
-        rooms_for_course = rooms_chosen[course] if course in rooms_chosen else rooms
+        if course in rooms_chosen:
+            rooms_for_course = rooms_chosen[course]
+        else:
+            rooms_for_course = rooms
         professor = full_prof_assignment[course]
         if professor:
             domain = [
