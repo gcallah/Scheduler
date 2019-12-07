@@ -3,17 +3,20 @@ This is the test suite for cspsolver.py.
 """
 import os, sys
 import collections
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from unittest import TestCase, main, skip
 
-from teachercourse_csp import pref_handler, assign_days_for_course, maps_day_to_class, hours_for_prof, profs_for_courses, add_nodes, assigner, compute_course_start_end
-from cspsolver import CSP, minConflicts
+from teachercourse_csp import pref_handler, assign_days_for_course, maps_day_to_class, hours_for_prof, profs_for_courses, add_nodes, assigner, compute_course_start_end, add_unary_constraint, add_binary_constraint
+from cspsolver import CSP
+
 
 def create_csp():
     csp = CSP()
-    csp.add_node("class1", ["domain1"])
+    csp.add_node(("physics", "John Smith"), [("648", (5, 60), "physics")])
     return csp
+
 def create_user_data1():
     rooms = ['655', '666', '745a', '745b', '433', '201', '115a', '115b']
     room_capacities = {
@@ -156,28 +159,80 @@ def create_user_data1():
                 course_no_students, course_mins, course_days_weekly
     return user_data
 
+
 def create_user_data():
-    courses = ["physics"]
-    professors = ['John Smith']
-    rooms = ["648"]
-    room_capacities = {'648': 30,}
-    course_no_students = {'physics': 35}
-    course_mins = {'physics': 60}
-    course_no_sections = {'physics': 2}
-    course_days_weekly = {'physics': 3}
-    prof_info = {'John Smith': {'courses': ['physics', 'chemistry'],'start_time': 8,'end_time': 17}}
+    courses = ["physics", "chemistry"]
+    professors = ['John Smith', 'Lisa Jones', 'Mike Williams']
+    rooms = ["648", "649"]
+    room_capacities = {'648': 30, '649': 40}
+    course_no_students = {'physics': 35, 'chemistry': 26}
+    course_mins = {'physics': 60, 'chemistry': 90}
+    course_no_sections = {'physics': 2, 'chemistry': 2}
+    course_days_weekly = {'physics': 3, 'chemistry': 2}
+    prof_info = {'John Smith': {'courses': ['physics', 'chemistry'], 'start_time': 8, 'end_time': 17},
+                 'Lisa Jones': {'courses': ['physics'], 'start_time': 9, 'end_time': 18},
+                 'Mike Williams': {'courses': ['biology 1'], 'start_time': 9, 'end_time': 15}}
     user_data = professors, prof_info, rooms, room_capacities, courses, \
-                    course_no_students, course_mins, course_days_weekly
+                course_no_students, course_mins, course_days_weekly
     return user_data
+
 
 class Teachercourse_Csp_TestCase(TestCase):
     def setUp(self):
-        self.csp = CSP()
-        self.room_chosen = {}
-        self.assigner = assigner(user_data=create_user_data())
+        self.csp = create_csp()
+        self.data = create_user_data()
 
     def tearDown(self):
         self.csp = None
+        self.data = None
+
+    def room_has_capacity(self, val, course):
+        room = val[0]
+        hour_and_min = val[1]
+        no_students = self.data[5][course]
+        return self.data[3][room] >= no_students
+
+    def no_class_overlap(self, val1, val2, course1, course2):
+        """
+            Class constraint function for binary
+        """
+        course_min = self.data[5]
+        hours1, mins1 = val1[1]
+        hours2, mins2 = val2[1]
+        course_start1 = hours1 * 6 + mins1 // 10
+        course_end1 = course_start1 + \
+                      course_min[course1] // 10
+        course_start2 = hours2 * 6 + mins2 // 10
+        course_end2 = course_start2 + \
+                      course_min[course2] // 10
+        # conditions to check if one class starts during other
+        if course_start1 <= course_start2 < course_end1:
+            return bool(False)
+        if course_start2 <= course_start1 < course_end2:
+            return bool(False)
+        # soft constraint: non-sequential classes
+        # get higher weight
+        if course_start1 == course_end2 or course_start2 == course_end1:
+            return 2
+        return bool(True)
+
+    def no_time_clash(self, val1, val2, course, dummy):
+        """
+            Class constraint function for binary
+        """
+        course_min = self.data[5]
+        room1, time1 = val1[0], val1[1]
+        room2, time2 = val2[0], val2[1]
+        if room1 != room2:
+            return bool(True)
+        hours1, mins1 = time1
+        hours2, mins2 = time2
+        start_time1 = hours1 * 6 + mins1 // 10
+        end_time1 = start_time1 + course_min[course] // 10
+        start_time2 = hours2 * 6 + mins2 // 10
+        if start_time1 <= start_time2 < end_time1:
+            return bool(False)
+        return bool(True)
 
     def test_pref_handler(self):
         self.assertRaises(ValueError, lambda: pref_handler("sun"))
@@ -193,7 +248,7 @@ class Teachercourse_Csp_TestCase(TestCase):
     def test_assign_days_for_course(self):
         result1 = assign_days_for_course(1)
         self.assertEqual(len(result1), 1)
-        self.assertTrue(result1[0] in ["mon", "tues","wed", "thur", "fri"])
+        self.assertTrue(result1[0] in ["mon", "tues", "wed", "thur", "fri"])
         result2 = assign_days_for_course(2)
         self.assertEqual(len(result2), 2)
         result3 = assign_days_for_course(3)
@@ -280,19 +335,33 @@ class Teachercourse_Csp_TestCase(TestCase):
     def test_compute_course_start_end(self):
         hour = 5
         min = 0
-        duration = {"physics" : 30}
+        duration = {"physics": 30}
         course = "physics"
         result = compute_course_start_end(hour, min, duration, course)
         self.assertTrue(len(result) == 2)
-        self.assertEqual(result, (5*6, 5*6+30))
+        self.assertEqual(result, (5 * 6, 5 * 6 + 30))
         min = 50
         result = compute_course_start_end(hour, min, duration, course)
-        self.assertEqual(result, (5*6+5, 5*6+5+30))
+        self.assertEqual(result, (5 * 6 + 5, 5 * 6 + 5 + 30))
+
+    def test_add_unary(self):
+        self.assertTrue(self.csp.unary_constraints == {})
+        add_unary_constraint(self.csp, self.room_has_capacity)
+        self.assertFalse(self.csp.unary_constraints == {})
+        self.assertTrue(('physics', 'John Smith') in self.csp.unary_constraints)
+
+    def test_binary(self):
+        self.csp.add_node(("chemistry", "John Smith"), [("649", (5, 60), "chemistry")])
+        self.assertTrue(self.csp.binary_constraints == {})
+        course_map = {}
+        add_binary_constraint(self.csp, course_map, self.no_class_overlap, self.no_time_clash)
+        self.assertFalse(self.csp.binary_constraints == {})
+        self.assertTrue(('physics', 'John Smith') in self.csp.binary_constraints)
 
     def test_assigner(self):
         user_data = create_user_data()
         solution = assigner(user_data)
-        self.assertTrue(len(solution) == 0)
+        self.assertFalse(len(solution) == 0)
         self.assertEqual(type(solution), type(collections.defaultdict(lambda: None)))
         user_data = create_user_data1()
         solution = assigner(user_data)
