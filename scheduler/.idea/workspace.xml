@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="18282140-1eab-43a1-a177-02b8c657a000" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/tests/test_teachercourse_csp.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_teachercourse_csp.py" afterDir="false" />
-    </list>
+    <list default="true" id="18282140-1eab-43a1-a177-02b8c657a000" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

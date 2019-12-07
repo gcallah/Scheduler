@@ -12,6 +12,7 @@ install:
 
 script: 
     - python scheduler/tests/test_cspsolver.py
+    - python scheduler/tests/test_teachercourse_csp.py
     - coverage run scheduler/cspsolver.py
     - coverage run scheduler/teachercourse_csp.py
     - coverage report
