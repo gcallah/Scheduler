@@ -367,3 +367,6 @@ class Teachercourse_Csp_TestCase(TestCase):
         solution = assigner(user_data)
         self.assertFalse(len(solution) == 0)
         self.assertEqual(type(solution), type(collections.defaultdict(lambda: None)))
+
+if __name__ == '__main__':
+    main()
