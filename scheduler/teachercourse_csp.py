@@ -194,19 +194,19 @@ def compute_course_start_end(
     return (course_start_time, course_end_time)
 
 
-def add_binary_constraint(csp, course_mins_map, no_class_overlap, no_time_clash):
+def add_binary_constraint(c, course_mins_map, no_class_overlap, no_time_clash):
     """Adds binary constraints to list of nodes.
     """
-    for index, node_n in enumerate(csp.nodes):
+    for index, node_n in enumerate(c.nodes):
         (course_n, prof_n) = node_n
-        for j in range(index, len(csp.nodes)):
-            node_m = csp.nodes[j]
+        for j in range(index, len(c.nodes)):
+            node_m = c.nodes[j]
             (course_m, prof_m) = node_m
             if prof_n == prof_m:
                 if course_n == course_m:
                     continue
-                csp.add_binary_constraint(node_n, node_m, no_class_overlap)
-            csp.add_binary_constraint(node_n, node_m, no_time_clash)
+                c.add_binary_constraint(node_n, node_m, no_class_overlap)
+            c.add_binary_constraint(node_n, node_m, no_time_clash)
 
 
 def assigner(user_data):
