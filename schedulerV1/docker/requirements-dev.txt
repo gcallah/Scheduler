@@ -1,5 +1,5 @@
 -r requirements.txt
-setuptools==40.4.3
+setuptools==65.5.1
 pytz==2018.5
 six==1.11.0
 coverage==4.5.1
